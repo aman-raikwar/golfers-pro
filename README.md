@@ -206,3 +206,18 @@ vendor/bin/codecept run functional,unit -- --coverage-html --coverage-xml
 ```
 
 You can see code coverage output under the `tests/_output` directory.
+
+
+To run project via terminal
+
+    ```
+    php yii serve 0.0.0.0
+    ```
+    
+Theme Url:
+
+# http://coderthemes.com/adminox_1.1/default/ui-notifications.html
+
+Toaster Link:
+
+# https://github.com/lavrentiev/yii2-toastr
