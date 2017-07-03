@@ -155,7 +155,7 @@ if (Yii::$app->session->hasFlash('success')) {
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">                                                
-                                                <?= $form->field($model, 'password_hash')->passwordInput(['maxlength' => true]) ?>
+                                                <?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -245,7 +245,7 @@ if (Yii::$app->session->hasFlash('success')) {
                                         <div class="col-12">
                                             <hr/>
                                             <div class="form-group">
-                                                <?= Html::submitButton('Register', array("class" => "btn btn-md btn-block btn-danger waves-effect waves-ligh")); ?>
+                                                <?= Html::submitButton('Register', ['class' => 'btn btn-md btn-block btn-danger waves-effect waves-light']) ?>
                                             </div>
                                             <p class="text-center"><?= Html::a('Back to Login', ['site/login']) ?></p>
                                         </div>

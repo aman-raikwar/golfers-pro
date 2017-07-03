@@ -8,13 +8,7 @@ use app\models\County;
 use app\models\ClubFunctionality;
 ?>
 
-<?php
-$form = ActiveForm::begin([
-            'enableClientValidation' => true,
-            'enableAjaxValidation' => true,
-            'options' => ['enctype' => 'multipart/form-data']
-        ]);
-?>
+<?php $form = ActiveForm::begin(['enableClientValidation' => true, 'enableAjaxValidation' => true, 'options' => ['enctype' => 'multipart/form-data']]); ?>
 <div class="row">
     <div class="col-md-12">
         <div class="form-group">
@@ -208,7 +202,6 @@ $form = ActiveForm::begin([
         </div>
     </div>
 </div>
-<?php echo $model->ClubFacilities; ?>
 <div class="row">
     <div class="col-md-12">
         <div class="form-group no-margin">

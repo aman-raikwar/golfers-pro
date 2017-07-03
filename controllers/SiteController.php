@@ -4,14 +4,18 @@ namespace app\controllers;
 
 use Yii;
 use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\Response;
-use yii\filters\VerbFilter;
+use yii\widgets\ActiveForm;
+
+use app\models\User;
+use app\models\Country;
+
 use app\models\LoginForm;
 use app\models\ContactForm;
-use app\models\GolferRegitration;
-use app\models\Country;
-use yii\widgets\ActiveForm;
+use app\models\PasswordResetRequestForm;
+use app\models\ResetPasswordForm;
 
 class SiteController extends Controller {
 
@@ -78,8 +82,10 @@ class SiteController extends Controller {
         if (!Yii::$app->user->isGuest) {
             return $this->redirect('golf-clubs');
         }
-
+        
+        $this->layout = 'frontend';
         $model = new LoginForm();
+        
         if ($model->load(Yii::$app->request->post())) {
             if (Yii::$app->request->isAjax) {
                 Yii::$app->response->format = Response::FORMAT_JSON;
@@ -90,10 +96,8 @@ class SiteController extends Controller {
                 return $this->redirect('golf-clubs');
             }
         }
-        $this->layout = 'frontend';
-        return $this->render('login', [
-                    'model' => $model,
-        ]);
+        
+        return $this->render('login', ['model' => $model]);
     }
 
 //    public function actionLists($id) {
@@ -118,22 +122,12 @@ class SiteController extends Controller {
             return $this->goHome();
         }
 
-        $model = new GolferRegitration();
         $this->layout = 'frontend';
+        $model = new User();
+        $model->setScenario('register');
 
-        if ($model->load(Yii::$app->request->post())) {
-            $model->setPassword($model->password);
-            $model->generateAuthKey();
-
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->save()) {
-//        $mail = Yii::$app->mailer->compose()
-//                ->setFrom(['aman.btech12@gmail.com' => 'Aman Raikwar'])
-//                ->setTo(['amanraikwar@mailinator.com'])
-//                ->setSubject('Mail from Golfer Website')
-//                ->setHtmlBody('This is my simple message for the User')
-//                ->send();
-//        print_r($mail);
-//        die;
                 Yii::$app->session->setFlash('success', $model->ID);
                 return $this->redirect('golfer-registration');
             }
@@ -142,20 +136,20 @@ class SiteController extends Controller {
         return $this->render('register', ['model' => $model,]);
     }
 
-    public function actionRegistration() {
-        $model = new GolferRegitration();
+    // public function actionRegistration() {
+    //     $model = new GolferRegitration();
 
-        if ($model->load(Yii::$app->request->post())) {
-            if ($model->validate()) {
-                // form inputs are valid, do something here
-                return;
-            }
-        }
-        $this->layout = 'frontend';
-        return $this->render('registration', [
-                    'model' => $model,
-        ]);
-    }
+    //     if ($model->load(Yii::$app->request->post())) {
+    //         if ($model->validate()) {
+    //             // form inputs are valid, do something here
+    //             return;
+    //         }
+    //     }
+    //     $this->layout = 'frontend';
+    //     return $this->render('registration', [
+    //                 'model' => $model,
+    //     ]);
+    // }
 
     /**
      * Logout action.
@@ -191,6 +185,55 @@ class SiteController extends Controller {
      */
     public function actionAbout() {
         return $this->render('about');
+    }
+    
+    /**
+     * Requests password reset.
+     *
+     * @return mixed
+     */
+    public function actionRequestPasswordReset()
+    {
+        $this->layout = 'frontend';
+        $model = new PasswordResetRequestForm();
+        
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if ($model->sendEmail()) {
+                Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
+                return $this->refresh();
+            } else {
+                Yii::$app->session->setFlash('error', 'Sorry, we are unable to reset password for email provided.');
+            }
+        }
+
+        return $this->render('requestPasswordResetToken', ['model' => $model]);
+    }
+
+    /**
+     * Resets password.
+     *
+     * @param string $token
+     * @return mixed
+     * @throws BadRequestHttpException
+     */
+    public function actionResetPassword($token)
+    {
+        $this->layout = 'frontend';
+        try {
+            $model = new ResetPasswordForm($token);
+        } catch (InvalidParamException $e) {
+            throw new BadRequestHttpException($e->getMessage());
+        }
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
+            Yii::$app->session->setFlash('success', 'New password was saved.');
+
+            return $this->goHome();
+        }
+
+        return $this->render('resetPassword', [
+            'model' => $model,
+        ]);
     }
 
 }

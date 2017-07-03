@@ -6,7 +6,7 @@ use yii\helpers\Url;
 
 $this->title = 'Golfer Login';
 ?>
-<!-- HOME -->
+
 <section>
     <div class="container">
         <div class="row">
@@ -26,43 +26,37 @@ $this->title = 'Golfer Login';
                             <div class="account-content">
                                 <h5 class="text-uppercase font-bold">Login to your Golfer Card account</h5>
                                 <hr/>
-                                <!--                                        <form class="form-horizontal" action="#">-->
-                                <?php
-                                $form = ActiveForm::begin([
-                                            'id' => 'login-form',
-                                ]);
-                                ?>
-
-                                <div class="form-group m-b-20 row">
-                                    <div class="col-12">
-                                        <label for="emailaddress">Email address</label>
-                                        <?= $form->field($model, 'email')->textInput(['class' => 'form-control', 'placeholder' => 'Email', 'autofocus' => true])->label(false) ?>
+                                <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
+                                    <div class="form-group m-b-20 row">
+                                        <div class="col-12">
+                                            <label for="emailaddress">Email address</label>
+                                            <?= $form->field($model, 'email')->textInput(['class' => 'form-control', 'placeholder' => 'Email', 'autofocus' => true])->label(false) ?>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group row m-b-20">
-                                    <div class="col-12">
-                                        <label for="password">Password</label>
-                                        <?= $form->field($model, 'password')->passwordInput(['class' => 'form-control', 'placeholder' => 'Password', 'autofocus' => true])->label(false) ?>                                    </div>
-                                </div>
-
-                                <div class="form-group row m-b-20">
-                                    <div class="col-12">
-                                        <a href="recoverpw.php" class="text-muted pull-right"><small>Forgot your password?</small></a>
-                                        <?php
-                                        $model->rememberMe = 1;
-                                        echo $form->field($model, 'rememberMe', [
-                                            'options' => ['class' => 'checkbox checkbox-success'],
-                                            'template' => "{input}\n{label}\n{hint}\n{error}"
-                                        ])->checkbox(['value' => 1, 'checked' => 'checked'], false)->label('Remember me');
-                                        ?>                                        
+                                    <div class="form-group row m-b-20">
+                                        <div class="col-12">
+                                            <label for="password">Password</label>
+                                            <?= $form->field($model, 'password')->passwordInput(['class' => 'form-control', 'placeholder' => 'Password', 'autofocus' => true])->label(false) ?>                                    </div>
                                     </div>
-                                </div>
-
-                                <div class="form-group row text-center m-t-10">
-                                    <div class="col-12">
-                                        <button class="btn btn-md btn-block btn-danger waves-effect waves-light" type="submit">Login</button>
+    
+                                    <div class="form-group row m-b-20">
+                                        <div class="col-12">
+                                            <?= Html::a('Forgot your password?', ['request-password-reset'], ['class' => 'text-muted pull-right']) ?>
+                                            <?php
+                                            $model->rememberMe = 1;
+                                            echo $form->field($model, 'rememberMe', [
+                                                'options' => ['class' => 'checkbox checkbox-success'],
+                                                'template' => "{input}\n{label}\n{hint}\n{error}"
+                                            ])->checkbox(['value' => 1, 'checked' => 'checked'], false)->label('Remember me');
+                                            ?>                                        
+                                        </div>
                                     </div>
-                                </div>
+    
+                                    <div class="form-group row text-center m-t-10">
+                                        <div class="col-12">
+                                            <?= Html::submitButton('Login', ['class' => 'btn btn-md btn-block btn-danger waves-effect waves-light']) ?>
+                                        </div>
+                                    </div>
                                 <?php ActiveForm::end(); ?>
 
                                 <div class="row m-t-50">
@@ -75,13 +69,9 @@ $this->title = 'Golfer Login';
                         </div>
                     </div>
                     <!-- end card-box-->
-
-
                 </div>
                 <!-- end wrapper -->
-
             </div>
         </div>
     </div>
 </section>
-<!--</div>-->

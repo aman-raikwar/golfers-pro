@@ -66,14 +66,11 @@ class GolfCourse extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-                [['Name', 'LoginID', 'Password', 'Email', 'Address1', 'Address2', 'Town', 'PostCode', 'ContactNumber', 'ClubHoles', 'ClubYardage', 'ClubPar', 'GreenFeeFrom', 'GreenFeeTo'], 'required'],
-            //['Password', 'string', 'min' => 6, 'max' => 16],
-            //['Password_repeat', 'required'],
-            //['password_repeat', 'compare', 'compareAttribute'=>'Password', 'skipOnEmpty' => false, 'message'=>"Both Passwords didn't match"],
-            //[['Password_repeat'], 'compare', 'compareAttribute' => 'Password'],
-            //['Password_repeat', 'compare'],
-            //[['Name', 'LoginID', 'Password', 'Email',  'ContactNumber', 'Address1', 'Address2', 'Town', 'PostCode', 'AddressNote', 'ClubDescription', 'ClubUrl', 'ClubHoles', 'ClubYardage', 'ClubPar', 'GpgUrl', 'ClubLogo', 'GreenFeeFrom', 'GreenFeeTo'], 'required'],            
-            [['ClubHoles', 'ClubYardage', 'ClubPar', 'GreenFeeFrom', 'GreenFeeTo'], 'integer'],
+                [['Name', 'LoginID', 'Password', 'Password_repeat', 'Email', 'Address1', 'Address2', 'Town', 'PostCode', 'ContactNumber', 'ClubHoles', 'ClubYardage', 'ClubPar', 'GreenFeeFrom', 'GreenFeeTo'], 'required'],
+                //['Password_repeat', 'compare', 'compareAttribute' => 'Password', 'message' => "Both Passwords didn't match"],
+                ['Password', 'safe'],
+                //[['Name', 'LoginID', 'Password', 'Email',  'ContactNumber', 'Address1', 'Address2', 'Town', 'PostCode', 'AddressNote', 'ClubDescription', 'ClubUrl', 'ClubHoles', 'ClubYardage', 'ClubPar', 'GpgUrl', 'ClubLogo', 'GreenFeeFrom', 'GreenFeeTo'], 'required'],            
+                [['ClubHoles', 'ClubYardage', 'ClubPar', 'GreenFeeFrom', 'GreenFeeTo'], 'integer'],
                 [['Name', 'LoginID', 'Password'], 'string', 'max' => 200],
                 [['Email', 'ContactNumber', 'Address1', 'Address2', 'Town', 'PostCode', 'AddressNote', 'ClubDescription', 'ClubUrl', 'GpgUrl', 'ClubLogo'], 'string', 'max' => 255],
                 [['ClubFacebook', 'ClubTwitter', 'Country', 'County'], 'safe']

@@ -61,6 +61,7 @@ $config = [
                 'golf-cards' => 'golf-course/index',
                 'login' => 'site/login',
                 'golfer-registration' => 'site/register',
+                'request-password-reset' => 'site/request-password-reset'
             ],
         ],
     ],
