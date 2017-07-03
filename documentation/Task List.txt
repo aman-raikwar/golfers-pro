@@ -19,3 +19,61 @@
 9. Club Functionalities - CRUD
 
 10 Edit Golf has many issues for example Country is not displayed on edit screen, password is displayed directly, Facilities that were selected on add are not displayed on Add page. Also there are many more. Major is when we click on Save CHanges we get yii error.
+
+
+
+if ($model->save()) {
+                \Yii::$app->session->setFlash('type', 'success');
+                \Yii::$app->session->setFlash('title', 'Add a Golf Club');
+                \Yii::$app->session->setFlash('message', 'Golf Club added successfully.');
+                
+                return $this->redirect(['index']);
+            } else {
+                Yii::$app->response->format = Response::FORMAT_JSON;
+                return ActiveForm::validate($model);
+            }
+            
+            
+            
+            
+            <?php 
+        $type = Yii::$app->session->getFlash('type');
+        $title = Yii::$app->session->getFlash('title');
+        $message = Yii::$app->session->getFlash('message');
+        
+        if(!empty($type) && !empty($message)) {
+            Notification::widget([
+                'type' => $type,
+                'title' => $title,
+                'message' => $message,
+                'options' => [
+                    "closeButton" => false,
+                    "debug" => false,
+                    "newestOnTop" => false,
+                    "progressBar" => false,
+                    "positionClass" => "toast-bottom-right",
+                    "preventDuplicates" => false,
+                    "onclick" => null,
+                    "showDuration" => "300",
+                    "hideDuration" => "1000",
+                    "timeOut" => "3000",
+                    "extendedTimeOut" => "1000",
+                    "showEasing" => "swing",
+                    "hideEasing" => "linear",
+                    "showMethod" => "fadeIn",
+                    "hideMethod" => "fadeOut"
+                ]
+            ]);
+        }
+        ?>
+        
+        
+        
+        //        $mail = Yii::$app->mailer->compose()
+//                ->setFrom(['aman.btech12@gmail.com' => 'Aman Raikwar'])
+//                ->setTo(['amanraikwar@mailinator.com'])
+//                ->setSubject('Mail from Golfer Website')
+//                ->setHtmlBody('This is my simple message for the User')
+//                ->send();
+//        print_r($mail);
+//        die;
