@@ -43,7 +43,9 @@ class LoginForm extends Model {
     public function validatePassword($attribute, $params) {
         if (!$this->hasErrors()) {
             $user = $this->getUser();            
-
+            //echo '<pre>';print_r($user);die;
+            //echo $this->password;die;
+            
             if (!$user || !$user->validatePassword($this->password)) {
                 $this->addError($attribute, 'Incorrect username or password.');
             }
@@ -79,6 +81,8 @@ class LoginForm extends Model {
         if ($this->_user === false) {
             $this->_user = User::findByUsername($this->email);
         }
+
+        // echo '<pre>';print_r($this->_user);die;
 
         return $this->_user;
     }

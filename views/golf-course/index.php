@@ -6,6 +6,8 @@ use yii\view\GridView;
 use yii\widgets\ActiveForm;
 use yii\widgets\Pjax;
 use yii\bootstrap\Modal;
+
+$this->title = 'Golf Clubs';
 ?>
 <div class="content-page">
 

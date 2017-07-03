@@ -10,6 +10,8 @@ use yii\bootstrap\Modal;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\PlayerSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+
+$this->title = 'Golfers';
 ?>
 
 <div class="content-page">

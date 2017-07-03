@@ -9,6 +9,8 @@ use app\models\County;
 use app\models\GolfCourse;
 use app\models\CardMembershipCategory;
 use app\components\Utility;
+
+$this->title = 'Golfer Registration';
 ?>
 
 <?php
@@ -245,9 +247,10 @@ if (Yii::$app->session->hasFlash('success')) {
                                             <div class="form-group">
                                                 <?= Html::submitButton('Register', array("class" => "btn btn-md btn-block btn-danger waves-effect waves-ligh")); ?>
                                             </div>
+                                            <p class="text-center"><?= Html::a('Back to Login', ['site/login']) ?></p>
                                         </div>
                                     </div>
-                            </div>
+                                </div>
                             </form>
                         </div>
                     </div>

@@ -37,14 +37,14 @@ AppAsset::register($this);
 
                 <!-- LOGO -->
                 <div class="topbar-left">
-                    <a href="<?= Url::to('golf-clubs') ?>" class="logo">
-                        <span>
-                            <img src="<?php echo Yii::$app->request->baseUrl; ?>/images/logo.png" alt="" height="50">
-                        </span>
-                        <i>
-                            <img src="<?php echo Yii::$app->request->baseUrl; ?>/images/logo_sm.png" alt="" height="50">
-                        </i>
-                    </a>
+                    <!--<a href="<?= Url::to('golf-clubs') ?>" class="logo">-->
+                    <!--    <span>-->
+                    <!--        <img src="<?php echo Yii::$app->request->baseUrl; ?>/images/logo.png" alt="" height="50">-->
+                    <!--    </span>-->
+                    <!--    <i>-->
+                    <!--        <img src="<?php echo Yii::$app->request->baseUrl; ?>/images/logo_sm.png" alt="" height="50">-->
+                    <!--    </i>-->
+                    <!--</a>-->
                 </div>
                 <!--  LOGO END  -->
                 <nav class="navbar-custom">
@@ -56,7 +56,7 @@ AppAsset::register($this);
                             </button>
                         </li>
                         <li>
-                            <h4 class="page-title text-dark">Golf Clubs</h4>
+                            <!--<h4 class="page-title text-dark">Golf Clubs</h4>-->
                         </li>
                     </ul>
 
@@ -110,7 +110,7 @@ AppAsset::register($this);
                             </li>
 
                             <li>
-                                <a href="<?php echo Url::base() . "/site/logout"; ?>"><i class="fi-power"></i><span> Logout </span></a>
+                                <?= Html::a('<i class="fi-power"></i><span> Logout </span>', ['site/logout'], ['data' => ['method' => 'post']]) ?>
                             </li>
 
                         </ul>
