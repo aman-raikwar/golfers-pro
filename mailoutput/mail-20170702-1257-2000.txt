@@ -1,0 +1,10 @@
+To: amanraikwar@mailinator.com
+Subject: Mail from Golfer Website
+Message-ID: <870d57dcf834351ecd6869d73a50a42b@localhost>
+Date: Sun, 02 Jul 2017 14:57:28 +0200
+From: Aman Raikwar <aman.btech12@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+This is my simple message for the User

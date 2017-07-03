@@ -1,0 +1,27 @@
+[25-Jun-2017 11:37:57 UTC] PHP Fatal error:  Class 'app\controllers\Signup' not found in /home/amishisharma/public_html/golfer/registration/controllers/SiteController.php on line 94
+[25-Jun-2017 12:12:20 UTC] PHP Fatal error:  Class 'app\controllers\Signup' not found in /home/amishisharma/public_html/golfer/registration/controllers/SiteController.php on line 94
+[25-Jun-2017 12:14:05 UTC] PHP Fatal error:  Class 'app\controllers\Signup' not found in /home/amishisharma/public_html/golfer/registration/controllers/SiteController.php on line 94
+[25-Jun-2017 12:22:11 UTC] PHP Fatal error:  Class 'app\controllers\Signup' not found in /home/amishisharma/public_html/golfer/registration/controllers/SiteController.php on line 94
+[25-Jun-2017 12:22:50 UTC] PHP Fatal error:  Class 'app\controllers\Signup' not found in /home/amishisharma/public_html/golfer/registration/controllers/SiteController.php on line 94
+[25-Jun-2017 12:24:51 UTC] PHP Fatal error:  Class 'app\controllers\Signup' not found in /home/amishisharma/public_html/golfer/registration/controllers/SiteController.php on line 94
+[25-Jun-2017 12:24:59 UTC] PHP Fatal error:  Class 'app\controllers\Signup' not found in /home/amishisharma/public_html/golfer/registration/controllers/SiteController.php on line 94
+[25-Jun-2017 12:25:02 UTC] PHP Fatal error:  Class 'app\controllers\Signup' not found in /home/amishisharma/public_html/golfer/registration/controllers/SiteController.php on line 94
+[28-Jun-2017 18:38:56 UTC] PHP Fatal error:  Class 'app\controllers\Signup' not found in /home/amishisharma/public_html/golfer/registration/controllers/SiteController.php on line 94
+[28-Jun-2017 18:41:32 UTC] PHP Fatal error:  Class 'app\controllers\Signup' not found in /home/amishisharma/public_html/golfer/registration/controllers/SiteController.php on line 94
+[28-Jun-2017 18:41:36 UTC] PHP Fatal error:  Class 'app\controllers\Signup' not found in /home/amishisharma/public_html/golfer/registration/controllers/SiteController.php on line 94
+[28-Jun-2017 18:43:00 UTC] PHP Fatal error:  Class 'app\controllers\Signup' not found in /home/amishisharma/public_html/golfer/registration/controllers/SiteController.php on line 94
+[28-Jun-2017 18:43:33 UTC] PHP Fatal error:  Class 'app\controllers\Signup' not found in /home/amishisharma/public_html/golfer/registration/controllers/SiteController.php on line 94
+[29-Jun-2017 05:30:33 UTC] PHP Fatal error:  Call to undefined method yii\helpers\Html::link() in /home/amishisharma/public_html/golfer/registration/views/golf-course/index.php on line 69
+[29-Jun-2017 05:52:48 UTC] PHP Fatal error:  Class 'ActiveForm' not found in /home/amishisharma/public_html/golfer/registration/views/golf-course/create.php on line 1
+[29-Jun-2017 05:53:33 UTC] PHP Fatal error:  Class 'ActiveForm' not found in /home/amishisharma/public_html/golfer/registration/views/golf-course/create.php on line 5
+[29-Jun-2017 16:41:50 UTC] PHP Fatal error:  Class 'Modal' not found in /home/amishisharma/public_html/golfer/registration/views/golf-course/index.php on line 71
+[29-Jun-2017 16:42:35 UTC] PHP Parse error:  syntax error, unexpected 'use' (T_USE), expecting ',' or ';' in /home/amishisharma/public_html/golfer/registration/views/golf-course/index.php on line 9
+[29-Jun-2017 16:42:51 UTC] PHP Fatal error:  Class 'yii\bootstap\Modal' not found in /home/amishisharma/public_html/golfer/registration/views/golf-course/index.php on line 73
+[29-Jun-2017 16:46:14 UTC] PHP Fatal error:  Class 'ActiveForm' not found in /home/amishisharma/public_html/golfer/registration/views/golf-course/_form.php on line 1
+[29-Jun-2017 17:02:23 UTC] PHP Fatal error:  Class 'Html' not found in /home/amishisharma/public_html/golfer/registration/views/golf-course/_form.php on line 223
+[29-Jun-2017 19:22:26 UTC] PHP Fatal error:  Class 'Country' not found in /home/amishisharma/public_html/golfer/registration/views/golf-course/_form.php on line 65
+[29-Jun-2017 19:22:42 UTC] PHP Fatal error:  Class 'Country' not found in /home/amishisharma/public_html/golfer/registration/views/golf-course/_form.php on line 65
+[29-Jun-2017 19:23:23 UTC] PHP Fatal error:  Class 'ArrayHelper' not found in /home/amishisharma/public_html/golfer/registration/views/golf-course/_form.php on line 67
+[29-Jun-2017 19:37:08 UTC] PHP Parse error:  syntax error, unexpected '=', expecting ']' in /home/amishisharma/public_html/golfer/registration/controllers/GolfCourseController.php on line 145
+[29-Jun-2017 19:39:00 UTC] PHP Parse error:  syntax error, unexpected '=', expecting ']' in /home/amishisharma/public_html/golfer/registration/controllers/GolfCourseController.php on line 147
+[29-Jun-2017 19:39:41 UTC] PHP Parse error:  syntax error, unexpected ''onchange'' (T_CONSTANT_ENCAPSED_STRING), expecting ']' in /home/amishisharma/public_html/golfer/registration/views/golf-course/_form.php on line 72

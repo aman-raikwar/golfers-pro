@@ -1,0 +1,21 @@
+1. Show loader when Popup is getting data
+		Done!
+
+2. Work on Club Functionalities (Add/Update)
+		Done!
+
+3. Create Golfer Card Membership Category Table for Levels
+		Done!
+
+4. Add a Golfer, Edit Golfer and List all Golfers has been partially.
+
+3. Ajax Datatable
+4. Add Player from Golfer Page: http://yogami.in/golfer/registration/web/player
+5. Link Golfer Club to their Profile Page for View feature from Golf Club list page
+
+
+7. Client will provide Admin Table Structure
+8. We have three types of user in system Admin, Golf Club and Golfers => We have GolfCourse(Golf Club), Player(Golfers)
+9. Club Functionalities - CRUD
+
+10 Edit Golf has many issues for example Country is not displayed on edit screen, password is displayed directly, Facilities that were selected on add are not displayed on Add page. Also there are many more. Major is when we click on Save CHanges we get yii error.
