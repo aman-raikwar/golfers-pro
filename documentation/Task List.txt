@@ -1,14 +1,3 @@
-1. Show loader when Popup is getting data
-		Done!
-
-2. Work on Club Functionalities (Add/Update)
-		Done!
-
-3. Create Golfer Card Membership Category Table for Levels
-		Done!
-
-4. Add a Golfer, Edit Golfer and List all Golfers has been partially.
-
 3. Ajax Datatable
 4. Add Player from Golfer Page: http://yogami.in/golfer/registration/web/player
 5. Link Golfer Club to their Profile Page for View feature from Golf Club list page
@@ -20,7 +9,7 @@
 
 10 Edit Golf has many issues for example Country is not displayed on edit screen, password is displayed directly, Facilities that were selected on add are not displayed on Add page. Also there are many more. Major is when we click on Save CHanges we get yii error.
 
-
+11. Order Country dropdown in alphatical order
 
 if ($model->save()) {
                 \Yii::$app->session->setFlash('type', 'success');
@@ -36,36 +25,7 @@ if ($model->save()) {
             
             
             
-            <?php 
-        $type = Yii::$app->session->getFlash('type');
-        $title = Yii::$app->session->getFlash('title');
-        $message = Yii::$app->session->getFlash('message');
-        
-        if(!empty($type) && !empty($message)) {
-            Notification::widget([
-                'type' => $type,
-                'title' => $title,
-                'message' => $message,
-                'options' => [
-                    "closeButton" => false,
-                    "debug" => false,
-                    "newestOnTop" => false,
-                    "progressBar" => false,
-                    "positionClass" => "toast-bottom-right",
-                    "preventDuplicates" => false,
-                    "onclick" => null,
-                    "showDuration" => "300",
-                    "hideDuration" => "1000",
-                    "timeOut" => "3000",
-                    "extendedTimeOut" => "1000",
-                    "showEasing" => "swing",
-                    "hideEasing" => "linear",
-                    "showMethod" => "fadeIn",
-                    "hideMethod" => "fadeOut"
-                ]
-            ]);
-        }
-        ?>
+            
         
         
         

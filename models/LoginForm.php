@@ -24,10 +24,10 @@ class LoginForm extends Model {
     public function rules() {
         return [
             // username and password are both required
-                [['email', 'password'], 'required'],
+            [['email', 'password'], 'required'],
             // rememberMe must be a boolean value
             ['rememberMe', 'boolean'],
-                ['email', 'email'],
+            ['email', 'email'],
             // password is validated by validatePassword()
             ['password', 'validatePassword'],
         ];
@@ -40,11 +40,10 @@ class LoginForm extends Model {
      * @param string $attribute the attribute currently being validated
      * @param array $params the additional name-value pairs given in the rule
      */
-    public function validatePassword($attribute, $params)
-    {
+    public function validatePassword($attribute, $params) {
         if (!$this->hasErrors()) {
             $user = $this->getUser();
-                       
+
             if (!$user || !$user->validatePassword($this->password)) {
                 $this->addError($attribute, 'Incorrect username or password.');
             }
@@ -56,8 +55,7 @@ class LoginForm extends Model {
      *
      * @return boolean whether the user is logged in successfully
      */
-    public function login()
-    {
+    public function login() {
         if ($this->validate()) {
             return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0);
         } else {
@@ -70,8 +68,7 @@ class LoginForm extends Model {
      *
      * @return User|null
      */
-    protected function getUser()
-    {
+    protected function getUser() {
         if ($this->_user === null) {
             $this->_user = User::findByUsername($this->email);
         }

@@ -8,6 +8,7 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 use yii\helpers\Url;
+use lavrentiev\widgets\toastr\Notification;
 
 AppAsset::register($this);
 ?>
@@ -27,6 +28,36 @@ AppAsset::register($this);
         <div id="loading-indicator">
             <img id="loading-image" src="<?php echo Yii::$app->request->baseUrl; ?>/images/ajaxloader.gif" alt="Loading..."/>
         </div>
+        <?php
+        $type = Yii::$app->session->getFlash('type');
+        $title = Yii::$app->session->getFlash('title');
+        $message = Yii::$app->session->getFlash('message');
+
+        if (!empty($type) && !empty($message)) {
+            Notification::widget([
+                'type' => $type,
+                'title' => $title,
+                'message' => $message,
+                'options' => [
+                    "closeButton" => false,
+                    "debug" => false,
+                    "newestOnTop" => true,
+                    "progressBar" => true,
+                    "positionClass" => "toast-top-right",
+                    "preventDuplicates" => false,
+                    "onclick" => null,
+                    "showDuration" => "100",
+                    "hideDuration" => "3000",
+                    "timeOut" => "3000",
+                    "extendedTimeOut" => "1000",
+                    "showEasing" => "swing",
+                    "hideEasing" => "linear",
+                    "showMethod" => "fadeIn",
+                    "hideMethod" => "fadeOut"
+                ]
+            ]);
+        }
+        ?>
         <?php $this->beginBody() ?>
 
         <!-- Begin page -->
@@ -37,14 +68,10 @@ AppAsset::register($this);
 
                 <!-- LOGO -->
                 <div class="topbar-left">
-                    <!--<a href="<?= Url::to('golf-clubs') ?>" class="logo">-->
-                    <!--    <span>-->
-                    <!--        <img src="<?php echo Yii::$app->request->baseUrl; ?>/images/logo.png" alt="" height="50">-->
-                    <!--    </span>-->
-                    <!--    <i>-->
-                    <!--        <img src="<?php echo Yii::$app->request->baseUrl; ?>/images/logo_sm.png" alt="" height="50">-->
-                    <!--    </i>-->
-                    <!--</a>-->
+                    <a href="<?= Url::to('golf-clubs') ?>" class="logo">
+                        <span><img src="<?php echo Yii::$app->request->baseUrl; ?>/images/logo.png" alt="" height="50"></span>
+                        <i><img src="<?php echo Yii::$app->request->baseUrl; ?>/images/logo_sm.png" alt="" height="50"></i>
+                    </a>
                 </div>
                 <!--  LOGO END  -->
                 <nav class="navbar-custom">
@@ -56,7 +83,7 @@ AppAsset::register($this);
                             </button>
                         </li>
                         <li>
-                            <!--<h4 class="page-title text-dark">Golf Clubs</h4>-->
+                            <h4 class="page-title text-dark">Golf Clubs</h4>
                         </li>
                     </ul>
 

@@ -4,38 +4,38 @@ $(function () {
     
     $('#registerSuccess').modal('show');
 
-    $('body').on('change', '#user-firstclubid', function () {
+    $('body').on('change', '#golfersignupform-golfer_firstclubid', function () {
         if ($(this).val() !== '') {
-            $('#user-ismemberofanotherclub').removeAttr('disabled');
+            $('#golfersignupform-golfer_ismemberofanotherclub').removeAttr('disabled');
         } else {
-            $('#user-ismemberofanotherclub').attr('disabled', 'disabled');
+            $('#golfersignupform-golfer_ismemberofanotherclub').attr('disabled', 'disabled');
         }
 
-        $('#user-ismemberofanotherclub').prop('selectedIndex', 0);
-        $("#user-otherclubname option").removeAttr('selected');
-        $("#user-otherclubname option").removeAttr('disabled');
-        $('#user-otherclubname').prop('selectedIndex', 0);
-        $('#user-otherclubname').attr('disabled', 'disabled');
+        $('#golfersignupform-golfer_ismemberofanotherclub').prop('selectedIndex', 0);
+        $("#golfersignupform-golfer_otherclubid option").removeAttr('selected');
+        $("#golfersignupform-golfer_otherclubid option").removeAttr('disabled');
+        $('#golfersignupform-golfer_otherclubid').prop('selectedIndex', 0);
+        $('#golfersignupform-golfer_otherclubid').attr('disabled', 'disabled');
     });
 
-    $('body').on('change', '#user-ismemberofanotherclub', function () {
+    $('body').on('change', '#golfersignupform-golfer_ismemberofanotherclub', function () {
         if ($(this).val() === '1') {
             //No
-            $("#user-otherclubname option").removeAttr('selected');
-            $("#user-otherclubname option").removeAttr('disabled');
-            $('#user-otherclubname').prop('selectedIndex', 0);
-            $('#user-otherclubname').attr('disabled', 'disabled');
+            $("#golfersignupform-golfer_otherclubid option").removeAttr('selected');
+            $("#golfersignupform-golfer_otherclubid option").removeAttr('disabled');
+            $('#golfersignupform-golfer_otherclubid').prop('selectedIndex', 0);
+            $('#golfersignupform-golfer_otherclubid').attr('disabled', 'disabled');
         } else {
             //Yes
-            var clubId1 = $('#user-firstclubid').val();
-            $('#user-otherclubname').removeAttr('disabled');
-            $("#user-otherclubname option[value='" + clubId1 + "']").attr('disabled', 'disabled');
+            var clubId1 = $('#golfersignupform-golfer_firstclubid').val();
+            $('#golfersignupform-golfer_otherclubid').removeAttr('disabled');
+            $("#golfersignupform-golfer_otherclubid option[value='" + clubId1 + "']").attr('disabled', 'disabled');
         }
     });
 
     var dt = new Date();
     dt.setFullYear(new Date().getFullYear() - 18);
-    $("#user-dateofbirth").datepicker({
+    $("#golfersignupform-golfer_dateofbirth").datepicker({
         autoclose: !0,
         todayHighlight: !0,
         endDate: dt,
@@ -45,11 +45,11 @@ $(function () {
 
     $('.show-datepicker').click(function (event) {
         event.preventDefault();
-        $("#user-dateofbirth").focus();
+        $("#golfersignupform-golfer_dateofbirth").focus();
     });
 
     // Get County from Country Id
-    $('body').on('change', '#user-country', function () {
+    $('body').on('change', '#golfersignupform-golfer_country', function () {
         var country_id = $(this).val();
         var url = $(this).data('url');
 
@@ -65,7 +65,7 @@ $(function () {
                         html += '<option value="' + index + '">' + item + '</option>';
                     });
                 }
-                $('#user-county').html(html);
+                $('#golfersignupform-golfer_county').html(html);
             }
         });
     });

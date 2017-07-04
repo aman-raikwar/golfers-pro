@@ -32,7 +32,7 @@ tests/_support/_generated
 # Yii temp directories
 web/assets/**
 runtime/**
-web/minify/**
 
 # composer itself is not needed
 composer.lock
+*.data
