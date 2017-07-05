@@ -4,7 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\GolfCourse;
-use app\models\GolfCourseSearch;
+use app\models\User;
 use app\models\County;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -73,6 +73,7 @@ class GolfCourseController extends Controller {
      */
     public function actionCreate() {
         $model = new GolfCourse();
+        $model->setScenario('create');
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             Yii::$app->response->format = Response::FORMAT_JSON;
@@ -91,9 +92,19 @@ class GolfCourseController extends Controller {
 
             if (!empty($_POST['GolfCourse']['ClubFacilities'])) {
                 $model->ClubFacilities = implode(',', $_POST['GolfCourse']['ClubFacilities']);
-            }           
+            }
 
-            if ($model->save()) {
+            $user = new User();
+            $user->user_username = $model->LoginID;
+            $user->user_email = $model->Email;
+            $user->setPassword($model->Password);
+            $user->generateAuthKey();
+            $user->user_roleID = 3;
+            $user->user_userID = 0;
+
+            if ($model->save() && $user->save()) {
+                $user->user_userID = $model->ID;
+                $user->save();
                 return $this->redirect(['index']);
             } else {
                 Yii::$app->response->format = Response::FORMAT_JSON;

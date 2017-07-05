@@ -113,6 +113,7 @@ class GolferSignupForm extends Model {
         }
 
         try {
+
             $golfer = new Golfer();
             $golfer->golfer_title = $this->golfer_title;
             $golfer->golfer_firstname = $this->golfer_firstname;
@@ -135,7 +136,9 @@ class GolferSignupForm extends Model {
             $golfer->golfer_lifetimeID = $this->golfer_lifetimeID;
             $golfer->golfer_optIn = $this->golfer_optIn;
             $golfer->golfer_opgRegType = $this->golfer_opgRegType;
-
+            $golfer->user_username = $this->user_username;
+            $golfer->user_email = $this->user_email;
+            $golfer->acceptTermsCondition = $this->acceptTermsCondition;
 
             $user = new User();
             $user->user_username = $this->user_username;
@@ -145,14 +148,15 @@ class GolferSignupForm extends Model {
             $user->user_roleID = 2;
             $user->user_userID = 0;
 
+
             if ($golfer->save() && $user->save()) {
                 $user->user_userID = $golfer->golfer_id;
                 return $user->save() ? $user : null;
             } else {
-//                echo '<pre>';
-//                print_r($golfer->getErrors());
-//                print_r($user->getErrors());
-//                die();
+                //echo '<pre>';
+                //print_r($golfer->getErrors());
+                //print_r($user->getErrors());
+                //die();
             }
         } catch (\yii\db\Exception $e) {
             return null;

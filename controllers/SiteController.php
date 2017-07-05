@@ -106,15 +106,18 @@ class SiteController extends Controller {
 
         $this->layout = 'frontend';
         $model = new GolferSignupForm();
-        
+
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->signup()) {
                 Yii::$app->session->setFlash('success', 'done');
                 return $this->redirect('golfer-registration');
+            } else {
+//                print_r($model->getErrors());
+//                die;
             }
         }
 
-        return $this->render('register', ['model' => $model,]);
+        return $this->render('register', ['model' => $model]);
     }
 
     // public function actionRegistration() {

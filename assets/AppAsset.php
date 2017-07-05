@@ -48,7 +48,7 @@ class AppAsset extends AssetBundle {
         "plugins/datatables/buttons.bootstrap4.min.js",
         "plugins/datatables/buttons.html5.min.js",
         "plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js",
-        "js/golfclub-script.js"
+        "js/roles-script.js"
     ];
     public $depends = [
         'yii\web\YiiAsset',

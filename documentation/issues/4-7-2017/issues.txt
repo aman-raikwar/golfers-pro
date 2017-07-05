@@ -1,0 +1,30 @@
+Adjust the menu in the following manner:
+
+When golfer is logged in we need to show only following menu:
+1. Activity
+2. My Profile
+3. Info & Support
+4. Logout
+
+
+When golf club is logged in:
+1. Activity
+2. Golfers
+3. Cards
+4. My Profile
+5. Info & Support
+6. Logout
+
+When Platform Admin logs in all is displayed
+--------------------------------------------------------------------------
+Done!
+--------------------------------------------------------------------------
+
+
+
+
+by tomorrow 11am we will be completeing all the given below functionalities:
+Golf Clubs including edit and Add
+Online registration for a Golfer
+Golf Club able to register a Golfer
+Login and Forgot Password process for a Golfer / Golf Club

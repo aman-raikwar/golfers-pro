@@ -1,36 +1,12 @@
 $(function () {
 
-    /********************************/
-    /**********   GolfClub  **********/
-    /********************************/
-
-    // Show Add GolfClub Modal
-    $('body').on('click', '#createGolfClub', function () {
-        $('#addGolfModal').find('.golfModalContent').load($(this).data('href'), function () {
-            var thisModal = $('#addGolfModal');
-            //setTimeout(function () {
+    $('body').on('click', '.link-golf-club', function () {
+        $("#loading-indicator").show();
+        $('#golf-club-modal').find('.modal-content').load($(this).data('href'), function () {
+            var thisModal = $('#golf-club-modal');
             thisModal.modal('show');
             $("#loading-indicator").hide();
-            //}, 1000);
         });
-        $("#loading-indicator").show();
-    });
-
-    // Show Edit GolfClub Modal
-    $('body').on('click', '#editGolfClub', function () {
-        $('#editGolfModal').find('.golfModalContent').load($(this).attr('value'), function () {
-            var thisModal = $('#editGolfModal');
-            //setTimeout(function () {
-            thisModal.modal('show');
-            $("#loading-indicator").hide();
-            //}, 1000);
-        });
-        $("#loading-indicator").show();
-    });
-
-    // Submit GolfClub Form
-    $('body').on('click', '#btnSubmitGolfClub', function () {
-        $('.golfModalContent form').submit();
     });
 
     // Club Logo Change
@@ -122,7 +98,7 @@ $(function () {
 });
 
 function readURL(input) {
-    if (input.files && input.files[0]) {
+    if (input.files && input.files[0] && input.files[0].type !== '') {
         var reader = new FileReader();
         reader.onload = function (e) {
             $('.showClubLogo img').attr('src', e.target.result);

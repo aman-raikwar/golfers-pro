@@ -63,30 +63,11 @@ $this->title = 'Golf Clubs';
                     <div class="portlet">
                         <div class="portlet-heading bg-inverse">
                             <h3 class="portlet-title">
-                                Golf Club Overview
+                                Golf Clubs
                             </h3>
                             <div class="portlet-widgets">
-                                <a href="javascript:void(0);" data-href="<?= Url::to(['golf-clubs/add-club']); ?>" id="createGolfClub"><i class="mdi mdi-plus"></i></a>
+                                <a href="javascript:void(0);" class="link-golf-club" data-href="<?= Url::to(['golf-clubs/add-club']); ?>"><i class="mdi mdi-plus"></i></a>
                             </div>
-                            <?php
-                            $golfModalfooter = '<button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>' . Html::submitButton('Save Changes', ['class' => 'btn btn-danger waves-effect waves-light', 'id' => 'btnSubmitGolfClub']);
-
-                            Modal::begin([
-                                'header' => '<h4 class="modal-title" id="myModalLabel">Add a Golf Club</h4>',
-                                'footer' => $golfModalfooter,
-                                'id' => 'addGolfModal'
-                            ]);
-                            echo '<div class="golfModalContent"></div>';
-                            Modal::end();
-
-                            Modal::begin([
-                                'header' => '<h4 class="modal-title" id="myModalLabel">Edit Golf Club</h4>',
-                                'footer' => $golfModalfooter,
-                                'id' => 'editGolfModal'
-                            ]);
-                            echo '<div class="golfModalContent"></div>';
-                            Modal::end();
-                            ?>
                             <div class="clearfix"></div>
                         </div>
                         <div id="bg-default" class="panel-collapse collapse in show">
@@ -125,8 +106,13 @@ $this->title = 'Golf Clubs';
                                                         <td>
                                                             <div class="button-list pull-right">
                                                                 <button type="button" class="btn btn-icon waves-effect btn-danger"> <i class="fa fa-search"></i> </button>
-                                                                <!-- <button type="button" class="btn btn-icon waves-effect waves-light btn-warning"> <i class="fa fa-pencil"></i> </button> -->
-                                                                <?= Html::button('<i class="fa fa-pencil"></i>', ['value' => Url::to(['golf-clubs/edit-club', 'id' => $row->ID]), 'id' => 'editGolfClub', 'class' => 'btn btn-icon waves-effect waves-light btn-warning']) ?>
+                                                                <?=
+                                                                Html::a('<span class="fa fa-pencil"></span>', 'javascript:void(0);', [
+                                                                    'title' => Yii::t('app', 'Edit'),
+                                                                    'class' => 'btn btn-icon waves-effect waves-light btn-warning link-golf-club',
+                                                                    'data-href' => Url::to(['golf-clubs/edit-club', 'id' => $row->ID])
+                                                                ]);
+                                                                ?>
                                                                 <?=
                                                                 Html::a('<i class="fa fa-remove"></i>', ['delete', 'id' => $row->ID], [
                                                                     'class' => 'btn btn-icon waves-effect waves-light btn-inverse',
@@ -156,3 +142,10 @@ $this->title = 'Golf Clubs';
         <!-- content end -->
     </div>
 </div>
+
+<?php
+Modal::begin(['id' => 'golf-club-modal']);
+Modal::end();
+?>
+
+<?php $this->registerJsFile(Yii::$app->request->baseUrl . '/js/golfclub-script.js', ['depends' => [\yii\web\JqueryAsset::className()]]); ?>

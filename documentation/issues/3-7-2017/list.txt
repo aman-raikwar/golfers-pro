@@ -1,10 +1,18 @@
 Login Process is as follows:
 • Add a field Username in the Golfer registration form which user will have to enter. System would check if this username is available or not. If it is available then registration will be done.
+--> Done!
+
 • Users will be able to use one email address only for registration and also choose a password of their choice
+--> Done!
+
 • On Login page users have to enter their username and password and then login. 
+--> Done!
+
 • When a users forgets their login details, the system should ask for their email address. Once they enter the email address then on the same screen we display the usernames that are associated with this email address. User can then select the username for which they need a new password and then system would send reset password link on the mail address linked to that username. Reset link will expire in 24hrs.
+--> Pending
+
 • If golfer forgets the username also then we ask user to enter "email address" and then on that email address we send the list of usernames linked to that email address
-Let me know if anything is not clear.
+--> Pending
 
 
 we have got some more corrections for add/edit golf club

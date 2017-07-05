@@ -64,27 +64,21 @@ if (Yii::$app->session->hasFlash('success')) {
                                 <?php $form = ActiveForm::begin(['enableClientValidation' => true, 'enableAjaxValidation' => false], ['id' => 'golfer-registration-form', 'class' => 'form-horizontal']); ?>
 
                                 <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <?php
-                                            $GolfCourse = GolfCourse::find()->all();
-                                            $GolfCourseList = ArrayHelper::map($GolfCourse, 'ID', 'Name');
-                                            echo $form->field($model, 'golfer_firstClubID')->dropDownList($GolfCourseList, ['prompt' => 'Select Golf Club']);
-                                            ?>
-                                        </div>
+                                    <div class="col-md-12">                                        
+                                        <?php
+                                        $GolfCourse = GolfCourse::find()->all();
+                                        $GolfCourseList = ArrayHelper::map($GolfCourse, 'ID', 'Name');
+                                        echo $form->field($model, 'golfer_firstClubID')->dropDownList($GolfCourseList, ['prompt' => 'Select Golf Club']);
+                                        ?>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <div class="form-group">
-                                            <?= $form->field($model, 'golfer_isMemberOfAnotherClub')->dropDownList([1 => 'No', 2 => 'Yes'], ['disabled' => 'disabled']); ?>
-                                        </div>
+                                        <?= $form->field($model, 'golfer_isMemberOfAnotherClub')->dropDownList([1 => 'No', 2 => 'Yes'], ['disabled' => 'disabled']); ?>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <?= $form->field($model, 'golfer_otherClubID')->dropDownList($GolfCourseList, ['prompt' => 'Select Golf Club', 'disabled' => 'disabled']); ?>
-                                        </div>
+                                    <div class="col-md-6">                                        
+                                        <?= $form->field($model, 'golfer_otherClubID')->dropDownList($GolfCourseList, ['prompt' => 'Select Golf Club', 'disabled' => 'disabled']); ?>                                        
                                     </div>
                                 </div>
 
@@ -103,135 +97,92 @@ if (Yii::$app->session->hasFlash('success')) {
 
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <div class="form-group">                                                
-                                            <?php
-                                            $getPersonTitlesList = Utility::getPersonTitles();
-                                            echo $form->field($model, 'golfer_title')->dropdownList($getPersonTitlesList, ['prompt' => 'Select Title']);
-                                            ?>
-                                        </div>
+                                        <?php
+                                        $getPersonTitlesList = Utility::getPersonTitles();
+                                        echo $form->field($model, 'golfer_title')->dropdownList($getPersonTitlesList, ['prompt' => 'Select Title']);
+                                        ?>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <div class="form-group">                                                
-                                            <?= $form->field($model, 'golfer_firstname')->textInput(['maxlength' => true]) ?>
-                                        </div>
+                                        <?= $form->field($model, 'golfer_firstname')->textInput(['maxlength' => true]) ?>
                                     </div>                                    
                                     <div class="col-md-6">
-                                        <div class="form-group">                                                
-                                            <?= $form->field($model, 'golfer_lastname')->textInput(['maxlength' => true]) ?>
-                                        </div>
+                                        <?= $form->field($model, 'golfer_lastname')->textInput(['maxlength' => true]) ?>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <div class="form-group">                                                
-                                            <?= $form->field($model, 'golfer_gender')->dropDownList(['F' => 'Female', 'M' => 'Male'], ['prompt' => 'Select Gender']) ?>
-                                        </div>
+                                        <?= $form->field($model, 'golfer_gender')->dropDownList(['F' => 'Female', 'M' => 'Male'], ['prompt' => 'Select Gender']) ?>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="field-9" class="control-label">Date of Birth</label>
-                                            <?=
-                                            $form->field($model, 'golfer_dateOfBirth', ['template' => '
-                                                            <div>
-                                                                <div class="input-group">
-                                                                    {input}
-                                                                   <span class="input-group-addon bg-custom b-0 show-datepicker"><i class="mdi mdi-calendar text-white"></i></span>
-                                                                </div>
-                                                                {error}{hint}
-                                                            </div>'
-                                            ])->textInput(['placeholder' => 'yyyy-mm-dd'])->label(false);
-                                            ?>
-                                        </div>
+                                        <?= $form->field($model, 'golfer_dateOfBirth', ['template' => '<div>{label}<div class="input-group">{input} <span class="input-group-addon bg-custom b-0 show-datepicker"><i class="mdi mdi-calendar text-white"></i></span></div>{error}{hint}</div>'])->textInput(['placeholder' => 'yyyy-mm-dd']); ?>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <div class="form-group">                                                
-                                            <?= $form->field($model, 'user_email')->textInput(['maxlength' => true]) ?>
-                                        </div>
+                                        <?= $form->field($model, 'user_email')->textInput(['maxlength' => true]) ?>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="form-group">                                                
-                                            <?= $form->field($model, 'user_username')->textInput(['maxlength' => true]) ?>
-                                        </div>
+                                        <?= $form->field($model, 'user_username')->textInput(['maxlength' => true]) ?>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <div class="form-group">                                                
-                                            <?= $form->field($model, 'user_password')->passwordInput(['maxlength' => true]) ?>
-                                        </div>
+                                        <?= $form->field($model, 'user_password')->passwordInput(['maxlength' => true]) ?>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="form-group">                                                
-                                            <?= $form->field($model, 'user_password_repeat')->passwordInput(['maxlength' => true]) ?>
-                                        </div>
+                                        <?= $form->field($model, 'user_password_repeat')->passwordInput(['maxlength' => true]) ?>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <div class="form-group">
-                                            <?= $form->field($model, 'golfer_phone')->textInput(['maxlength' => true]) ?>
-                                        </div>
+                                        <?= $form->field($model, 'golfer_phone')->textInput(['maxlength' => true]) ?>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <div class="form-group">                                                
-                                            <?= $form->field($model, 'golfer_address1')->textInput(['maxlength' => true]) ?>
-                                        </div>
+                                        <?= $form->field($model, 'golfer_address1')->textInput(['maxlength' => true]) ?>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">                                                
-                                            <?= $form->field($model, 'golfer_address2')->textInput(['maxlength' => true]) ?>
-                                        </div>
+                                    <div class="col-md-12">                                        
+                                        <?= $form->field($model, 'golfer_address2')->textInput(['maxlength' => true]) ?>                                        
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <div class="form-group">
-                                            <?php
-                                            $countries = Country::find()->orderBy('nationality')->all();
-                                            $countryList = ArrayHelper::map($countries, 'id', 'nationality');
-                                            echo $form->field($model, 'golfer_country')->dropDownList($countryList, [
-                                                'prompt' => 'Select Country',
-                                                'data-url' => Url::to(['golf-clubs/county-list'])
-                                            ]);
-                                            ?>            
-                                        </div>
+                                        <?php
+                                        $countries = Country::find()->orderBy('nationality')->all();
+                                        $countryList = ArrayHelper::map($countries, 'id', 'nationality');
+                                        echo $form->field($model, 'golfer_country')->dropDownList($countryList, [
+                                            'prompt' => 'Select Country',
+                                            'data-url' => Url::to(['golf-clubs/county-list'])
+                                        ]);
+                                        ?>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">                                                
-                                            <?php
-                                            $counties = County::find()->orderBy('name')->all();
-                                            $countyList = ArrayHelper::map($counties, 'id', 'name');
-                                            echo $form->field($model, 'golfer_county')->dropDownList($countyList, ['prompt' => 'Select County']);
-                                            ?>
-                                        </div>
+                                    <div class="col-md-6">                                        
+                                        <?php
+                                        $counties = County::find()->orderBy('name')->all();
+                                        $countyList = ArrayHelper::map($counties, 'id', 'name');
+                                        echo $form->field($model, 'golfer_county')->dropDownList($countyList, ['prompt' => 'Select County']);
+                                        ?>                                        
                                     </div>
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <?= $form->field($model, 'golfer_town')->textInput(['maxlength' => true]) ?>
-                                        </div>
+                                    <div class="col-md-6">                                        
+                                        <?= $form->field($model, 'golfer_town')->textInput(['maxlength' => true]) ?>                                        
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <?= $form->field($model, 'golfer_postCode')->textInput(['maxlength' => true]) ?>
-                                        </div>
+                                    <div class="col-md-6">                                        
+                                        <?= $form->field($model, 'golfer_postCode')->textInput(['maxlength' => true]) ?>                                        
                                     </div>
                                 </div>
 

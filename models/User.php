@@ -25,6 +25,9 @@ use yii\web\IdentityInterface;
  */
 class User extends ActiveRecord implements IdentityInterface {
 
+    const STATUS_DELETED = 0;
+    const STATUS_ACTIVE = 1;
+
     /**
      * @inheritdoc
      */
@@ -109,7 +112,7 @@ class User extends ActiveRecord implements IdentityInterface {
      * @return static|null
      */
     public static function findByUsername($username) {
-        return static::findOne(['user_email' => $username]);
+        return static::findOne(['user_username' => $username]);
     }
 
     /**
@@ -138,7 +141,8 @@ class User extends ActiveRecord implements IdentityInterface {
         }
 
         $timestamp = (int) substr($token, strrpos($token, '_') + 1);
-        $expire = Yii::$app->params['user.passwordResetTokenExpire'];
+        //$expire = Yii::$app->params['user.passwordResetTokenExpire'];
+        $expire = 24 * 60 * 60;
         return $timestamp + $expire >= time();
     }
 
@@ -214,5 +218,4 @@ class User extends ActiveRecord implements IdentityInterface {
 //            return false;
 //        }
 //    }
-
 }

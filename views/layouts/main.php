@@ -9,6 +9,7 @@ use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 use yii\helpers\Url;
 use lavrentiev\widgets\toastr\Notification;
+use kartik\widgets\SideNav;
 
 AppAsset::register($this);
 ?>
@@ -95,36 +96,27 @@ AppAsset::register($this);
 
             <!-- ========== Left Sidebar Start ========== -->
             <div class="left side-menu">
-                <div class="slimscroll-menu" id="remove-scroll">
-
+                <div class="slimscroll-menu" id="remove-scroll">                    
                     <!--- Sidemenu -->
                     <div id="sidebar-menu">
                         <!-- Left Menu Start -->
-                        <ul class="metismenu" id="side-menu">
-                            <li>
-                                <a href="<?= Url::base() . "/golf-clubs" ?>"><i class="fi-ribbon"></i><span> Golf Clubs </span></a>
-                            </li>
+                        <ul class="metismenu" id="side-menu">                            
+                            <li><?= Html::a('<i class="fi-disc"></i><span> Activity </span>', ['/playeractivity']) ?></li>
 
-                            <li>
-                                <a href="<?= Url::base() . "/playeractivity" ?>"><i class="fi-disc"></i><span> Activity </span></a>
-                            </li>
+                            <?php if (Yii::$app->user->identity->user_roleID == 1) { ?>
+                                <li><?= Html::a('<i class="fi-ribbon"></i><span> Golf Clubs </span>', ['/golf-clubs']) ?></li>                                
+                            <?php } ?>
 
-                            <li>
-                                <a href="<?= Url::base() . "/player" ?>"><i class="fi-head"></i><span> Golfers </span></a>
-                            </li>
+                            <?php if (in_array(Yii::$app->user->identity->user_roleID, [1, 3])) { ?>
+                                <li><?= Html::a('<i class="fi-head"></i><span> Golfers </span>', ['/player']) ?></li>
+                                <li><?= Html::a('<i class="fi-book"></i><span> Cards </span>', ['/golf-cards']) ?></li>                                
+                            <?php } ?>
 
-                            <li>
-                                <a href="<?= Url::base() . "/golf-cards" ?>"><i class="fi-book"></i><span> Cards </span></a>
-                            </li>
+                            <?php if (Yii::$app->user->identity->user_roleID == 1) { ?>
+                                <li><?= Html::a('<i class="fi-server"></i><span> Readers </span>', ['/golf-clubs']) ?></li>
+                            <?php } ?>
 
-                            <li>
-                                <a href="<?= Url::base() . "/golf-clubs" ?>"><i class="fi-server"></i><span> Readers </span></a>
-                            </li>
-
-                            <li>
-                                <a href="<?= Url::base() . "/golf-clubs" ?>"><i class="fi-cog"></i><span> My Profile </span></a>
-                            </li>
-
+                            <li><?= Html::a('<i class="fi-cog"></i><span> My Profile </span>', ['/golf-clubs']) ?></li>
                             <li>
                                 <a href="javascript: void(0);"><i class="fi-help"></i><span> Info & Support </span> <span class="menu-arrow"></span></a>
                                 <ul class="nav-second-level" aria-expanded="false">
@@ -135,11 +127,7 @@ AppAsset::register($this);
                                     <li><a href="privacy.php">Privacy Policy</a></li>
                                 </ul>
                             </li>
-
-                            <li>
-                                <?= Html::a('<i class="fi-power"></i><span> Logout </span>', ['site/logout'], ['data' => ['method' => 'post']]) ?>
-                            </li>
-
+                            <li><?= Html::a('<i class="fi-power"></i><span> Logout </span>', ['site/logout'], ['data' => ['method' => 'post']]) ?></li>
                         </ul>
 
                     </div>
@@ -159,12 +147,12 @@ AppAsset::register($this);
                     'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
                 ])
                 ?>
-                <?= $content ?>
+                <?= $content ?>                
             </div>
         </div>
 
         <footer class="footer text-right">
-            2017 &copy; The Golfer Card. - www.onegolfnetwork.com
+            2017 &copy; The Golfer Card. - www.onegolfnetwork.com            
         </footer>
 
         <?php $this->endBody() ?>

@@ -66,27 +66,29 @@ class GolfCourse extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-                [['Name', 'LoginID', 'Password', 'Password_repeat', 'Email', 'Address1', 'Address2', 'Town', 'PostCode', 'ContactNumber', 'ClubHoles', 'ClubYardage', 'ClubPar', 'GreenFeeFrom', 'GreenFeeTo'], 'required'],
-                //['Password_repeat', 'compare', 'compareAttribute' => 'Password', 'message' => "Both Passwords didn't match"],
-                ['Password', 'safe'],
-                //[['Name', 'LoginID', 'Password', 'Email',  'ContactNumber', 'Address1', 'Address2', 'Town', 'PostCode', 'AddressNote', 'ClubDescription', 'ClubUrl', 'ClubHoles', 'ClubYardage', 'ClubPar', 'GpgUrl', 'ClubLogo', 'GreenFeeFrom', 'GreenFeeTo'], 'required'],            
-                [['ClubHoles', 'ClubYardage', 'ClubPar', 'GreenFeeFrom', 'GreenFeeTo'], 'integer'],
-                [['Name', 'LoginID', 'Password'], 'string', 'max' => 200],
-                [['Email', 'ContactNumber', 'Address1', 'Address2', 'Town', 'PostCode', 'AddressNote', 'ClubDescription', 'ClubUrl', 'GpgUrl', 'ClubLogo'], 'string', 'max' => 255],
-                [['ClubFacebook', 'ClubTwitter', 'Country', 'County'], 'safe']
+            [['Name', 'LoginID', 'Email', 'Address1', 'Country', 'Town', 'ContactNumber', 'ClubUrl', 'ClubHoles', 'ClubYardage', 'ClubPar', 'GreenFeeFrom', 'GreenFeeTo'], 'required'],
+            ['Password', 'required', 'on' => 'create'],
+            ['Password', 'string', 'min' => 6],
+            ['Password_repeat', 'required', 'on' => 'create'],
+            ['Password_repeat', 'validatePassword'],
+            ['Email', 'email'],
+            //[['ClubLogo'], 'file', 'extensions' => 'svg, png, jpg, jpeg, gif'],
+            //['ClubLogo', 'image', 'minWidth' => 500, 'maxWidth' => 500, 'minHeight' => 500, 'maxHeight' => 500, 'extensions' => 'jpg, gif, png', 'maxSize' => 1024 * 1024 * 2],
+            //['ClubLogo', 'required', 'on' => 'create'],
+            ['ClubLogo', 'image', 'minWidth' => 300, 'maxWidth' => 500, 'minHeight' => 300, 'maxHeight' => 500, 'extensions' => 'jpg, jpeg, gif, png', 'maxSize' => 1024 * 1024 * 2, 'on' => 'create'],
+            [['ClubUrl', 'GpgUrl', 'ClubFacebook', 'ClubTwitter'], 'url'],
+            [['ClubHoles', 'ClubYardage', 'ClubPar', 'GreenFeeFrom', 'GreenFeeTo'], 'integer'],
+            [['Name', 'LoginID', 'Password'], 'string', 'max' => 200],
+            [['Email', 'ContactNumber', 'Address1', 'Address2', 'Town', 'PostCode', 'AddressNote', 'ClubDescription', 'ClubUrl', 'GpgUrl'], 'string', 'max' => 255],
+            [['ClubFacebook', 'ClubTwitter', 'Country', 'County'], 'safe']
         ];
     }
 
-//    
-//        public function rules()
-//    {
-//        return [
-//            [['Name', 'LoginID', 'Password', 'IsAdmin', 'Activationkey', 'Email', 'ClubFacebook', 'ClubTwitter', 'ContactNumber', 'Address1', 'Address2', 'Town', 'County', 'Country', 'PostCode', 'AddressNote', 'ClubDescription', 'ClubUrl', 'ClubHoles', 'ClubYardage', 'ClubPar', 'GpgUrl', 'ClubLogo', 'MainImage', 'GreenFeeFrom', 'GreenFeeTo', 'hasDrivingRange', 'hasPracticeGround', 'hasPracticeNet', 'hasPuttingGreen', 'hasSwingStudio', 'hasBuggyHire', 'hasTrolleyHire', 'allowsSociety', 'hasVenueHire', 'hasShowers', 'hasSnooker', 'hasGym', 'hasSwimming', 'hasAccommodation'], 'required'],
-//            [['IsAdmin', 'ClubHoles', 'ClubYardage', 'ClubPar', 'GreenFeeFrom', 'GreenFeeTo', 'hasDrivingRange', 'hasPracticeGround', 'hasPracticeNet', 'hasPuttingGreen', 'hasSwingStudio', 'hasBuggyHire', 'hasTrolleyHire', 'allowsSociety', 'hasVenueHire', 'hasShowers', 'hasSnooker', 'hasGym', 'hasSwimming', 'hasAccommodation'], 'integer'],
-//            [['Name', 'LoginID', 'Password'], 'string', 'max' => 200],
-//            [['Activationkey', 'Email', 'ClubFacebook', 'ClubTwitter', 'ContactNumber', 'Address1', 'Address2', 'Town', 'County', 'Country', 'PostCode', 'AddressNote', 'ClubDescription', 'ClubUrl', 'GpgUrl', 'ClubLogo', 'MainImage'], 'string', 'max' => 255],
-//        ];
-//    }
+    public function validatePassword($attribute, $params) {
+        if ($this->Password != $this->Password_repeat) {
+            $this->addError($attribute, 'Both Password didn\'t match.');
+        }
+    }
 
     /**
      * @inheritdoc
@@ -94,9 +96,10 @@ class GolfCourse extends \yii\db\ActiveRecord {
     public function attributeLabels() {
         return [
             'ID' => 'ID',
-            'Name' => 'Golf Club Name',
-            'LoginID' => 'Admin Login',
+            'Name' => 'Name',
+            'LoginID' => 'Admin Username',
             'Password' => 'Password',
+            'Password_repeat' => 'Confirm Password',
             'IsAdmin' => 'Is Admin',
             'Activationkey' => 'Activationkey',
             'Email' => 'Email Address',
@@ -120,20 +123,6 @@ class GolfCourse extends \yii\db\ActiveRecord {
             'MainImage' => 'Main Image',
             'GreenFeeFrom' => 'Green Fee From (£)',
             'GreenFeeTo' => 'Green Fee To (£)',
-//            'hasDrivingRange' => 'Has Driving Range',
-//            'hasPracticeGround' => 'Has Practice Ground',
-//            'hasPracticeNet' => 'Has Practice Net',
-//            'hasPuttingGreen' => 'Has Putting Green',
-//            'hasSwingStudio' => 'Has Swing Studio',
-//            'hasBuggyHire' => 'Has Buggy Hire',
-//            'hasTrolleyHire' => 'Has Trolley Hire',
-//            'allowsSociety' => 'Allows Society',
-//            'hasVenueHire' => 'Has Venue Hire',
-//            'hasShowers' => 'Has Showers',
-//            'hasSnooker' => 'Has Snooker',
-//            'hasGym' => 'Has Gym',
-//            'hasSwimming' => 'Has Swimming',
-//            'hasAccommodation' => 'Has Accommodation',
         ];
     }
 

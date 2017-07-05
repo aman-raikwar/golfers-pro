@@ -32,6 +32,12 @@ use Yii;
  */
 class Golfer extends \yii\db\ActiveRecord {
 
+    public $user_email;
+    public $user_username;
+    public $user_password;
+    public $user_password_repeat;
+    public $acceptTermsCondition;
+
     /**
      * @inheritdoc
      */
@@ -44,12 +50,32 @@ class Golfer extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-            [['golfer_firstname', 'golfer_lastname', 'golfer_dateOfBirth', 'golfer_firstClubID'], 'required'],
-            [['golfer_dateOfBirth'], 'safe'],
+            ['user_username', 'trim'],
+            ['user_username', 'required'],
+            ['user_username', 'unique', 'targetClass' => '\app\models\User', 'message' => 'This username has already been taken.'],
+            ['user_username', 'string', 'min' => 2, 'max' => 255],
+            ['user_email', 'trim'],
+            ['user_email', 'required'],
+            ['user_email', 'email'],
+            ['user_email', 'string', 'max' => 255],
+            ['user_email', 'unique', 'targetClass' => '\app\models\User', 'message' => 'This email address has already been taken.'],
+            ['user_password', 'required', 'on' => 'update'],
+            ['user_password', 'string', 'min' => 6],
+            ['user_password_repeat', 'required', 'on' => 'update'],
+            ['user_password_repeat', 'compare', 'compareAttribute' => 'user_password'],
+//            [['golfer_firstname', 'golfer_lastname', 'golfer_dateOfBirth', 'golfer_firstClubID'], 'required'],
+//            [['golfer_dateOfBirth'], 'safe'],
+//            [['golfer_firstClubID', 'golfer_country', 'golfer_optIn'], 'integer'],
+//            [['golfer_title', 'golfer_gender', 'golfer_phone', 'golfer_town', 'golfer_isMemberOfAnotherClub', 'golfer_otherClubID', 'golfer_county', 'golfer_countyCardId', 'golfer_countyCardNumber', 'golfer_postCode', 'golfer_opgRegType'], 'string', 'max' => 100],
+//            [['golfer_firstname', 'golfer_lastname', 'golfer_address1', 'golfer_address2', 'golfer_notes'], 'string', 'max' => 200],
+//            [['golfer_lifetimeID'], 'string', 'max' => 256],
+            [['golfer_firstClubID', 'golfer_firstname', 'golfer_lastname', 'golfer_country', 'golfer_town', 'golfer_postCode', 'golfer_dateOfBirth'], 'required'],
             [['golfer_firstClubID', 'golfer_country', 'golfer_optIn'], 'integer'],
-            [['golfer_title', 'golfer_gender', 'golfer_phone', 'golfer_town', 'golfer_isMemberOfAnotherClub', 'golfer_otherClubID', 'golfer_county', 'golfer_countyCardId', 'golfer_countyCardNumber', 'golfer_postCode', 'golfer_opgRegType'], 'string', 'max' => 100],
+            ['acceptTermsCondition', 'required', 'requiredValue' => 1, 'message' => 'Please accept Terms and Conditions'],
+            ['golfer_phone', 'string', 'max' => 12],
+            ['golfer_dateOfBirth', 'safe'],
             [['golfer_firstname', 'golfer_lastname', 'golfer_address1', 'golfer_address2', 'golfer_notes'], 'string', 'max' => 200],
-            [['golfer_lifetimeID'], 'string', 'max' => 256],
+            ['acceptTermsCondition', 'required', 'requiredValue' => 1, 'message' => 'Please accept Terms and Conditions'],
         ];
     }
 
@@ -58,6 +84,10 @@ class Golfer extends \yii\db\ActiveRecord {
      */
     public function attributeLabels() {
         return [
+            'user_password' => Yii::t('app', 'Password'),
+            'user_password_repeat' => Yii::t('app', 'Repeat Password'),
+            'user_email' => Yii::t('app', 'Email'),
+            'user_username' => Yii::t('app', 'Username'),
             'golfer_id' => Yii::t('app', 'Golfer ID'),
             'golfer_title' => Yii::t('app', 'Title'),
             'golfer_firstname' => Yii::t('app', 'First Name'),

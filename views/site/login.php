@@ -22,13 +22,13 @@ $this->title = 'Login';
                                 </h2>
                             </div>
                             <div class="account-content">
-                                <h5 class="text-uppercase font-bold">Login to your Golfer Card account</h5>
+                                <h5 class="text-uppercase font-bold">Login to your account</h5>
                                 <hr/>
                                 <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
                                 <div class="form-group m-b-20 row">
                                     <div class="col-12">
-                                        <label for="emailaddress">Email address</label>
-                                        <?= $form->field($model, 'email')->textInput(['class' => 'form-control', 'placeholder' => 'Email', 'autofocus' => true])->label(false) ?>
+                                        <label for="emailaddress">Username</label>
+                                        <?= $form->field($model, 'username')->textInput(['class' => 'form-control', 'placeholder' => 'Username', 'autofocus' => true])->label(false) ?>
                                     </div>
                                 </div>
                                 <div class="form-group row m-b-20">
@@ -36,7 +36,6 @@ $this->title = 'Login';
                                         <label for="password">Password</label>
                                         <?= $form->field($model, 'password')->passwordInput(['class' => 'form-control', 'placeholder' => 'Password', 'autofocus' => true])->label(false) ?>                                    </div>
                                 </div>
-
                                 <div class="form-group row m-b-20">
                                     <div class="col-12">
                                         <?= Html::a('Forgot your password?', ['request-password-reset'], ['class' => 'text-muted pull-right']) ?>
@@ -49,7 +48,6 @@ $this->title = 'Login';
                                         ?>                                        
                                     </div>
                                 </div>
-
                                 <div class="form-group row text-center m-t-10">
                                     <div class="col-12">
                                         <?= Html::submitButton('Login', ['class' => 'btn btn-md btn-block btn-danger waves-effect waves-light']) ?>
@@ -62,7 +60,6 @@ $this->title = 'Login';
                                         <p class="text-muted">Don't have an account? <a href="<?= Url::to('golfer-registration') ?>" class="text-dark m-l-5"><b>Sign Up</b></a></p>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>                    

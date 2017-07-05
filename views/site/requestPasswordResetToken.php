@@ -1,5 +1,4 @@
 <?php
-
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model \frontend\models\PasswordResetRequestForm */
@@ -34,18 +33,18 @@ $this->title = 'Request password reset';
                                 <hr/>
                                 <?= Alert::widget() ?>
                                 <?php $form = ActiveForm::begin(['id' => 'request-password-reset-form']); ?>
-                                    <div class="form-group m-b-20 row">
-                                        <div class="col-12">
-                                            <label for="emailaddress">Email address</label>
-                                            <?= $form->field($model, 'email')->textInput(['class' => 'form-control', 'placeholder' => 'Email', 'autofocus' => true])->label(false) ?>
-                                        </div>
+                                <div class="form-group m-b-20 row">
+                                    <div class="col-12">
+                                        <label for="emailaddress">Email address</label>
+                                        <?= $form->field($model, 'user_email')->textInput(['class' => 'form-control', 'placeholder' => 'Email', 'autofocus' => true])->label(false) ?>
                                     </div>
-    
-                                    <div class="form-group row text-center m-t-10">
-                                        <div class="col-12">
-                                            <?= Html::submitButton('Send', ['class' => 'btn btn-md btn-block btn-danger waves-effect waves-light']) ?>
-                                        </div>
+                                </div>
+
+                                <div class="form-group row text-center m-t-10">
+                                    <div class="col-12">
+                                        <?= Html::submitButton('Send', ['class' => 'btn btn-md btn-block btn-danger waves-effect waves-light']) ?>
                                     </div>
+                                </div>
                                 <?php ActiveForm::end(); ?>
 
                                 <div class="row m-t-50">
