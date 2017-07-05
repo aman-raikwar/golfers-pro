@@ -5,7 +5,7 @@ use yii\grid\GridView;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
 
-$this->title = Yii::t('app', 'Roles');
+$this->title = Yii::t('app', 'Golf Clubs');
 ?>
 
 <div class="content-page">
@@ -17,29 +17,38 @@ $this->title = Yii::t('app', 'Roles');
                         <div class="portlet-heading bg-inverse">
                             <h3 class="portlet-title"><?= Html::encode($this->title) ?></h3>
                             <div class="portlet-widgets">
-                                <?= Html::a('<i class="mdi mdi-plus"></i>', 'javascript:void(0);', ['class' => 'link-role', 'data-href' => Url::to(['roles/create'])]) ?>
+                                <?= Html::a('<i class="mdi mdi-plus"></i>', 'javascript:void(0);', ['class' => 'link-golf-club', 'data-href' => Url::to(['golf-club/create'])]) ?>
                             </div>
                             <div class="clearfix"></div>
                         </div>                        
                         <div id="bg-default" class="panel-collapse collapse in show">
-                            <div class="portlet-body">
+                            <div class="portlet-body">                                
                                 <?=
                                 GridView::widget([
                                     'dataProvider' => $dataProvider,
-                                    'filterModel' => $searchModel,
+                                    //'filterModel' => $searchModel,
                                     'tableOptions' => ['class' => 'table  table-bordered table-hover'],
                                     'layout' => '{items}{summary}{pager}',
                                     'columns' => [
                                         ['class' => 'yii\grid\SerialColumn', 'contentOptions' => ['style' => 'width: 20px;', 'class' => 'text-center'],],
-                                        //'role_id',
-                                        'role_name',
-                                        ['attribute' => 'created_at', 'filter' => ''],
-                                        ['attribute' => 'updated_at', 'filter' => ''],
+                                        'golfclub_name',
+                                        'golfclub_id',
                                         [
-                                            'attribute' => 'status',
-                                            'filter' => array("1" => "Active", "0" => "Inactive"),
+                                            'label' => 'Club Admin Name',
                                             'content' => function($data) {
-                                                return $data->status === 1 ? 'Active' : 'In-active';
+                                                return $data->user->user_username;
+                                            }
+                                        ],
+                                        [
+                                            'label' => 'Associated Golfers',
+                                            'content' => function($data) {
+                                                return '';
+                                            }
+                                        ],
+                                        [
+                                            'label' => 'Number of Check-ins',
+                                            'content' => function($data) {
+                                                return '';
                                             }
                                         ],
                                         [
@@ -49,9 +58,9 @@ $this->title = Yii::t('app', 'Roles');
                                             'template' => '{update} {delete}',
                                             'buttons' => [
                                                 'update' => function ($url, $model) {
-                                                    return Html::a('<span class="fa fa-edit"></span>', 'javascript:void(0);', [
+                                                    return Html::a('<span class="fa fa-pencil"></span>', 'javascript:void(0);', [
                                                                 'title' => Yii::t('app', 'Edit'),
-                                                                'class' => 'btn btn-icon waves-effect waves-light btn-warning link-role',
+                                                                'class' => 'btn btn-icon waves-effect waves-light btn-warning link-golf-club',
                                                                 'data-href' => $url
                                                     ]);
                                                 },
@@ -78,8 +87,6 @@ $this->title = Yii::t('app', 'Roles');
 </div>
 
 <?php
-Modal::begin(['id' => 'role-modal']);
+Modal::begin(['id' => 'golf-club-modal']);
 Modal::end();
 ?>
-
-<?php $this->registerJsFile(Yii::$app->request->baseUrl . '/js/roles-script.js', ['depends' => [\yii\web\JqueryAsset::className()]]); ?>

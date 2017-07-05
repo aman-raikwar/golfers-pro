@@ -5,12 +5,12 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Roles;
+use app\models\Role;
 
 /**
- * RolesSearch represents the model behind the search form about `app\models\Roles`.
+ * RoleSearch represents the model behind the search form about `app\models\Role`.
  */
-class RolesSearch extends Roles {
+class RoleSearch extends Role {
 
     /**
      * @inheritdoc
@@ -38,7 +38,7 @@ class RolesSearch extends Roles {
      * @return ActiveDataProvider
      */
     public function search($params) {
-        $query = Roles::find();
+        $query = Role::find();
 
         // add conditions that should always apply here
 

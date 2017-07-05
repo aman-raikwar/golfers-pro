@@ -6,7 +6,7 @@ use Yii;
 use yii\db\ActiveRecord;
 
 /**
- * This is the model class for table "tbl_roles".
+ * This is the model class for table "tbl_role".
  *
  * @property integer $role_id
  * @property string $role_name
@@ -16,13 +16,13 @@ use yii\db\ActiveRecord;
  *
  * @property Users[] $users
  */
-class Roles extends ActiveRecord {
+class Role extends ActiveRecord {
 
     /**
      * @inheritdoc
      */
     public static function tableName() {
-        return 'tbl_roles';
+        return 'tbl_role';
     }
 
     /**

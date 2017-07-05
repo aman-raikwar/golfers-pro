@@ -4,18 +4,21 @@ namespace app\controllers;
 
 use Yii;
 use app\models\User;
-use app\models\Golfer;
-use app\models\GolferSearch;
+use app\models\GolfClub;
+use app\models\GolfClubSearch;
+use app\models\County;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
+use yii\helpers\ArrayHelper;
+use yii\web\UploadedFile;
 
 /**
- * GolferController implements the CRUD actions for Golfer model.
+ * GolfClubController implements the CRUD actions for GolfClub model.
  */
-class GolferController extends Controller {
+class GolfClubController extends Controller {
 
     /**
      * @inheritdoc
@@ -32,11 +35,11 @@ class GolferController extends Controller {
     }
 
     /**
-     * Lists all Golfer models.
+     * Lists all GolfClub models.
      * @return mixed
      */
     public function actionIndex() {
-        $searchModel = new GolferSearch();
+        $searchModel = new GolfClubSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -46,7 +49,7 @@ class GolferController extends Controller {
     }
 
     /**
-     * Displays a single Golfer model.
+     * Displays a single GolfClub model.
      * @param integer $id
      * @return mixed
      */
@@ -57,12 +60,13 @@ class GolferController extends Controller {
     }
 
     /**
-     * Creates a new Golfer model.
+     * Creates a new GolfClub model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate() {
-        $model = new Golfer();
+        $model = new GolfClub();
+        $model->setScenario('create');
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             Yii::$app->response->format = Response::FORMAT_JSON;
@@ -71,20 +75,33 @@ class GolferController extends Controller {
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
+            $clubLogo = UploadedFile::getInstance($model, 'golfclub_logo');
+            if (!empty($clubLogo)) {
+                $ClubLogoFileName = date('YmdHis') . '_' . $clubLogo->baseName . '.' . $clubLogo->extension;
+                $ClubLogoFilePath = 'uploads/' . $ClubLogoFileName;
+                $clubLogo->saveAs($ClubLogoFilePath);
+                $model->golfclub_logo = $ClubLogoFileName;
+            }
+
+            if (!empty($_POST['GolfClub']['golfclub_facilities'])) {
+                $model->golfclub_facilities = implode(',', $_POST['GolfClub']['golfclub_facilities']);
+            }
+
             $user = new User();
             $user->user_username = $model->user_username;
             $user->user_email = $model->user_email;
             $user->setPassword($model->user_password);
             $user->generateAuthKey();
-            $user->user_roleID = 2;
+            $user->user_roleID = 3;
 
             if ($user->save()) {
-                $model->golfer_opgRegType = $_POST['Golfer']['golfer_opgRegType'];
-                $model->golfer_userID = $user->user_id;
+                $model->golfclub_userID = $user->user_id;
                 if ($model->save(false)) {
+
                     \Yii::$app->session->setFlash('type', 'success');
-                    \Yii::$app->session->setFlash('title', 'Golfer');
-                    \Yii::$app->session->setFlash('message', 'Golfer added successfully.');
+                    \Yii::$app->session->setFlash('title', 'Golf Club');
+                    \Yii::$app->session->setFlash('message', 'Golf Club added successfully.');
+
                     return $this->redirect(['index']);
                 } else {
 //                    echo 'Second';
@@ -100,13 +117,13 @@ class GolferController extends Controller {
                 Yii::$app->response->format = Response::FORMAT_JSON;
                 return ActiveForm::validate($model);
             }
+        } else {
+            return $this->renderAjax('_form', ['model' => $model]);
         }
-
-        return $this->renderAjax('_form', ['model' => $model]);
     }
 
     /**
-     * Updates an existing Golfer model.
+     * Updates an existing GolfClub model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -121,6 +138,8 @@ class GolferController extends Controller {
             return ActiveForm::validate($model);
         }
 
+        $oldClubLogo = $model->golfclub_logo;
+
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
             $model->user->user_email = $model->user_email;
@@ -128,11 +147,30 @@ class GolferController extends Controller {
             $model->user->setPassword($model->user_password);
             $model->user->generateAuthKey();
 
+            $clubLogo = UploadedFile::getInstance($model, 'golfclub_logo');
+            if (!empty($clubLogo)) {
+                $ClubLogoFileName = date('YmdHis') . '_' . $clubLogo->baseName . '.' . $clubLogo->extension;
+                $ClubLogoFilePath = 'uploads/' . $ClubLogoFileName;
+                $clubLogo->saveAs($ClubLogoFilePath);
+                $model->golfclub_logo = $ClubLogoFileName;
+            } else {
+                $model->golfclub_logo = $oldClubLogo;
+            }
+
+            if (!empty($_POST['GolfClub']['golfclub_facilities'])) {
+                $model->golfclub_facilities = implode(',', $_POST['GolfClub']['golfclub_facilities']);
+            }
+
+//            print_r($_POST);
+//            print_r($_FILES);
+//            print_r($model->attributes);
+//            die;
+
             if ($model->save() && $model->user->save()) {
 
                 \Yii::$app->session->setFlash('type', 'success');
-                \Yii::$app->session->setFlash('title', 'Golfer');
-                \Yii::$app->session->setFlash('message', 'Golfer updated successfully.');
+                \Yii::$app->session->setFlash('title', 'Golf Club');
+                \Yii::$app->session->setFlash('message', 'Golf Club updated successfully.');
 
                 return $this->redirect(['index']);
             } else {
@@ -145,7 +183,7 @@ class GolferController extends Controller {
     }
 
     /**
-     * Deletes an existing Golfer model.
+     * Deletes an existing GolfClub model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -156,35 +194,47 @@ class GolferController extends Controller {
         if (!empty($model)) {
             if ($model->delete() && $model->user->delete()) {
                 \Yii::$app->session->setFlash('type', 'success');
-                \Yii::$app->session->setFlash('title', 'Golfer');
-                \Yii::$app->session->setFlash('message', 'Golfer deleted successfully.');
+                \Yii::$app->session->setFlash('title', 'Golf Club');
+                \Yii::$app->session->setFlash('message', 'Golf Club deleted successfully.');
             } else {
                 \Yii::$app->session->setFlash('type', 'danger');
-                \Yii::$app->session->setFlash('title', 'Golfer');
-                \Yii::$app->session->setFlash('message', 'Unable to delete this Golfer!');
+                \Yii::$app->session->setFlash('title', 'Golf Club');
+                \Yii::$app->session->setFlash('message', 'Unable to delete this Golf Club!');
             }
         } else {
             \Yii::$app->session->setFlash('type', 'danger');
-            \Yii::$app->session->setFlash('title', 'Golfer');
-            \Yii::$app->session->setFlash('message', 'No Golfer found!');
+            \Yii::$app->session->setFlash('title', 'Golf Club');
+            \Yii::$app->session->setFlash('message', 'No Golf Club found!');
         }
 
         return $this->redirect(['index']);
     }
 
     /**
-     * Finds the Golfer model based on its primary key value.
+     * Finds the GolfClub model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Golfer the loaded model
+     * @return GolfClub the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id) {
-        if (($model = Golfer::findOne($id)) !== null) {
+        if (($model = GolfClub::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    public function actionCountyList($id) {
+        $counties = County::find()->where('country_id = :country_id', [':country_id' => $id])->orderby('name')->all();
+        $response = array('status' => false);
+        if (!empty($counties)) {
+            $countyList = ArrayHelper::map($counties, 'id', 'name');
+            $response = array('status' => true, 'counties' => $countyList);
+        }
+
+        echo json_encode($response);
+        exit();
     }
 
 }

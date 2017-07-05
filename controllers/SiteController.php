@@ -11,7 +11,7 @@ use yii\widgets\ActiveForm;
 use app\models\User;
 use app\models\Country;
 use app\models\LoginForm;
-use app\models\GolferSignupForm;
+use app\models\Golfer;
 use app\models\ContactForm;
 use app\models\PasswordResetRequestForm;
 use app\models\ResetPasswordForm;
@@ -79,7 +79,7 @@ class SiteController extends Controller {
      */
     public function actionLogin() {
         if (!Yii::$app->user->isGuest) {
-            return $this->redirect('golf-clubs');
+            return $this->redirect(['playeractivity/index']);
         }
 
         $this->layout = 'frontend';
@@ -92,7 +92,7 @@ class SiteController extends Controller {
             }
 
             if ($model->login()) {
-                return $this->redirect('golf-clubs');
+                return $this->redirect(['playeractivity/index']);
             }
         }
 
@@ -105,13 +105,37 @@ class SiteController extends Controller {
         }
 
         $this->layout = 'frontend';
-        $model = new GolferSignupForm();
+        $model = new Golfer();
+
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        }
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->signup()) {
-                Yii::$app->session->setFlash('success', 'done');
-                return $this->redirect('golfer-registration');
+
+            $user = new User();
+            $user->user_username = $model->user_username;
+            $user->user_email = $model->user_email;
+            $user->setPassword($model->user_password);
+            $user->generateAuthKey();
+            $user->user_roleID = 2;
+
+            if ($user->save()) {
+                $model->golfer_opgRegType = $_POST['Golfer']['golfer_opgRegType'];
+                $model->golfer_userID = $user->user_id;
+                if ($model->save(false)) {
+                    Yii::$app->session->setFlash('success', 'done');
+                    return $this->redirect('golfer-registration');
+                } else {
+//                    echo 'Second';
+//                    print_r($user->getErrors());
+//                    print_r($model->getErrors());
+//                    die;
+                }
             } else {
+//                echo 'First';
+//                print_r($user->getErrors());
 //                print_r($model->getErrors());
 //                die;
             }
@@ -119,20 +143,6 @@ class SiteController extends Controller {
 
         return $this->render('register', ['model' => $model]);
     }
-
-    // public function actionRegistration() {
-    //     $model = new GolferRegitration();
-    //     if ($model->load(Yii::$app->request->post())) {
-    //         if ($model->validate()) {
-    //             // form inputs are valid, do something here
-    //             return;
-    //         }
-    //     }
-    //     $this->layout = 'frontend';
-    //     return $this->render('registration', [
-    //                 'model' => $model,
-    //     ]);
-    // }
 
     /**
      * Logout action.

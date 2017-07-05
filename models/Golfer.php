@@ -29,6 +29,7 @@ use Yii;
  * @property string $golfer_lifetimeID
  * @property integer $golfer_optIn
  * @property string $golfer_opgRegType
+ * @property integer $golfer_userID
  */
 class Golfer extends \yii\db\ActiveRecord {
 
@@ -52,30 +53,43 @@ class Golfer extends \yii\db\ActiveRecord {
         return [
             ['user_username', 'trim'],
             ['user_username', 'required'],
-            ['user_username', 'unique', 'targetClass' => '\app\models\User', 'message' => 'This username has already been taken.'],
+            //['user_username', 'unique', 'targetClass' => User::className(), 'message' => 'This username has already been taken.'],
+            [
+                'user_username',
+                'unique',
+                'targetClass' => User::className(),
+                'message' => 'This username has already been taken.',
+                'when' => function ($model, $attribute) {
+                    if (empty($model->golfer_userID)) {
+                        return true;
+                    } else {
+                        $userNewModel = \app\models\User::find()->where(['user_username' => $model->{$attribute}])->andWhere(['<>', 'user_id', $model->golfer_userID])->one();
+
+                        if (empty($userNewModel)) {
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    }
+                }
+            ],
             ['user_username', 'string', 'min' => 2, 'max' => 255],
             ['user_email', 'trim'],
             ['user_email', 'required'],
             ['user_email', 'email'],
             ['user_email', 'string', 'max' => 255],
-            ['user_email', 'unique', 'targetClass' => '\app\models\User', 'message' => 'This email address has already been taken.'],
-            ['user_password', 'required', 'on' => 'update'],
+            //['user_email', 'unique', 'targetClass' => '\app\models\User', 'message' => 'This email address has already been taken.'],
+            ['user_password', 'required', 'on' => 'create'],
             ['user_password', 'string', 'min' => 6],
-            ['user_password_repeat', 'required', 'on' => 'update'],
-            ['user_password_repeat', 'compare', 'compareAttribute' => 'user_password'],
-//            [['golfer_firstname', 'golfer_lastname', 'golfer_dateOfBirth', 'golfer_firstClubID'], 'required'],
-//            [['golfer_dateOfBirth'], 'safe'],
-//            [['golfer_firstClubID', 'golfer_country', 'golfer_optIn'], 'integer'],
-//            [['golfer_title', 'golfer_gender', 'golfer_phone', 'golfer_town', 'golfer_isMemberOfAnotherClub', 'golfer_otherClubID', 'golfer_county', 'golfer_countyCardId', 'golfer_countyCardNumber', 'golfer_postCode', 'golfer_opgRegType'], 'string', 'max' => 100],
-//            [['golfer_firstname', 'golfer_lastname', 'golfer_address1', 'golfer_address2', 'golfer_notes'], 'string', 'max' => 200],
-//            [['golfer_lifetimeID'], 'string', 'max' => 256],
+            ['user_password_repeat', 'required', 'on' => 'create'],
+            //['user_password_repeat', 'compare', 'compareAttribute' => 'user_password'],
+            ['user_password_repeat', 'compare', 'compareAttribute' => 'user_password', 'skipOnEmpty' => false],
             [['golfer_firstClubID', 'golfer_firstname', 'golfer_lastname', 'golfer_country', 'golfer_town', 'golfer_postCode', 'golfer_dateOfBirth'], 'required'],
             [['golfer_firstClubID', 'golfer_country', 'golfer_optIn'], 'integer'],
             ['acceptTermsCondition', 'required', 'requiredValue' => 1, 'message' => 'Please accept Terms and Conditions'],
             ['golfer_phone', 'string', 'max' => 12],
-            ['golfer_dateOfBirth', 'safe'],
             [['golfer_firstname', 'golfer_lastname', 'golfer_address1', 'golfer_address2', 'golfer_notes'], 'string', 'max' => 200],
-            ['acceptTermsCondition', 'required', 'requiredValue' => 1, 'message' => 'Please accept Terms and Conditions'],
+            [['golfer_dateOfBirth', 'golfer_opgregtype', 'golfer_isMemberOfAnotherClub', 'golfer_otherClubID', 'golfer_title', 'golfer_gender', 'golfer_county'], 'safe'],
         ];
     }
 
@@ -110,7 +124,16 @@ class Golfer extends \yii\db\ActiveRecord {
             'golfer_lifetimeID' => Yii::t('app', 'Player Lifetime ID'),
             'golfer_optIn' => Yii::t('app', 'Opt In'),
             'golfer_opgRegType' => Yii::t('app', 'This refers to the Golfer Card levels of 1,2,3 etc. For now, just put generic names.'),
+            'golfer_userID' => Yii::t('app', 'Golfer User ID'),
         ];
     }
+
+    public function getUser() {
+        return $this->hasOne(User::className(), ['user_id' => 'golfer_userID']);
+    }
+
+//    public function getGolfClub() {
+//        return $this->hasOne(GolfClub::className(), ['golfclub_id' => 'golfer_firstClubID']);
+//    }
 
 }

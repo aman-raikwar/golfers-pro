@@ -3,8 +3,8 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Roles;
-use app\models\RolesSearch;
+use app\models\Role;
+use app\models\RoleSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -12,9 +12,9 @@ use yii\web\Response;
 use yii\widgets\ActiveForm;
 
 /**
- * RolesController implements the CRUD actions for Roles model.
+ * RoleController implements the CRUD actions for Role model.
  */
-class RolesController extends Controller {
+class RoleController extends Controller {
 
     /**
      * @inheritdoc
@@ -31,11 +31,11 @@ class RolesController extends Controller {
     }
 
     /**
-     * Lists all Roles models.
+     * Lists all Role models.
      * @return mixed
      */
     public function actionIndex() {
-        $searchModel = new RolesSearch();
+        $searchModel = new RoleSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -45,7 +45,7 @@ class RolesController extends Controller {
     }
 
     /**
-     * Displays a single Roles model.
+     * Displays a single Role model.
      * @param integer $id
      * @return mixed
      */
@@ -56,12 +56,12 @@ class RolesController extends Controller {
     }
 
     /**
-     * Creates a new Roles model.
+     * Creates a new Role model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate() {
-        $model = new Roles();
+        $model = new Role();
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             Yii::$app->response->format = Response::FORMAT_JSON;
@@ -72,7 +72,7 @@ class RolesController extends Controller {
             if ($model->save()) {
 
                 \Yii::$app->session->setFlash('type', 'success');
-                \Yii::$app->session->setFlash('title', 'Add a Role');
+                \Yii::$app->session->setFlash('title', 'Roles');
                 \Yii::$app->session->setFlash('message', 'Role added successfully.');
 
                 return $this->redirect(['index']);
@@ -86,7 +86,7 @@ class RolesController extends Controller {
     }
 
     /**
-     * Updates an existing Roles model.
+     * Updates an existing Role model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -103,7 +103,7 @@ class RolesController extends Controller {
             if ($model->save()) {
 
                 \Yii::$app->session->setFlash('type', 'success');
-                \Yii::$app->session->setFlash('title', 'Update Role');
+                \Yii::$app->session->setFlash('title', 'Roles');
                 \Yii::$app->session->setFlash('message', 'Role updated successfully.');
 
                 return $this->redirect(['index']);
@@ -117,7 +117,7 @@ class RolesController extends Controller {
     }
 
     /**
-     * Deletes an existing Roles model.
+     * Deletes an existing Role model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -125,7 +125,7 @@ class RolesController extends Controller {
     public function actionDelete($id) {
         $model = $this->findModel($id);
 
-        \Yii::$app->session->setFlash('title', 'Delete Role');
+        \Yii::$app->session->setFlash('title', 'Roles');
         if ($model->delete()) {
             \Yii::$app->session->setFlash('type', 'success');
             \Yii::$app->session->setFlash('message', 'Role deleted successfully.');
@@ -138,14 +138,14 @@ class RolesController extends Controller {
     }
 
     /**
-     * Finds the Roles model based on its primary key value.
+     * Finds the Role model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Roles the loaded model
+     * @return Role the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id) {
-        if (($model = Roles::findOne($id)) !== null) {
+        if (($model = Role::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

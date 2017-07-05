@@ -28,13 +28,13 @@ $this->title = 'Login';
                                 <div class="form-group m-b-20 row">
                                     <div class="col-12">
                                         <label for="emailaddress">Username</label>
-                                        <?= $form->field($model, 'username')->textInput(['class' => 'form-control', 'placeholder' => 'Username', 'autofocus' => true])->label(false) ?>
+                                        <?= $form->field($model, 'username')->textInput(['class' => 'form-control', 'placeholder' => 'Username', 'autofocus' => true, 'autocomplete' => 'off'])->label(false) ?>
                                     </div>
                                 </div>
                                 <div class="form-group row m-b-20">
                                     <div class="col-12">
                                         <label for="password">Password</label>
-                                        <?= $form->field($model, 'password')->passwordInput(['class' => 'form-control', 'placeholder' => 'Password', 'autofocus' => true])->label(false) ?>                                    </div>
+                                        <?= $form->field($model, 'password')->passwordInput(['class' => 'form-control', 'placeholder' => 'Password', 'autofocus' => true, 'autocomplete' => 'off'])->label(false) ?>                                    </div>
                                 </div>
                                 <div class="form-group row m-b-20">
                                     <div class="col-12">

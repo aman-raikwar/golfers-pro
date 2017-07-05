@@ -1,0 +1,17 @@
+
+Completed:-
+
+5) Golf club add, edit and delete
+6) Golfer add, edit and delete
+7) user_userID should be removed from user table and insert user_id in player and golcource table
+8) username should be unique
+10) Email should not be unique multiple users can be register with same email address
+
+
+Working:- 
+
+1) Email is not going to golfer when register
+2) Golfer will see Activity page after login
+3) Admin and Golf club will see Activity page after login
+4) Forgot password process
+9) username and pwd should be send to golf club when added

@@ -60,10 +60,22 @@ use app\components\Utility;
 
     <div class="row">
         <div class="col-md-6">
-            <?= $form->field($model, 'golfer_isMemberOfAnotherClub')->dropDownList([1 => 'No', 2 => 'Yes'], ['disabled' => 'disabled'])->label('Member of a second Golf Club?'); ?>
+            <?php
+            $disabled = true;
+            if (!$model->isNewRecord && $model->golfer_isMemberOfAnotherClub == 2) {
+                $disabled = false;
+            }
+            ?>
+            <?= $form->field($model, 'golfer_isMemberOfAnotherClub')->dropDownList([1 => 'No', 2 => 'Yes'], ['disabled' => $disabled])->label('Member of a second Golf Club?'); ?>
         </div>
         <div class="col-md-6">                                        
-            <?= $form->field($model, 'golfer_otherClubID')->dropDownList($GolfCourseList, ['prompt' => 'Select Golf Club', 'disabled' => 'disabled'])->label('Select Golf Club'); ?>                                        
+            <?php
+            $disabled = true;
+            if (!$model->isNewRecord && $model->golfer_isMemberOfAnotherClub == 2) {
+                $disabled = false;
+            }
+            ?>
+            <?= $form->field($model, 'golfer_otherClubID')->dropDownList($GolfCourseList, ['prompt' => 'Select Golf Club', 'disabled' => $disabled])->label('Select Golf Club'); ?>                                        
         </div>
     </div>
 
@@ -88,10 +100,10 @@ use app\components\Utility;
 
     <div class="row">
         <div class="col-md-6">
-            <?= $form->field($model, 'golfer_firstname')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'golfer_firstname')->textInput(['maxlength' => true, 'autocomplete' => 'off']) ?>
         </div>                                    
         <div class="col-md-6">
-            <?= $form->field($model, 'golfer_lastname')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'golfer_lastname')->textInput(['maxlength' => true, 'autocomplete' => 'off']) ?>
         </div>
     </div>
 
@@ -100,42 +112,42 @@ use app\components\Utility;
             <?= $form->field($model, 'golfer_gender')->dropDownList(['F' => 'Female', 'M' => 'Male'], ['prompt' => 'Select Gender']) ?>
         </div>
         <div class="col-md-6">
-            <?= $form->field($model, 'golfer_dateOfBirth', ['template' => '<div>{label}<div class="input-group">{input} <span class="input-group-addon bg-custom b-0 show-datepicker"><i class="mdi mdi-calendar text-white"></i></span></div>{error}{hint}</div>'])->textInput(['placeholder' => 'yyyy-mm-dd']); ?>
+            <?= $form->field($model, 'golfer_dateOfBirth', ['template' => '<div>{label}<div class="input-group">{input} <span class="input-group-addon bg-custom b-0 show-datepicker"><i class="mdi mdi-calendar text-white"></i></span></div>{error}{hint}</div>'])->textInput(['placeholder' => 'yyyy-mm-dd', 'autocomplete' => 'off']); ?>
         </div>
     </div>
 
     <div class="row">
         <div class="col-md-6">
-            <?= $form->field($model, 'user_email')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'user_email')->textInput(['maxlength' => true, 'autocomplete' => 'off']) ?>
         </div>
         <div class="col-md-6">
-            <?= $form->field($model, 'user_username')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'user_username')->textInput(['maxlength' => true, 'autocomplete' => 'off']) ?>
         </div>
     </div>
 
     <div class="row">
         <div class="col-md-6">
-            <?= $form->field($model, 'user_password')->passwordInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'user_password')->passwordInput(['maxlength' => true, 'autocomplete' => 'off']) ?>
         </div>
         <div class="col-md-6">
-            <?= $form->field($model, 'user_password_repeat')->passwordInput(['maxlength' => true]) ?>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-12">
-            <?= $form->field($model, 'golfer_phone')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'user_password_repeat')->passwordInput(['maxlength' => true, 'autocomplete' => 'off']) ?>
         </div>
     </div>
 
     <div class="row">
         <div class="col-md-12">
-            <?= $form->field($model, 'golfer_address1')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'golfer_phone')->textInput(['maxlength' => true, 'autocomplete' => 'off']) ?>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <?= $form->field($model, 'golfer_address1')->textInput(['maxlength' => true, 'autocomplete' => 'off']) ?>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">                                        
-            <?= $form->field($model, 'golfer_address2')->textInput(['maxlength' => true]) ?>                                        
+            <?= $form->field($model, 'golfer_address2')->textInput(['maxlength' => true, 'autocomplete' => 'off']) ?>                                        
         </div>
     </div>
 
@@ -161,10 +173,10 @@ use app\components\Utility;
 
     <div class="row">
         <div class="col-md-6">                                        
-            <?= $form->field($model, 'golfer_town')->textInput(['maxlength' => true]) ?>                                        
+            <?= $form->field($model, 'golfer_town')->textInput(['maxlength' => true, 'autocomplete' => 'off']) ?>                                        
         </div>
         <div class="col-md-6">                                        
-            <?= $form->field($model, 'golfer_postCode')->textInput(['maxlength' => true]) ?>                                        
+            <?= $form->field($model, 'golfer_postCode')->textInput(['maxlength' => true, 'autocomplete' => 'off']) ?>                                        
         </div>
     </div>
 
@@ -198,3 +210,6 @@ use app\components\Utility;
 </div>
 
 <?php $form = ActiveForm::end(); ?>
+
+<?php $this->registerJsFile(Yii::$app->request->baseUrl . '/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]); ?>
+<?php $this->registerJsFile(Yii::$app->request->baseUrl . '/js/golfer-script.js', ['depends' => [\yii\web\JqueryAsset::className()]]); ?>

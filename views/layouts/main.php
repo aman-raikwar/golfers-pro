@@ -9,7 +9,6 @@ use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 use yii\helpers\Url;
 use lavrentiev\widgets\toastr\Notification;
-use kartik\widgets\SideNav;
 
 AppAsset::register($this);
 ?>
@@ -69,7 +68,7 @@ AppAsset::register($this);
 
                 <!-- LOGO -->
                 <div class="topbar-left">
-                    <a href="<?= Url::to('golf-clubs') ?>" class="logo">
+                    <a href="<?= Url::to('golf-club') ?>" class="logo">
                         <span><img src="<?php echo Yii::$app->request->baseUrl; ?>/images/logo.png" alt="" height="50"></span>
                         <i><img src="<?php echo Yii::$app->request->baseUrl; ?>/images/logo_sm.png" alt="" height="50"></i>
                     </a>
@@ -104,19 +103,19 @@ AppAsset::register($this);
                             <li><?= Html::a('<i class="fi-disc"></i><span> Activity </span>', ['/playeractivity']) ?></li>
 
                             <?php if (Yii::$app->user->identity->user_roleID == 1) { ?>
-                                <li><?= Html::a('<i class="fi-ribbon"></i><span> Golf Clubs </span>', ['/golf-clubs']) ?></li>                                
+                                <li><?= Html::a('<i class="fi-ribbon"></i><span> Golf Clubs </span>', ['/golf-club']) ?></li>                                
                             <?php } ?>
 
                             <?php if (in_array(Yii::$app->user->identity->user_roleID, [1, 3])) { ?>
-                                <li><?= Html::a('<i class="fi-head"></i><span> Golfers </span>', ['/player']) ?></li>
+                                <li><?= Html::a('<i class="fi-head"></i><span> Golfers </span>', ['/golfer']) ?></li>
                                 <li><?= Html::a('<i class="fi-book"></i><span> Cards </span>', ['/golf-cards']) ?></li>                                
                             <?php } ?>
 
                             <?php if (Yii::$app->user->identity->user_roleID == 1) { ?>
-                                <li><?= Html::a('<i class="fi-server"></i><span> Readers </span>', ['/golf-clubs']) ?></li>
+                                <li><?= Html::a('<i class="fi-server"></i><span> Readers </span>', ['']) ?></li>
                             <?php } ?>
 
-                            <li><?= Html::a('<i class="fi-cog"></i><span> My Profile </span>', ['/golf-clubs']) ?></li>
+                            <li><?= Html::a('<i class="fi-cog"></i><span> My Profile </span>', ['']) ?></li>
                             <li>
                                 <a href="javascript: void(0);"><i class="fi-help"></i><span> Info & Support </span> <span class="menu-arrow"></span></a>
                                 <ul class="nav-second-level" aria-expanded="false">

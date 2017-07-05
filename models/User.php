@@ -8,7 +8,7 @@ use yii\base\Security;
 use yii\web\IdentityInterface;
 
 /**
- * This is the model class for table "tbl_users".
+ * This is the model class for table "tbl_user".
  *
  * @property integer $user_id
  * @property string $user_username
@@ -17,11 +17,11 @@ use yii\web\IdentityInterface;
  * @property string $user_activation_key
  * @property string $user_auth_key
  * @property integer $user_roleID
- * @property string $created
- * @property string $updated
+ * @property string $created_at
+ * @property string $updated_at
  * @property integer $status
  *
- * @property Roles $userRole
+ * @property Golfclub[] $golfclubs
  */
 class User extends ActiveRecord implements IdentityInterface {
 
@@ -32,7 +32,7 @@ class User extends ActiveRecord implements IdentityInterface {
      * @inheritdoc
      */
     public static function tableName() {
-        return 'tbl_users';
+        return 'tbl_user';
     }
 
     /**
@@ -61,8 +61,8 @@ class User extends ActiveRecord implements IdentityInterface {
             [['created_at', 'updated_at'], 'safe'],
             [['user_username', 'user_email', 'user_password', 'user_activation_key', 'user_auth_key'], 'string', 'max' => 255],
             [['user_username'], 'unique'],
-            [['user_email'], 'unique'],
-            [['user_roleID'], 'exist', 'skipOnError' => true, 'targetClass' => Roles::className(), 'targetAttribute' => ['user_roleID' => 'role_id']],
+            [['user_email'], 'email'],
+            [['user_roleID'], 'exist', 'skipOnError' => true, 'targetClass' => Role::className(), 'targetAttribute' => ['user_roleID' => 'role_id']],
         ];
     }
 
@@ -87,9 +87,9 @@ class User extends ActiveRecord implements IdentityInterface {
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUserRole() {
-        return $this->hasOne(Roles::className(), ['role_id' => 'user_roleID']);
-    }
+//    public function getGolfclubs() {
+//        return $this->hasMany(Golfclub::className(), ['golfclub_userID' => 'user_id']);
+//    }
 
     /**
      * @inheritdoc
@@ -207,15 +207,4 @@ class User extends ActiveRecord implements IdentityInterface {
         $this->password_reset_token = null;
     }
 
-//    public function beforeSave($insert) {
-//        if (parent::beforeSave($insert)) {
-//
-//            $this->setPassword($this->password);
-//            $this->generateAuthKey();
-//
-//            return true;
-//        } else {
-//            return false;
-//        }
-//    }
 }

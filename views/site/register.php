@@ -83,33 +83,27 @@ if (Yii::$app->session->hasFlash('success')) {
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <label for="field-4" class="control-label">Golfer Card Membership Category</label>                                                
-                                            <?php
-                                            $CardMembershipCategory = CardMembershipCategory::find()->all();
-                                            $CardMembershipCategoryList = ArrayHelper::map($CardMembershipCategory, 'id', 'name');
-                                            echo $form->field($model, 'golfer_opgRegType')->dropDownList($CardMembershipCategoryList, ['prompt' => 'Select Golfer Card Membership Category'])->label(false);
-                                            ?>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">                                        
                                         <?php
-                                        $getPersonTitlesList = Utility::getPersonTitles();
-                                        echo $form->field($model, 'golfer_title')->dropdownList($getPersonTitlesList, ['prompt' => 'Select Title']);
-                                        ?>
+                                        $CardMembershipCategory = CardMembershipCategory::find()->all();
+                                        $CardMembershipCategoryList = ArrayHelper::map($CardMembershipCategory, 'id', 'name');
+                                        echo $form->field($model, 'golfer_opgRegType')->dropDownList($CardMembershipCategoryList, ['prompt' => 'Select Golfer Card Membership Category']);
+                                        ?>                                        
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <?= $form->field($model, 'golfer_firstname')->textInput(['maxlength' => true]) ?>
+                                        <?= $form->field($model, 'golfer_title')->dropdownList(Utility::getPersonTitles(), ['prompt' => 'Select Title']); ?>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <?= $form->field($model, 'golfer_firstname')->textInput(['maxlength' => true, 'autocomplete' => 'off']) ?>
                                     </div>                                    
                                     <div class="col-md-6">
-                                        <?= $form->field($model, 'golfer_lastname')->textInput(['maxlength' => true]) ?>
+                                        <?= $form->field($model, 'golfer_lastname')->textInput(['maxlength' => true, 'autocomplete' => 'off']) ?>
                                     </div>
                                 </div>
 
@@ -118,42 +112,42 @@ if (Yii::$app->session->hasFlash('success')) {
                                         <?= $form->field($model, 'golfer_gender')->dropDownList(['F' => 'Female', 'M' => 'Male'], ['prompt' => 'Select Gender']) ?>
                                     </div>
                                     <div class="col-md-6">
-                                        <?= $form->field($model, 'golfer_dateOfBirth', ['template' => '<div>{label}<div class="input-group">{input} <span class="input-group-addon bg-custom b-0 show-datepicker"><i class="mdi mdi-calendar text-white"></i></span></div>{error}{hint}</div>'])->textInput(['placeholder' => 'yyyy-mm-dd']); ?>
+                                        <?= $form->field($model, 'golfer_dateOfBirth', ['template' => '<div>{label}<div class="input-group">{input} <span class="input-group-addon bg-custom b-0 show-datepicker"><i class="mdi mdi-calendar text-white"></i></span></div>{error}{hint}</div>'])->textInput(['placeholder' => 'yyyy-mm-dd', 'autocomplete' => 'off']); ?>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <?= $form->field($model, 'user_email')->textInput(['maxlength' => true]) ?>
+                                        <?= $form->field($model, 'user_email')->textInput(['maxlength' => true, 'autocomplete' => 'off']) ?>
                                     </div>
                                     <div class="col-md-6">
-                                        <?= $form->field($model, 'user_username')->textInput(['maxlength' => true]) ?>
+                                        <?= $form->field($model, 'user_username')->textInput(['maxlength' => true, 'autocomplete' => 'off']) ?>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <?= $form->field($model, 'user_password')->passwordInput(['maxlength' => true]) ?>
+                                        <?= $form->field($model, 'user_password')->passwordInput(['maxlength' => true, 'autocomplete' => 'off']) ?>
                                     </div>
                                     <div class="col-md-6">
-                                        <?= $form->field($model, 'user_password_repeat')->passwordInput(['maxlength' => true]) ?>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <?= $form->field($model, 'golfer_phone')->textInput(['maxlength' => true]) ?>
+                                        <?= $form->field($model, 'user_password_repeat')->passwordInput(['maxlength' => true, 'autocomplete' => 'off']) ?>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <?= $form->field($model, 'golfer_address1')->textInput(['maxlength' => true]) ?>
+                                        <?= $form->field($model, 'golfer_phone')->textInput(['maxlength' => true, 'autocomplete' => 'off']) ?>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <?= $form->field($model, 'golfer_address1')->textInput(['maxlength' => true, 'autocomplete' => 'off']) ?>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">                                        
-                                        <?= $form->field($model, 'golfer_address2')->textInput(['maxlength' => true]) ?>                                        
+                                        <?= $form->field($model, 'golfer_address2')->textInput(['maxlength' => true, 'autocomplete' => 'off']) ?>                                        
                                     </div>
                                 </div>
 
@@ -179,10 +173,10 @@ if (Yii::$app->session->hasFlash('success')) {
 
                                 <div class="row">
                                     <div class="col-md-6">                                        
-                                        <?= $form->field($model, 'golfer_town')->textInput(['maxlength' => true]) ?>                                        
+                                        <?= $form->field($model, 'golfer_town')->textInput(['maxlength' => true, 'autocomplete' => 'off']) ?>                                        
                                     </div>
                                     <div class="col-md-6">                                        
-                                        <?= $form->field($model, 'golfer_postCode')->textInput(['maxlength' => true]) ?>                                        
+                                        <?= $form->field($model, 'golfer_postCode')->textInput(['maxlength' => true, 'autocomplete' => 'off']) ?>                                        
                                     </div>
                                 </div>
 

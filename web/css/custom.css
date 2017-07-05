@@ -18,8 +18,7 @@
     z-index: 100;
 }
 
-.golf-course-update div#golfcourse-clubfacilities label, 
-.golf-course-create div#golfcourse-clubfacilities label {
+#golfclub-golfclub_facilities label {
     width: 50%;
     float: left;
 }

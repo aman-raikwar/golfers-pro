@@ -12,59 +12,13 @@ $this->title = 'Golf Clubs';
 <div class="content-page">
 
     <!-- content -->
-    <div class="content">
-
-        <!-- container -->
-        <div class="container-fluid">
-            <!-- Top Stat Row -->
-            <div class="row top-row">
-                <!-- col -->
-                <div class="col-lg-4 col-md-6">
-                    <div class="card-box widget-box-two widget-two-danger">
-                        <i class="mdi mdi-book widget-two-icon"></i>
-                        <div class="wigdet-two-content">
-                            <p class="m-0 text-uppercase font-bold font-secondary text-overflow" title="Statistics">Number of Golf Clubs</p>
-                            <h2 class="font-600">65841</h2>
-                            <p class="m-0">Since June 2017</p>
-                        </div>
-                    </div>
-                </div>
-                <!-- end col -->
-                <!-- col -->
-                <div class="col-lg-4 col-md-6">
-                    <div class="card-box widget-box-two widget-two-danger">
-                        <i class="mdi mdi-account-multiple widget-two-icon"></i>
-                        <div class="wigdet-two-content">
-                            <p class="m-0 text-uppercase font-bold font-secondary text-overflow" title="Statistics">Registered Golfers</p>
-                            <h2 class="font-600">236521</h2>
-                            <p class="m-0">Since June 2017</p>
-                        </div>
-                    </div>
-                </div>
-                <!-- end col -->
-                <!-- col -->
-                <div class="col-lg-4 col-md-6">
-                    <div class="card-box widget-box-two widget-two-danger">
-                        <i class="mdi mdi-check widget-two-icon"></i>
-                        <div class="wigdet-two-content">
-                            <p class="m-0 text-uppercase font-bold font-secondary text-overflow" title="Statistics">Number of Check-ins</p>
-                            <h2 class="font-600">563698</h2>
-                            <p class="m-0">Since June 2017</p>
-                        </div>
-                    </div>
-                </div>
-                <!-- end col -->
-
-            </div>
-            <!-- Top Stat Row End-->
-            <!-- Golf Course Table Row -->
+    <div class="content">        
+        <div class="container-fluid">            
             <div class="row">
                 <div class="col-12">
                     <div class="portlet">
                         <div class="portlet-heading bg-inverse">
-                            <h3 class="portlet-title">
-                                Golf Clubs
-                            </h3>
+                            <h3 class="portlet-title">Golf Clubs</h3>
                             <div class="portlet-widgets">
                                 <a href="javascript:void(0);" class="link-golf-club" data-href="<?= Url::to(['golf-clubs/add-club']); ?>"><i class="mdi mdi-plus"></i></a>
                             </div>

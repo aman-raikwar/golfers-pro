@@ -29,17 +29,33 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?=
                             GridView::widget([
                                 'dataProvider' => $dataProvider,
-                                'filterModel' => $searchModel,
+                                //'filterModel' => $searchModel,
                                 'tableOptions' => ['class' => 'table  table-bordered table-hover'],
                                 'layout' => '{items}{summary}{pager}',
                                 'columns' => [
                                     ['class' => 'yii\grid\SerialColumn', 'contentOptions' => ['style' => 'width: 20px;', 'class' => 'text-center'],],
                                     'golfer_firstname',
                                     'golfer_lastname',
-                                    'golfer_gender',
                                     [
                                         'attribute' => 'golfer_firstClubID',
-                                        'label' => 'Primary Membership Golf Club'
+                                        'label' => 'Primary Membership Golf Club',
+                                        'content' => function ($data) {
+                                            if (!empty($data->golfer_firstClubID)) {
+                                                return $data->golfer_firstClubID;
+                                            } else {
+                                                return '';
+                                            }
+                                        }
+                                    ],
+                                    [
+                                        'attribute' => 'golfer_gender',
+                                        'content' => function ($data) {
+                                            if (!empty($data->golfer_gender)) {
+                                                return ($data->golfer_gender == 'M') ? 'Male' : 'Female';
+                                            } else {
+                                                return '';
+                                            }
+                                        }
                                     ],
                                     [
                                         'attribute' => 'golfer_countyCardNumber',

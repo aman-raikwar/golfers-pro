@@ -47,7 +47,7 @@ class AppAsset extends AssetBundle {
         "plugins/datatables/dataTables.buttons.min.js",
         "plugins/datatables/buttons.bootstrap4.min.js",
         "plugins/datatables/buttons.html5.min.js",
-        "plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js",
+        //"plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js",
         "js/roles-script.js"
     ];
     public $depends = [

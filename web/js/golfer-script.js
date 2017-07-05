@@ -1,8 +1,6 @@
 /* global $ */
 
 $(function () {
-    
-    $('#registerSuccess').modal('show');
 
     $('body').on('change', '#golfer-golfer_firstclubid', function () {
         if ($(this).val() !== '') {
@@ -32,6 +30,11 @@ $(function () {
             $("#golfer-golfer_otherclubid option[value='" + clubId1 + "']").attr('disabled', 'disabled');
         }
     });
+
+    if ($('#golfer-golfer_otherclubid').is(':disabled') == false) {
+        var clubId1 = $('#golfer-golfer_firstclubid').val();
+        $("#golfer-golfer_otherclubid option[value='" + clubId1 + "']").attr('disabled', 'disabled');
+    }
 
     var dt = new Date();
     dt.setFullYear(new Date().getFullYear() - 18);

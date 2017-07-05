@@ -47,13 +47,13 @@ class GolferSignupForm extends Model {
         return [
             ['user_username', 'trim'],
             ['user_username', 'required'],
-            ['user_username', 'unique', 'targetClass' => '\app\models\User', 'message' => 'This username has already been taken.'],
+            ['user_username', 'unique', 'targetClass' => User::className(), 'message' => 'This username has already been taken.'],
             ['user_username', 'string', 'min' => 2, 'max' => 255],
             ['user_email', 'trim'],
             ['user_email', 'required'],
             ['user_email', 'email'],
             ['user_email', 'string', 'max' => 255],
-            ['user_email', 'unique', 'targetClass' => '\app\models\User', 'message' => 'This email address has already been taken.'],
+            //['user_email', 'unique', 'targetClass' => '\app\models\User', 'message' => 'This email address has already been taken.'],
             ['user_password', 'required'],
             ['user_password', 'string', 'min' => 6],
             ['user_password_repeat', 'required'],
@@ -64,7 +64,6 @@ class GolferSignupForm extends Model {
             ['golfer_phone', 'string', 'max' => 12],
             ['golfer_dateOfBirth', 'safe'],
             [['golfer_firstname', 'golfer_lastname', 'golfer_address1', 'golfer_address2', 'golfer_notes'], 'string', 'max' => 200],
-                //[['Title', 'IsMemberOfAnotherClub', 'OtherClubName', 'Gender', 'Town', 'County', 'CountyCardId', 'CountyCardNumber', 'PostCode', 'OpgRegType'], 'string', 'max' => 100],
         ];
     }
 
@@ -149,14 +148,14 @@ class GolferSignupForm extends Model {
             $user->user_userID = 0;
 
 
-            if ($golfer->save() && $user->save()) {
-                $user->user_userID = $golfer->golfer_id;
+            if ($user->save()) {
+                $golfer->golfer_userID = $user->user_id;
                 return $user->save() ? $user : null;
             } else {
-                //echo '<pre>';
-                //print_r($golfer->getErrors());
-                //print_r($user->getErrors());
-                //die();
+                echo '<pre>';
+                print_r($golfer->getErrors());
+                print_r($user->getErrors());
+                die();
             }
         } catch (\yii\db\Exception $e) {
             return null;
