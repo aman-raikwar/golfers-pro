@@ -146,9 +146,9 @@ use app\models\ClubFunctionality;
                 <label for="field-24" class="control-label">Club Image</label>
                 <?php
                 if (!$model->isNewRecord && !empty($model->golfclub_logo)) {
-                    echo '<div class="form-group showClubLogo" style="height:80px;"><img src="/uploads/' . $model->golfclub_logo . '" style="max-height: 100%;" /></div>';
+                    echo '<div class="form-group showClubLogo" style="height:80px;"><img src="' . Yii::$app->request->baseUrl . '/uploads/' . $model->golfclub_logo . '" style="max-height: 100%;" /></div>';
                 } else {
-                    echo '<div class="form-group showClubLogo" style="height:80px;"><img src="/images/default-logo.png" style="max-height: 100%;" /></div>';
+                    echo '<div class="form-group showClubLogo" style="height:80px;"><img src="' . Yii::$app->request->baseUrl . '/images/default-logo.png" style="max-height: 100%;" /></div>';
                 }
                 ?>
                 <?= $form->field($model, 'golfclub_logo')->fileInput(['class' => "form-control", "id" => "golfclub_logo"])->label(false) ?>

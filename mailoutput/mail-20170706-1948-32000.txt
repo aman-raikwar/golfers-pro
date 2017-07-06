@@ -1,0 +1,55 @@
+To: golfclub@mailinator.com
+Subject: Password reset for My Application
+Message-ID: <5b9374adca148fc4a2ec52ec417908d2@localhost>
+Date: Thu, 06 Jul 2017 21:48:06 +0200
+From: My Application robot <support@golfersclub.com>
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="_=_swift_v4_1499370486_5cdee16069cc63bb96e42f1f1f8b4c04_=_"
+
+
+--_=_swift_v4_1499370486_5cdee16069cc63bb96e42f1f1f8b4c04_=_
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+Hello golfclub,
+
+Follow the link below to reset your password:
+
+htt=
+p://localhost:8080/site/reset-password?token=3Dy1ycCdx5Yju2mrhsH70HuEG2lhNp=
+HJIv_1499365590
+
+--_=_swift_v4_1499370486_5cdee16069cc63bb96e42f1f1f8b4c04_=_
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org=
+/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns=3D"http://www.w3.org/1999/=
+xhtml">
+<head>
+    <meta http-equiv=3D"Content-Type" content=3D"text/ht=
+ml; charset=3DUTF-8" />
+    <title></title>
+    </head>
+<body>
+    =
+    <div class=3D"password-reset">
+    <p>Hello golfclub,</p>
+
+    <p=
+>Follow the link below to reset your password:</p>
+
+    <p><a href=3D"h=
+ttp://localhost:8080/site/reset-password?token=3Dy1ycCdx5Yju2mrhsH70HuEG2lh=
+NpHJIv_1499365590">http://localhost:8080/site/reset-password?token=3Dy1ycCd=
+x5Yju2mrhsH70HuEG2lhNpHJIv_1499365590</a></p>
+</div>
+    </body>
+</ht=
+ml>
+
+
+--_=_swift_v4_1499370486_5cdee16069cc63bb96e42f1f1f8b4c04_=_--
+

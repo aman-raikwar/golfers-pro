@@ -5,6 +5,7 @@ $db = require(__DIR__ . '/db.php');
 
 $config = [
     'id' => 'basic',
+    'name' => 'The Golfer Club',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'components' => [
@@ -41,7 +42,7 @@ $config = [
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
-                    [
+                [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
                     'categories' => ['yii\swiftmailer\Logger::add'],

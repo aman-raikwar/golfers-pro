@@ -79,7 +79,7 @@ class Golfer extends \yii\db\ActiveRecord {
             ['user_email', 'email'],
             ['user_email', 'string', 'max' => 255],
             //['user_email', 'unique', 'targetClass' => '\app\models\User', 'message' => 'This email address has already been taken.'],
-            ['user_password', 'required', 'on' => 'create'],
+            ['user_password', 'required', 'on' => ['register', 'create']],
             ['user_password', 'string', 'min' => 6],
             ['user_password_repeat', 'required', 'on' => 'create'],
             //['user_password_repeat', 'compare', 'compareAttribute' => 'user_password'],
@@ -135,5 +135,4 @@ class Golfer extends \yii\db\ActiveRecord {
 //    public function getGolfClub() {
 //        return $this->hasOne(GolfClub::className(), ['golfclub_id' => 'golfer_firstClubID']);
 //    }
-
 }

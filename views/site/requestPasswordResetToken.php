@@ -8,7 +8,7 @@ use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
 use app\components\Alert;
 
-$this->title = 'Request password reset';
+$this->title = 'Forgot your Password?';
 ?>
 
 <section>
@@ -29,16 +29,64 @@ $this->title = 'Request password reset';
                             </div>
                             <div class="account-content">
                                 <h5 class="text-uppercase font-bold"><?= Html::encode($this->title) ?></h5>
-                                <p>Please fill out your email. A link to reset password will be sent there.</p>
+                                <p>Please fill out your Email or Username. A link to reset password will be sent there.</p>
                                 <hr/>
                                 <?= Alert::widget() ?>
                                 <?php $form = ActiveForm::begin(['id' => 'request-password-reset-form']); ?>
+
                                 <div class="form-group m-b-20 row">
-                                    <div class="col-12">
-                                        <label for="emailaddress">Email address</label>
-                                        <?= $form->field($model, 'user_email')->textInput(['class' => 'form-control', 'placeholder' => 'Email', 'autofocus' => true])->label(false) ?>
+                                    <div class="col-6">
+                                        <?php
+                                        $disabledEmailBox = false;
+                                        $disabledUsernameBox = false;
+                                        if (empty($model->request_type)) {
+                                            $model->request_type = 1;
+                                            $disabledUsernameBox = true;
+                                        } else {
+                                            if ($model->request_type == 1) {
+                                                $disabledUsernameBox = true;
+                                            } else {
+                                                $disabledEmailBox = true;
+                                            }
+                                        }
+                                        ?>
+                                        <div class="radio radio-custom">
+                                            <input type="radio" class="radio-request-type" name="PasswordResetRequestForm[request_type]" id="passwordresetrequestform-request_type-email" value="1" <?php echo $disabledEmailBox == false ? 'checked="checked"' : '' ?>>
+                                            <label for="passwordresetrequestform-request_type-email">Email Address</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="radio radio-custom">
+                                            <input type="radio" class="radio-request-type" name="PasswordResetRequestForm[request_type]" id="passwordresetrequestform-request_type-username" value="2" <?php echo $disabledUsernameBox == false ? 'checked="checked"' : '' ?>>
+                                            <label for="passwordresetrequestform-request_type-username">Username</label>
+                                        </div>                                       
                                     </div>
                                 </div>
+
+                                <div class="form-group m-b-20 row show-email-box" <?php echo $disabledEmailBox == true ? 'style="display: none;"' : '' ?>>
+                                    <div class="col-12">                                        
+                                        <?= $form->field($model, 'user_email')->textInput(['class' => 'form-control', 'placeholder' => 'Email', 'autofocus' => true]) ?>
+                                    </div>
+                                </div>
+
+                                <div class="form-group m-b-20 row show-username-box" <?php echo $disabledUsernameBox == true ? 'style="display: none;"' : '' ?>>
+                                    <div class="col-12">                                        
+                                        <?= $form->field($model, 'user_username')->textInput(['class' => 'form-control', 'placeholder' => 'Username']) ?>
+                                    </div>
+                                </div>
+
+                                <?php if (!empty($users)) { ?>
+                                    <div class="form-group m-b-20">
+                                        <?php foreach ($users as $user) { ?>
+                                            <div class="col-12 select-user">
+                                                <div class="radio radio-custom">
+                                                    <input type="radio" name="selectedUser" id="selectedUser_<?= $user['user_id'] ?>" value="<?= $user['user_id'] ?>">
+                                                    <label for="selectedUser_<?= $user['user_id'] ?>"><?= $user['user_username'] ?></label>
+                                                </div>
+                                            </div>
+                                        <?php } ?>
+                                    </div>
+                                <?php } ?>
 
                                 <div class="form-group row text-center m-t-10">
                                     <div class="col-12">
@@ -63,3 +111,33 @@ $this->title = 'Request password reset';
         </div>
     </div>
 </section>
+
+<style type="text/css">
+    .select-user {border: 1px solid #ccc;padding-top: 10px;padding-bottom: 5px;}
+    .select-user:last-child {border-top: none;}
+    .select-user:hover {border-color: #32c861;border-top: 1px solid #32c861;cursor: pointer;}
+    .select-user.activeUser {border-color: #32c861;border-top: 1px solid #32c861;}
+</style>
+
+<?php
+$script = <<< JS
+    $('.radio-request-type').on('click', function() {
+        var type = $(this).val();
+        if(type == 1) {
+            $('.show-username-box').hide();
+            $('.show-email-box').show();            
+            $('#passwordresetrequestform-user_email').focus();
+        } else {
+            $('.show-email-box').hide();
+            $('.show-username-box').show();
+            $('#passwordresetrequestform-user_username').focus();
+        }
+   })
+        
+        $('.select-user').on('click', function() {
+            $('.select-user').removeClass('activeUser');
+            $(this).addClass('activeUser');            
+        })
+JS;
+$this->registerJs($script);
+?>

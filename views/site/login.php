@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
+use app\components\Alert;
 
 $this->title = 'Login';
 ?>
@@ -24,6 +25,7 @@ $this->title = 'Login';
                             <div class="account-content">
                                 <h5 class="text-uppercase font-bold">Login to your account</h5>
                                 <hr/>
+                                <?= Alert::widget() ?>
                                 <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
                                 <div class="form-group m-b-20 row">
                                     <div class="col-12">
@@ -38,7 +40,7 @@ $this->title = 'Login';
                                 </div>
                                 <div class="form-group row m-b-20">
                                     <div class="col-12">
-                                        <?= Html::a('Forgot your password?', ['request-password-reset'], ['class' => 'text-muted pull-right']) ?>
+                                        <?= Html::a('Forgot your Password?', ['request-password-reset'], ['class' => 'text-muted pull-right']) ?>
                                         <?php
                                         $model->rememberMe = 1;
                                         echo $form->field($model, 'rememberMe', [

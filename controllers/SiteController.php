@@ -106,6 +106,7 @@ class SiteController extends Controller {
 
         $this->layout = 'frontend';
         $model = new Golfer();
+        $model->setScenario('register');
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             Yii::$app->response->format = Response::FORMAT_JSON;
@@ -125,6 +126,15 @@ class SiteController extends Controller {
                 $model->golfer_opgRegType = $_POST['Golfer']['golfer_opgRegType'];
                 $model->golfer_userID = $user->user_id;
                 if ($model->save(false)) {
+
+                    Yii::$app
+                            ->mailer
+                            ->compose(['html' => 'accountVerification-html', 'text' => 'accountVerification-text'], ['user' => $user])
+                            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' robot'])
+                            ->setTo($user->user_email)
+                            ->setSubject('Account Verification Link for ' . Yii::$app->name)
+                            ->send();
+
                     Yii::$app->session->setFlash('success', 'done');
                     return $this->redirect('golfer-registration');
                 } else {
@@ -189,13 +199,36 @@ class SiteController extends Controller {
         $this->layout = 'frontend';
         $model = new PasswordResetRequestForm();
 
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        }
+
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->sendEmail()) {
-                Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
-                return $this->refresh();
-            } else {
-                Yii::$app->session->setFlash('error', 'Sorry, we are unable to reset password for email provided.');
+            $flag = 1;
+            $selectUser = 0;
+            if ($model->request_type == 1) {
+                if (isset($_POST['selectedUser']) && !empty($_POST['selectedUser']) && $_POST['selectedUser'] > 0) {
+                    $selectUser = $_POST['selectedUser'];
+                } else {
+                    $usersFromEmail = User::find()->where(['status' => User::STATUS_ACTIVE, 'user_email' => $model->user_email])->asArray()->all();
+                    if (count($usersFromEmail) > 1) {
+                        $flag = 0;
+                        return $this->render('requestPasswordResetToken', ['model' => $model, 'users' => $usersFromEmail]);
+                    }
+                }
             }
+
+            if ($flag == 1) {
+                if ($model->sendEmail($selectUser)) {
+                    Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
+                    return $this->refresh();
+                } else {
+                    Yii::$app->session->setFlash('error', 'Sorry, we are unable to reset password for email provided.');
+                }
+            }
+        } else {
+            //print_r($model->getErrors());
         }
 
         return $this->render('requestPasswordResetToken', ['model' => $model]);
@@ -225,6 +258,26 @@ class SiteController extends Controller {
         return $this->render('resetPassword', [
                     'model' => $model,
         ]);
+    }
+
+    public function actionAccountVerification($token) {
+        $this->layout = 'frontend';
+
+        if (!empty($token)) {
+            $user = User::find()->where(['user_auth_key' => $token, 'status' => 0])->one();
+            if (!empty($user)) {
+                $user->status = 1;
+                $user->save();
+
+                Yii::$app->session->setFlash('success', 'Your account is verified successfully.');
+            } else {
+                Yii::$app->session->setFlash('warning', 'Your account verification failed. Contact Site Administrator.');
+            }
+        } else {
+            Yii::$app->session->setFlash('danger', 'Account Verification Token is required');
+        }
+
+        return $this->goHome();
     }
 
 }

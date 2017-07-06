@@ -90,6 +90,7 @@ class GolfClubController extends Controller {
             $user = new User();
             $user->user_username = $model->user_username;
             $user->user_email = $model->user_email;
+            $tempPassword = $model->user_password;
             $user->setPassword($model->user_password);
             $user->generateAuthKey();
             $user->user_roleID = 3;
@@ -97,6 +98,14 @@ class GolfClubController extends Controller {
             if ($user->save()) {
                 $model->golfclub_userID = $user->user_id;
                 if ($model->save(false)) {
+
+                    Yii::$app
+                            ->mailer
+                            ->compose(['html' => 'golfClubCredentials-html', 'text' => 'golfClubCredentials-text'], ['user' => $user, 'tempPassword' => $tempPassword])
+                            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' robot'])
+                            ->setTo($user->user_email)
+                            ->setSubject('Golf Club Credentials for ' . Yii::$app->name)
+                            ->send();
 
                     \Yii::$app->session->setFlash('type', 'success');
                     \Yii::$app->session->setFlash('title', 'Golf Club');

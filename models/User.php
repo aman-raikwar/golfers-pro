@@ -126,7 +126,7 @@ class User extends ActiveRecord implements IdentityInterface {
             return null;
         }
 
-        return static::findOne(['password_reset_token' => $token]);
+        return static::findOne(['user_activation_key' => $token]);
     }
 
     /**
@@ -204,7 +204,7 @@ class User extends ActiveRecord implements IdentityInterface {
      * Removes password reset token
      */
     public function removePasswordResetToken() {
-        $this->password_reset_token = null;
+        $this->user_password_reset_token = null;
     }
 
 }
