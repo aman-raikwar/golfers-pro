@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'label' => 'Primary Membership Golf Club',
                                         'content' => function ($data) {
                                             if (!empty($data->golfer_firstClubID)) {
-                                                return $data->golfer_firstClubID;
+                                                return $data->getGolfClubName($data->golfer_firstClubID);
                                             } else {
                                                 return '';
                                             }
@@ -64,19 +64,26 @@ $this->params['breadcrumbs'][] = $this->title;
                                     [
                                         'class' => 'yii\grid\ActionColumn',
                                         'header' => 'Actions',
-                                        'headerOptions' => ['style' => 'width:120px', 'class' => 'text-center'],
-                                        'template' => '{update} {delete}',
+                                        'headerOptions' => ['style' => 'width:160px', 'class' => 'text-center'],
+                                        'contentOptions' => ['class' => 'text-center'],
+                                        'template' => '{view} {update} {delete}',
                                         'buttons' => [
+                                            'view' => function ($url, $model) {
+                                                return Html::a('<span class="fa fa-search"></span>', $url, [
+                                                            'title' => Yii::t('app', 'View the Golfer Profile'),
+                                                            'class' => 'btn btn-icon waves-effect waves-light btn-danger'
+                                                ]);
+                                            },
                                             'update' => function ($url, $model) {
                                                 return Html::a('<span class="fa fa-pencil"></span>', 'javascript:void(0);', [
-                                                            'title' => Yii::t('app', 'Edit'),
+                                                            'title' => Yii::t('app', 'Edit the Golfer'),
                                                             'class' => 'btn btn-icon waves-effect waves-light btn-warning link-golfer',
                                                             'data-href' => $url
                                                 ]);
                                             },
                                             'delete' => function ($url, $model) {
                                                 return Html::a('<span class="fa fa-remove"></span>', $url, [
-                                                            'title' => Yii::t('app', 'Delete'),
+                                                            'title' => Yii::t('app', 'Delete the Golfer'),
                                                             'class' => 'btn btn-icon waves-effect waves-light btn-inverse',
                                                             'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
                                                             'data-method' => 'post',
@@ -96,6 +103,6 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 
 <?php
-Modal::begin(['id' => 'golfer-modal']);
+Modal::begin(['id' => 'golfer-modal', 'clientOptions' => ['backdrop' => 'static', 'keyboard' => false]]);
 Modal::end();
 ?>

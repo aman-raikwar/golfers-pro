@@ -29,4 +29,13 @@ $(function () {
         });
     });
 
+    $('body').on('click', '.link-registration-cards', function () {
+        $("#loading-indicator").show();
+        $('#registration-cards-modal').find('.modal-content').load($(this).data('href'), function () {
+            var thisModal = $('#registration-cards-modal');
+            thisModal.modal('show');
+            $("#loading-indicator").hide();
+        });
+    });
+
 });

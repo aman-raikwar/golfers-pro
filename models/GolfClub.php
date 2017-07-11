@@ -146,4 +146,8 @@ class GolfClub extends \yii\db\ActiveRecord {
         return $this->hasOne(User::className(), ['user_id' => 'golfclub_userID']);
     }
 
+    public static function getCountOfGolfers($golfclub_id) {
+        return Golfer::find()->andWhere(['OR', ['golfer_firstClubID' => $golfclub_id], ['golfer_otherClubID' => $golfclub_id]])->count();
+    }
+
 }

@@ -94,7 +94,7 @@ class GolfClubController extends Controller {
             $user->setPassword($model->user_password);
             $user->generateAuthKey();
             $user->user_roleID = 3;
-            $user->status = 1;
+            $user->user_status = 1;
 
             if ($user->save()) {
                 $model->golfclub_userID = $user->user_id;

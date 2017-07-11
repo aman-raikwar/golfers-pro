@@ -1,0 +1,34 @@
+Hi Aman,
+
+Please find the detailed process below:
+
+Add Card Process
+This will be implemented as follows:
+
+Only Platform admin can add cards. Both add cards and assign cards process are combined in one popup modal that is Assign Cards. The data of this is stored in registration_cards table.
+Table Structure:
+1. ID	
+2. CardNumber
+3. UserID
+4. Registered Date
+5. ClubID 
+
+There will be two scenarios for the entries done in table:
+
+Scenario 1:
+When Club Name is selected and Top Range is ABC1 and ABC50. Then in that case 50 cards numbers are inserted in the table and Club ID is also inserted as per the selected club. Registered Date will also be entered and it will be current date. UserID will be blank for now, but it should be updated when card numbers are assigned to golfers.
+
+Scenario 2:
+When Club Name is not selected and Top Range is ABC1 and ABC50. Then in that case 50 cards numbers are inserted in the table. Registered Date will also be entered and it will be current date. ClubID and UserID will be blank.
+
+Design to be used:
+
+Cards table page should be: http://yogami.in/golfer/design/cards.php (This is view of Admin but when golf club is logged "Golf Club" column will not be displayed and also club will be able to view only cards assigned to itself by admin) 
+Buttons on right:
+Request Cards: This will be shown only to Golf Club 
+Add Cards: This button will be displayed only in Admin view.
+
+Request Card:
+Only an email should be sent to platform admin with a request. HTML of email is awaited.
+
+Let me know if anything is not clear in this process.

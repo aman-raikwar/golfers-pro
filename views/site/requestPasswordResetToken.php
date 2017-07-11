@@ -29,7 +29,7 @@ $this->title = 'Forgot your Password?';
                             </div>
                             <div class="account-content">
                                 <h5 class="text-uppercase font-bold"><?= Html::encode($this->title) ?></h5>
-                                <p>Please fill out your Email or Username. A link to reset password will be sent there.</p>
+                                <p>Please fill out your Email or Username. A link to reset your password will be emailed to you.</p>
                                 <hr/>
                                 <?= Alert::widget() ?>
                                 <?php $form = ActiveForm::begin(['id' => 'request-password-reset-form']); ?>

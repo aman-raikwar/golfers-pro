@@ -6,7 +6,7 @@ use yii\bootstrap\ActiveForm;
 use yii\helpers\ArrayHelper;
 use app\models\Country;
 use app\models\County;
-use app\models\GolfCourse;
+use app\models\GolfClub;
 use app\models\CardMembershipCategory;
 use app\components\Utility;
 
@@ -66,9 +66,9 @@ if (Yii::$app->session->hasFlash('success')) {
                                 <div class="row">
                                     <div class="col-md-12">                                        
                                         <?php
-                                        $GolfCourse = GolfCourse::find()->all();
-                                        $GolfCourseList = ArrayHelper::map($GolfCourse, 'ID', 'Name');
-                                        echo $form->field($model, 'golfer_firstClubID')->dropDownList($GolfCourseList, ['prompt' => 'Select Golf Club']);
+                                        $GolfClubs = GolfClub::find()->orderby('golfclub_name')->all();
+                                        $GolfClubsList = ArrayHelper::map($GolfClubs, 'golfclub_id', 'golfclub_name');
+                                        echo $form->field($model, 'golfer_firstClubID')->dropDownList($GolfClubsList, ['prompt' => 'Select Golf Club']);
                                         ?>
                                     </div>
                                 </div>
@@ -78,19 +78,21 @@ if (Yii::$app->session->hasFlash('success')) {
                                         <?= $form->field($model, 'golfer_isMemberOfAnotherClub')->dropDownList([1 => 'No', 2 => 'Yes'], ['disabled' => 'disabled']); ?>
                                     </div>
                                     <div class="col-md-6">                                        
-                                        <?= $form->field($model, 'golfer_otherClubID')->dropDownList($GolfCourseList, ['prompt' => 'Select Golf Club', 'disabled' => 'disabled']); ?>                                        
+                                        <?= $form->field($model, 'golfer_otherClubID')->dropDownList($GolfClubsList, ['prompt' => 'Select Golf Club', 'disabled' => 'disabled']); ?>                                        
                                     </div>
                                 </div>
 
+                                <!--
                                 <div class="row">
                                     <div class="col-md-12">                                        
-                                        <?php
-                                        $CardMembershipCategory = CardMembershipCategory::find()->all();
-                                        $CardMembershipCategoryList = ArrayHelper::map($CardMembershipCategory, 'id', 'name');
-                                        echo $form->field($model, 'golfer_opgRegType')->dropDownList($CardMembershipCategoryList, ['prompt' => 'Select Golfer Card Membership Category']);
-                                        ?>                                        
+                                <?php
+                                $CardMembershipCategory = CardMembershipCategory::find()->all();
+                                $CardMembershipCategoryList = ArrayHelper::map($CardMembershipCategory, 'id', 'name');
+                                echo $form->field($model, 'golfer_opgRegType')->dropDownList($CardMembershipCategoryList, ['prompt' => 'Select Golfer Card Membership Category']);
+                                ?>                                        
                                     </div>
                                 </div>
+                                -->
 
                                 <div class="row">
                                     <div class="col-md-6">
@@ -112,7 +114,7 @@ if (Yii::$app->session->hasFlash('success')) {
                                         <?= $form->field($model, 'golfer_gender')->dropDownList(['F' => 'Female', 'M' => 'Male'], ['prompt' => 'Select Gender']) ?>
                                     </div>
                                     <div class="col-md-6">
-                                        <?= $form->field($model, 'golfer_dateOfBirth', ['template' => '<div>{label}<div class="input-group">{input} <span class="input-group-addon bg-custom b-0 show-datepicker"><i class="mdi mdi-calendar text-white"></i></span></div>{error}{hint}</div>'])->textInput(['placeholder' => 'yyyy-mm-dd', 'autocomplete' => 'off']); ?>
+                                        <?= $form->field($model, 'golfer_dateOfBirth', ['template' => '<div>{label}<div class="input-group">{input} <span class="input-group-addon bg-custom b-0 show-datepicker"><i class="mdi mdi-calendar text-white"></i></span></div>{error}{hint}</div>'])->textInput(['placeholder' => 'DD-MM-YYYY', 'autocomplete' => 'off']); ?>
                                     </div>
                                 </div>
 

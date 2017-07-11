@@ -8,6 +8,7 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 use yii\helpers\Url;
+
 //use lavrentiev\widgets\toastr\Notification;
 //
 //print_r(Notification);
@@ -23,7 +24,7 @@ AppAsset::register($this);
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="shortcut icon" href="<?php Yii::$app->getHomeUrl(); ?>/favicon.ico" type="image/x-icon">
         <?= Html::csrfMetaTags() ?>
-        <title><?= Html::encode($this->title) ?></title>
+        <title><?= Html::encode(Yii::$app->name . ($this->title ? ' - ' . $this->title : '')) ?></title>
         <?php $this->head() ?>
     </head>
     <body>
@@ -85,7 +86,7 @@ AppAsset::register($this);
                             </button>
                         </li>
                         <li>
-                            <h4 class="page-title text-dark">Golf Clubs</h4>
+                            <h4 class="page-title text-dark"><?= $this->title; ?></h4>
                         </li>
                     </ul>
 
@@ -110,14 +111,14 @@ AppAsset::register($this);
 
                             <?php if (in_array(Yii::$app->user->identity->user_roleID, [1, 3])) { ?>
                                 <li><?= Html::a('<i class="fi-head"></i><span> Golfers </span>', ['/golfer']) ?></li>
-                                <li><?= Html::a('<i class="fi-book"></i><span> Cards </span>', ['/golf-cards']) ?></li>                                
+                                <li><?= Html::a('<i class="fi-book"></i><span> Cards </span>', 'javascript:void(0);') ?></li>                                
                             <?php } ?>
 
                             <?php if (Yii::$app->user->identity->user_roleID == 1) { ?>
-                                <li><?= Html::a('<i class="fi-server"></i><span> Readers </span>', ['']) ?></li>
+                                <li><?= Html::a('<i class="fi-server"></i><span> Readers </span>', 'javascript:void(0);') ?></li>
                             <?php } ?>
 
-                            <li><?= Html::a('<i class="fi-cog"></i><span> My Profile </span>', ['']) ?></li>
+                            <li><?= Html::a('<i class="fi-cog"></i><span> My Profile </span>', 'javascript:void(0);') ?></li>
                             <li>
                                 <a href="javascript: void(0);"><i class="fi-help"></i><span> Info & Support </span> <span class="menu-arrow"></span></a>
                                 <ul class="nav-second-level" aria-expanded="false">

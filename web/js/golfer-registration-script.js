@@ -1,7 +1,7 @@
 /* global $ */
 
 $(function () {
-    
+
     $('#registerSuccess').modal('show');
 
     $('body').on('change', '#golfer-golfer_firstclubid', function () {
@@ -33,14 +33,14 @@ $(function () {
         }
     });
 
-    var dt = new Date();
-    dt.setFullYear(new Date().getFullYear() - 18);
+    //var dt = new Date();
+    //dt.setFullYear(new Date().getFullYear() - 18);
     $("#golfer-golfer_dateofbirth").datepicker({
         autoclose: !0,
         todayHighlight: !0,
-        endDate: dt,
+        // endDate: dt,
         allowInputToggle: true,
-        format: 'yyyy-mm-dd'
+        format: 'dd-mm-yyyy'
     });
 
     $('.show-datepicker').click(function (event) {

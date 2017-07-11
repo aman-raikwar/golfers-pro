@@ -79,7 +79,8 @@ class GolferController extends Controller {
             $user->user_roleID = 2;
 
             if ($user->save()) {
-                $model->golfer_opgRegType = $_POST['Golfer']['golfer_opgRegType'];
+                //$model->golfer_opgRegType = $_POST['Golfer']['golfer_opgRegType'];
+                $model->golfer_opgRegType = 1;
                 $model->golfer_userID = $user->user_id;
                 if ($model->save(false)) {
                     \Yii::$app->session->setFlash('type', 'success');

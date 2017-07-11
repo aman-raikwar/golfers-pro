@@ -15,6 +15,7 @@ use app\models\Golfer;
 use app\models\ContactForm;
 use app\models\PasswordResetRequestForm;
 use app\models\ResetPasswordForm;
+use app\models\CardMembershipCategory;
 
 class SiteController extends Controller {
 
@@ -46,6 +47,18 @@ class SiteController extends Controller {
                 ],
             ],
         ];
+    }
+
+    public function beforeAction($action) {
+        if (parent::beforeAction($action)) {
+            // change layout for error action
+            if ($action->id == 'error') {
+                $this->layout = 'frontend';
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -123,7 +136,8 @@ class SiteController extends Controller {
             $user->user_roleID = 2;
 
             if ($user->save()) {
-                $model->golfer_opgRegType = $_POST['Golfer']['golfer_opgRegType'];
+                //$model->golfer_opgRegType = $_POST['Golfer']['golfer_opgRegType'];
+                $model->golfer_opgRegType = 1;
                 $model->golfer_userID = $user->user_id;
                 if ($model->save(false)) {
 
@@ -277,7 +291,7 @@ class SiteController extends Controller {
             Yii::$app->session->setFlash('danger', 'Account Verification Token is required');
         }
 
-        return $this->goHome();
+        return $this->render('confirmation');
     }
 
 }

@@ -18,3 +18,16 @@ Completed:-
 
 
 
+Credentials:
+
+Administrator
+Username: administrator
+Password: 123456
+
+Golfer
+Username: golfer
+Password: 123456
+
+Golf Club
+Username: golfclub
+Password: 123456

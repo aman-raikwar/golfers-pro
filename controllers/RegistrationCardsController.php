@@ -8,17 +8,18 @@ use app\models\RegistrationCardsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
+use yii\widgets\ActiveForm;
 
 /**
  * RegistrationCardsController implements the CRUD actions for RegistrationCards model.
  */
-class RegistrationCardsController extends Controller
-{
+class RegistrationCardsController extends Controller {
+
     /**
      * @inheritdoc
      */
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
@@ -33,13 +34,14 @@ class RegistrationCardsController extends Controller
      * Lists all RegistrationCards models.
      * @return mixed
      */
-    public function actionIndex()
-    {
-        
-        $searchModel = new RegistrationCards();
-        $data = $searchModel->getAll(Yii::$app->request->queryParams);
+    public function actionIndex() {
+
+        $searchModel = new RegistrationCardsSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
         return $this->render('index', [
-            'data' => $data
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -48,10 +50,9 @@ class RegistrationCardsController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionView($id)
-    {
+    public function actionView($id) {
         return $this->render('view', [
-            'model' => $this->findModel($id),
+                    'model' => $this->findModel($id),
         ]);
     }
 
@@ -60,21 +61,57 @@ class RegistrationCardsController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
-    {
+    public function actionCreate() {
         $model = new RegistrationCards();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->ID]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
         }
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+
+            $firstcard_number = $model->firstcard_number;
+            $lastcard_number = $model->lastcard_number;
+
+            $firstcard_value = intval(preg_replace('/[^0-9]+/', '', $firstcard_number), 10);
+            $lastcard_value = intval(preg_replace('/[^0-9]+/', '', $lastcard_number), 10);
+
+            $firstcard_string = strtoupper(str_replace($firstcard_value, '', $firstcard_number));
+            $lastcard_string = strtoupper(str_replace($lastcard_value, '', $lastcard_number));
+
+            if ($firstcard_string != $lastcard_string) {
+                Yii::$app->response->format = Response::FORMAT_JSON;
+                return ActiveForm::validate($model);
+            }
+
+            $flag = 0;
+            for ($i = $firstcard_value; $i <= $lastcard_value; $i++) {
+                $model = new RegistrationCards();
+                $model->CardNumber = $firstcard_string . $i;
+                $model->ClubID = 0;
+                $model->UserID = 0;
+                $model->RegisteredDate = date('Y-m-d');
+                $model->setIsNewRecord(false);
+                $model->save();
+                print_r($model->attributes);
+                $flag = 1;
+            }
+            die;
+
+            if ($flag == 1) {
+                \Yii::$app->session->setFlash('type', 'success');
+                \Yii::$app->session->setFlash('title', 'Golfer Cards');
+                \Yii::$app->session->setFlash('message', 'Golfer Card added successfully.');
+
+                return $this->redirect(['index']);
+            }
+        }
+
+        return $this->renderAjax('_form', ['model' => $model]);
     }
-    
-    public function actionAddnew()
-    {
+
+    public function actionAddnew() {
         $model = new RegistrationCards();
         $data = $model->demoInsert();
     }
@@ -85,15 +122,14 @@ class RegistrationCardsController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id)
-    {
+    public function actionUpdate($id) {
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->ID]);
         } else {
             return $this->render('update', [
-                'model' => $model,
+                        'model' => $model,
             ]);
         }
     }
@@ -104,8 +140,7 @@ class RegistrationCardsController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
-    {
+    public function actionDelete($id) {
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
@@ -118,12 +153,12 @@ class RegistrationCardsController extends Controller
      * @return RegistrationCards the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
-    {
+    protected function findModel($id) {
         if (($model = RegistrationCards::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
 }

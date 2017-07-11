@@ -5,6 +5,7 @@ namespace app\models;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveRecord;
+
 /**
  * This is the model class for table "registration_cards".
  *
@@ -14,51 +15,57 @@ use yii\db\ActiveRecord;
  * @property string $RegisteredDate
  * @property string $ClubID
  */
-class RegistrationCards extends ActiveRecord
-{
+class RegistrationCards extends ActiveRecord {
+
+    public $firstcard_number;
+    public $lastcard_number;
+
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'registration_cards';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
-            [['CardNumber', 'UserID', 'RegisteredDate', 'ClubID'], 'required'],
+            [['firstcard_number', 'lastcard_number'], 'required'],
+            //[['CardNumber', 'UserID', 'RegisteredDate', 'ClubID'], 'required'],
             [['RegisteredDate'], 'safe'],
-            [['CardNumber', 'UserID', 'ClubID'], 'string', 'max' => 200],
+            [['CardNumber'], 'string', 'max' => 200],
+            [['UserID', 'ClubID'], 'integer'],
         ];
     }
+
 //
 //    /**
 //     * @inheritdoc
 //     */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'ID' => 'ID',
+            'firstcard_number' => 'First Card Number',
+            'lastcard_number' => 'Last Card Number',
             'CardNumber' => 'Card Number',
             'UserID' => 'User ID',
-            'RegisteredDate' => 'Registered Date',
-            'ClubID' => 'Club ID',
+            'RegisteredDate' => 'Registered',
+            'ClubID' => 'Golf Club',
         ];
     }
-    
-    
-    public function getAll($input){
-      return $query = RegistrationCards::find()->all();
+
+    public function getAll($input) {
+        return $query = RegistrationCards::find()->all();
     }
-    
-    public function demoInsert(){
-          $obj = new RegistrationCards();
-          $obj->CardNumber = "1234";
-          $obj->save();      
-          print_r($obj);die;
-      }
+
+    public function demoInsert() {
+        $obj = new RegistrationCards();
+        $obj->CardNumber = "1234";
+        $obj->save();
+        print_r($obj);
+        die;
+    }
+
 }

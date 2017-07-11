@@ -5,7 +5,7 @@ $db = require(__DIR__ . '/db.php');
 
 $config = [
     'id' => 'basic',
-    'name' => 'The Golfer Club',
+    'name' => 'The Golfer Card',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'components' => [

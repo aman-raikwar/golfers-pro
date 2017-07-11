@@ -9,10 +9,10 @@ Login Process is as follows:
 --> Done!
 
 • When a users forgets their login details, the system should ask for their email address. Once they enter the email address then on the same screen we display the usernames that are associated with this email address. User can then select the username for which they need a new password and then system would send reset password link on the mail address linked to that username. Reset link will expire in 24hrs.
---> Pending
+--> Done!
 
 • If golfer forgets the username also then we ask user to enter "email address" and then on that email address we send the list of usernames linked to that email address
---> Pending
+--> Done!
 
 
 we have got some more corrections for add/edit golf club
@@ -37,3 +37,5 @@ we have got some more corrections for add/edit golf club
 in golfer pro registraion password field is not present
 in this case we would generate the password and send on user's email along with the username that golfer pro has entered
 We can change "Admin Login" to "Admin Username"
+
+Done!

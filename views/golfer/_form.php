@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
-use app\models\GolfCourse;
+use app\models\GolfClub;
 use app\models\CardMembershipCategory;
 use app\models\Country;
 use app\models\County;
@@ -51,9 +51,9 @@ use app\components\Utility;
     <div class="row">
         <div class="col-md-12">                                        
             <?php
-            $GolfCourse = GolfCourse::find()->orderby('Name')->all();
-            $GolfCourseList = ArrayHelper::map($GolfCourse, 'ID', 'Name');
-            echo $form->field($model, 'golfer_firstClubID')->dropDownList($GolfCourseList, ['prompt' => 'Select Golf Club'])->label('Which Golf Club are they a member of?');
+            $GolfClubs = GolfClub::find()->orderby('golfclub_name')->all();
+            $GolfClubsList = ArrayHelper::map($GolfClubs, 'golfclub_id', 'golfclub_name');
+            echo $form->field($model, 'golfer_firstClubID')->dropDownList($GolfClubsList, ['prompt' => 'Select Golf Club'])->label('Which Golf Club are they a member of?');
             ?>
         </div>
     </div>
@@ -75,22 +75,24 @@ use app\components\Utility;
                 $disabled = false;
             }
             ?>
-            <?= $form->field($model, 'golfer_otherClubID')->dropDownList($GolfCourseList, ['prompt' => 'Select Golf Club', 'disabled' => $disabled])->label('Select Golf Club'); ?>                                        
+            <?= $form->field($model, 'golfer_otherClubID')->dropDownList($GolfClubsList, ['prompt' => 'Select Golf Club', 'disabled' => $disabled])->label('Select Golf Club'); ?>                                        
         </div>
     </div>
 
+    <!--
     <div class="row">
         <div class="col-md-12">
             <div class="form-group">
                 <label for="field-4" class="control-label">Golfer Card Membership Category</label>                                                
-                <?php
-                $CardMembershipCategory = CardMembershipCategory::find()->all();
-                $CardMembershipCategoryList = ArrayHelper::map($CardMembershipCategory, 'id', 'name');
-                echo $form->field($model, 'golfer_opgRegType')->dropDownList($CardMembershipCategoryList, ['prompt' => 'Select Golfer Card Membership Category'])->label(false);
-                ?>
+    <?php
+    $CardMembershipCategory = CardMembershipCategory::find()->all();
+    $CardMembershipCategoryList = ArrayHelper::map($CardMembershipCategory, 'id', 'name');
+    echo $form->field($model, 'golfer_opgRegType')->dropDownList($CardMembershipCategoryList, ['prompt' => 'Select Golfer Card Membership Category'])->label(false);
+    ?>
             </div>
         </div>
     </div>
+    -->
 
     <div class="row">
         <div class="col-md-6">
@@ -112,7 +114,7 @@ use app\components\Utility;
             <?= $form->field($model, 'golfer_gender')->dropDownList(['F' => 'Female', 'M' => 'Male'], ['prompt' => 'Select Gender']) ?>
         </div>
         <div class="col-md-6">
-            <?= $form->field($model, 'golfer_dateOfBirth', ['template' => '<div>{label}<div class="input-group">{input} <span class="input-group-addon bg-custom b-0 show-datepicker"><i class="mdi mdi-calendar text-white"></i></span></div>{error}{hint}</div>'])->textInput(['placeholder' => 'yyyy-mm-dd', 'autocomplete' => 'off']); ?>
+            <?= $form->field($model, 'golfer_dateOfBirth', ['template' => '<div>{label}<div class="input-group">{input} <span class="input-group-addon bg-custom b-0 show-datepicker"><i class="mdi mdi-calendar text-white"></i></span></div>{error}{hint}</div>'])->textInput(['placeholder' => 'DD-MM-YYYY', 'autocomplete' => 'off']); ?>
         </div>
     </div>
 
@@ -206,7 +208,7 @@ use app\components\Utility;
 
 <div class="modal-footer">
     <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
-    <?= Html::submitButton('Save Changes', ['class' => 'btn btn-danger waves-effect waves-light', 'id' => 'btnSave']); ?>
+    <?= Html::submitButton($model->isNewRecord ? 'Add Golfer' : 'Save Changes', ['class' => 'btn btn-danger waves-effect waves-light', 'id' => 'btnSave']); ?>
 </div>
 
 <?php $form = ActiveForm::end(); ?>

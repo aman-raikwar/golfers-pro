@@ -86,7 +86,7 @@ class GolferSignupForm extends Model {
             'golfer_address2' => Yii::t('app', 'Address Line 2'),
             'golfer_phone' => Yii::t('app', 'Phone No'),
             'golfer_town' => Yii::t('app', 'Town'),
-            'golfer_firstClubID' => Yii::t('app', 'Which golf club they a member of. Can also be \'None\', which we will store in the platform as \'Nomad\' Club'),
+            'golfer_firstClubID' => Yii::t('app', 'Which Golf Club are you a member of?'),
             'golfer_isMemberOfAnotherClub' => Yii::t('app', 'Is Member Of Another Club'),
             'golfer_otherClubID' => Yii::t('app', 'Other Club Name'),
             'golfer_country' => Yii::t('app', 'Country'),
@@ -97,7 +97,7 @@ class GolferSignupForm extends Model {
             'golfer_notes' => Yii::t('app', 'Notes'),
             'golfer_lifetimeID' => Yii::t('app', 'Player Lifetime ID'),
             'golfer_optIn' => Yii::t('app', 'Opt In'),
-            'golfer_opgRegType' => Yii::t('app', 'This refers to the Golfer Card levels of 1,2,3 etc. For now, just put generic names.'),
+            'golfer_opgRegType' => Yii::t('app', 'Golfer Card Membership Category'),
         ];
     }
 
