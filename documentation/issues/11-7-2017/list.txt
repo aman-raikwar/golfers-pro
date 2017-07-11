@@ -1,105 +1,73 @@
-Hi Aman,
-
-Please fix these issues as priority.
-
-MAJOR: Cannot add Golf Club error is coming when click on Save Changes.
+Completed:-
 
 1. Typo on password reset screen, should be 'Please fill out your Email or Username. A link to reset your password will be emailed to you.'
--- Done!
-
-
 2. When logged in, page title should be 'The Golfer Card' not 'The Golfer Club'
--- Done!
-
-
 3. When logged in, the menu items are showing multiple 'active' css styling. Only the current page should be showing as active.
 -- This is wrong only on http://yogami.in/golfer/registration/web/playeractivity page.
--- Done!
+5. If, when I am on the main golf club page (not the detail), I click the edit button next to a golf club. In the pop-up to edit, the golf club image is not showing. It is just showing the broken image link. I have attached a screenshot.
+-*This is working fine Leave this
+10. On edit golfer pop-up the date of birth date selector is not working.
+-- Working now
+11. Where have you got the list of countries from for the dropdown? They do not make sense. These should be pulled in from the database.
+-- Leave this
+14. Golfer Card membership category should be hidden for now and defaulted to Level 1.
+15. Any date display in the platform should be DD-MM-YYYY, not how you have done it for birth date.
+6. Golf Club detail page has not been completed at all. I presume you are working on this?
+-- Leave this
+8. Golfer detail page has not been completed.
+-- Leave this
+18. When adding a golfer, the button should say 'Add Golfer' not 'Save Change' as there are no changes to be saved. 'Save Changes' is only relevant when we are editing a golfer.
+21. The membership level should be hidden and defaulted to 1 for now.
+22. Should be 'Member of another Club?
+-- Compare all the text from the design that was sent by client. Link is given below: http://yogami.in/golfer/design/golfer-registration.php
+23. Date of Birth selector is working here but the date format is wrong.
+-- Also golf club page error has been fixed
+25. When someone clicks the activation link, they should be taken to the screen I provided you with. This is because when we launch, there will be other information provided to them there. Page I am referring to is 'Confirmation.html'.
+-- They should be taken to http://yogami.in/golfer/design/confirmation.php page.
+26. The login form is not correct. I designed it to have email address and password. You have changed it to username. If the process Andrew wants requires username login then we should allow either email or username. Everyone always forgets usernames, no-one ever forgets their email address.
+-- Leave this.
+20. I'm not sure why you are displaying some text here, it doesn't make sense. The first field should be 'Which Golf Club are you a member of' or whatever I had put in the original code. You have put development notes there. We also need an option for when they are not a member of a golf club.
+-- Compare all the text from the design that was sent by client. Link is given below: http://yogami.in/golfer/design/golfer-registration.php
+
+
+
+Pending Tasks:-
+
+MAJOR: Cannot add Golf Club error is coming when click on Save Changes.
 
 
 4. You have changed the styling of the golf club table.
 -- Table should be similar to as shown in the link below: http://yogami.in/golfer/design/index.php
 
 
-5. If, when I am on the main golf club page (not the detail), I click the edit button next to a golf club. In the pop-up to edit, the golf club image is not showing. It is just showing the broken image link. I have attached a screenshot.
--*This is working fine Leave this
--- Done!
-
-
-6. Golf Club detail page has not been completed at all. I presume you are working on this?
--- Leave this
-
-
-
 7. Think there is something wrong on the 'Golfers' page as the table is not displaying with pagination, search etc.
 -- Table should be similar to as shown in the link below: http://yogami.in/golfer/registration/web/golfer
-
-8. Golfer detail page has not been completed.
--- Leave this
 
 
 9. Can you explain about the error message on the validation field for which golf club they are a member of? I don't know why you have added this in. This is a development note.
 -- Compare all the text from the design that was sent by client. Link is given below: http://yogami.in/golfer/design/golfer-registration.php
 
-10. On edit golfer pop-up the date of birth date selector is not working.
--- Working now
-
-11. Where have you got the list of countries from for the dropdown? They do not make sense. These should be pulled in from the database.
--- Leave this
-
 
 12. Add/Edit Golfer > Select Golfer Card Number is not working and is an essential part of this process, so registration process is not yet complete.
 -- Work on the Add Card number first as per the document that i will be sending you.
 
+
 13. Select which golf club they are a member of should default to my club if I am logged in as a golf club. It should also give an option for 'No Golf Club'. These are in the development notes.
 
-14. Golfer Card membership category should be hidden for now and defaulted to Level 1.
--- Done!
-
-15. Any date display in the platform should be DD-MM-YYYY, not how you have done it for birth date.
--- Done!
 
 16.  Please can re-order the form so the last 4 fields are: Town - County - Post Code - Country
 -- Here County depends on Country so, it is not the good idea to setup Country in last. What's your opinion
 
+
 17. Golfer Table is not as per my styling, there should not be  blue href links
 -- Table should be similar to as shown in the link below: http://yogami.in/golfer/registration/web/golfer
 
-18. When adding a golfer, the button should say 'Add Golfer' not 'Save Change' as there are no changes to be saved. 'Save Changes' is only relevant when we are editing a golfer.
--- Done!
 
 19. Golf Clubs page is not complete. The counter for number of check-ins is showing 0 even though I know for sure that there are some in the database.
 -- Need to work on this.
+
  
 Golfer Self Registration:
- 
-20. I'm not sure why you are displaying some text here, it doesn't make sense. The first field should be 'Which Golf Club are you a member of' or whatever I had put in the original code. You have put development notes there. We also need an option for when they are not a member of a golf club.
--- Compare all the text from the design that was sent by client. Link is given below: http://yogami.in/golfer/design/golfer-registration.php
--- Done!
-
-
-21. The membership level should be hidden and defaulted to 1 for now.
--- Done!
-
- 
-22. Should be 'Member of another Club?
--- Compare all the text from the design that was sent by client. Link is given below: http://yogami.in/golfer/design/golfer-registration.php
--- Done!
-
- 
-23. Date of Birth selector is working here but the date format is wrong.
--- Also golf club page error has been fixed
--- Done!
-
- 
 24.Activation email took too long to come through
 
- 
-25. When someone clicks the activation link, they should be taken to the screen I provided you with. This is because when we launch, there will be other information provided to them there. Page I am referring to is 'Confirmation.html'.
--- They should be taken to http://yogami.in/golfer/design/confirmation.php page.
--- Done!
- 
 
-
-26. The login form is not correct. I designed it to have email address and password. You have changed it to username. If the process Andrew wants requires username login then we should allow either email or username. Everyone always forgets usernames, no-one ever forgets their email address.
--- Leave this.
