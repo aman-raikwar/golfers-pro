@@ -10,13 +10,12 @@ use app\models\RegistrationCards;
 /**
  * RegistrationCardsSearch represents the model behind the search form about `app\models\RegistrationCards`.
  */
-class RegistrationCardsSearch extends RegistrationCards
-{
+class RegistrationCardsSearch extends RegistrationCards {
+
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['ID'], 'integer'],
             [['CardNumber', 'UserID', 'RegisteredDate', 'ClubID'], 'safe'],
@@ -26,8 +25,7 @@ class RegistrationCardsSearch extends RegistrationCards
     /**
      * @inheritdoc
      */
-    public function scenarios()
-    {
+    public function scenarios() {
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
@@ -39,9 +37,8 @@ class RegistrationCardsSearch extends RegistrationCards
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
-    {
-        $query = RegistrationCards::find();
+    public function search($params) {
+        $query = RegistrationCards::find()->orderBy(['ID' => SORT_DESC]);
 
         // add conditions that should always apply here
 
@@ -64,9 +61,20 @@ class RegistrationCardsSearch extends RegistrationCards
         ]);
 
         $query->andFilterWhere(['like', 'CardNumber', $this->CardNumber])
-            ->andFilterWhere(['like', 'UserID', $this->UserID])
-            ->andFilterWhere(['like', 'ClubID', $this->ClubID]);
+                ->andFilterWhere(['like', 'UserID', $this->UserID])
+                ->andFilterWhere(['like', 'ClubID', $this->ClubID]);
+
+        if (Yii::$app->user->identity->user_roleID == 3) {
+            $user_id = Yii::$app->user->identity->user_id;
+            $club = GolfClub::findOne(['golfclub_userID' => $user_id]);
+            if (!empty($club)) {
+                $query->andFilterWhere(['=', 'ClubID', $club->golfclub_id]);
+            } else {
+                $query->andFilterWhere(['=', 'ClubID', 0]);
+            }
+        }
 
         return $dataProvider;
     }
+
 }

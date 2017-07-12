@@ -8,8 +8,8 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 use yii\helpers\Url;
+use lavrentiev\widgets\toastr\Notification;
 
-//use lavrentiev\widgets\toastr\Notification;
 //
 //print_r(Notification);
 //die;
@@ -37,28 +37,28 @@ AppAsset::register($this);
         $message = Yii::$app->session->getFlash('message');
 
         if (!empty($type) && !empty($message)) {
-//            Notification::widget([
-//                'type' => $type,
-//                'title' => $title,
-//                'message' => $message,
-//                'options' => [
-//                    "closeButton" => false,
-//                    "debug" => false,
-//                    "newestOnTop" => true,
-//                    "progressBar" => true,
-//                    "positionClass" => "toast-top-right",
-//                    "preventDuplicates" => false,
-//                    "onclick" => null,
-//                    "showDuration" => "100",
-//                    "hideDuration" => "3000",
-//                    "timeOut" => "3000",
-//                    "extendedTimeOut" => "1000",
-//                    "showEasing" => "swing",
-//                    "hideEasing" => "linear",
-//                    "showMethod" => "fadeIn",
-//                    "hideMethod" => "fadeOut"
-//                ]
-//            ]);
+            Notification::widget([
+                'type' => $type,
+                'title' => $title,
+                'message' => $message,
+                'options' => [
+                    "closeButton" => false,
+                    "debug" => false,
+                    "newestOnTop" => true,
+                    "progressBar" => true,
+                    "positionClass" => "toast-top-right",
+                    "preventDuplicates" => false,
+                    "onclick" => null,
+                    "showDuration" => "100",
+                    "hideDuration" => "3000",
+                    "timeOut" => "3000",
+                    "extendedTimeOut" => "1000",
+                    "showEasing" => "swing",
+                    "hideEasing" => "linear",
+                    "showMethod" => "fadeIn",
+                    "hideMethod" => "fadeOut"
+                ]
+            ]);
         }
         ?>
         <?php $this->beginBody() ?>
@@ -111,7 +111,7 @@ AppAsset::register($this);
 
                             <?php if (in_array(Yii::$app->user->identity->user_roleID, [1, 3])) { ?>
                                 <li><?= Html::a('<i class="fi-head"></i><span> Golfers </span>', ['/golfer']) ?></li>
-                                <li><?= Html::a('<i class="fi-book"></i><span> Cards </span>', 'javascript:void(0);') ?></li>                                
+                                <li><?= Html::a('<i class="fi-book"></i><span> Cards </span>', ['/registration-cards']) ?></li>                                
                             <?php } ?>
 
                             <?php if (Yii::$app->user->identity->user_roleID == 1) { ?>

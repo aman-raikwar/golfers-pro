@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
+use fedemotta\datatables\DataTables;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\GolferSearch */
@@ -25,15 +26,16 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="clearfix"></div>
                     </div>                        
                     <div id="bg-default" class="panel-collapse collapse in show">
-                        <div class="portlet-body">                            
+                        <div class="portlet-body">
                             <?=
-                            GridView::widget([
+                            DataTables::widget([
                                 'dataProvider' => $dataProvider,
-                                //'filterModel' => $searchModel,
-                                'tableOptions' => ['class' => 'table  table-bordered table-hover'],
-                                'layout' => '{items}{summary}{pager}',
+                                'filterModel' => $searchModel,
                                 'columns' => [
-                                    ['class' => 'yii\grid\SerialColumn', 'contentOptions' => ['style' => 'width: 20px;', 'class' => 'text-center'],],
+                                    [
+                                        'class' => 'yii\grid\SerialColumn',
+                                        'contentOptions' => ['class' => 'text-center']
+                                    ],
                                     'golfer_firstname',
                                     'golfer_lastname',
                                     [

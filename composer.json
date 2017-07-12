@@ -19,7 +19,8 @@
         "yiisoft/yii2-bootstrap": "~2.0.0",
         "yiisoft/yii2-swiftmailer": "^2.0",
         "lavrentiev/yii2-toastr": "~2.0.0",
-        "kartik-v/yii2-widget-sidenav": "*"
+        "kartik-v/yii2-widget-sidenav": "*",
+        "fedemotta/yii2-widget-datatables": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

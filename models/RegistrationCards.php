@@ -47,8 +47,8 @@ class RegistrationCards extends ActiveRecord {
     public function attributeLabels() {
         return [
             'ID' => 'ID',
-            'firstcard_number' => 'First Card Number',
-            'lastcard_number' => 'Last Card Number',
+            'firstcard_number' => 'Top Range',
+            'lastcard_number' => 'Bottom Range',
             'CardNumber' => 'Card Number',
             'UserID' => 'User ID',
             'RegisteredDate' => 'Registered',
@@ -56,16 +56,25 @@ class RegistrationCards extends ActiveRecord {
         ];
     }
 
-    public function getAll($input) {
-        return $query = RegistrationCards::find()->all();
+    public static function getClubName($clubID) {
+        $club = GolfClub::findOne(['golfclub_id' => $clubID]);
+
+        if (!empty($club)) {
+            return $club->golfclub_name;
+        } else {
+            return '-';
+        }
     }
 
-    public function demoInsert() {
-        $obj = new RegistrationCards();
-        $obj->CardNumber = "1234";
-        $obj->save();
-        print_r($obj);
-        die;
-    }
-
+//    public function getAll($input) {
+//        return $query = RegistrationCards::find()->all();
+//    }
+//
+//    public function demoInsert() {
+//        $obj = new RegistrationCards();
+//        $obj->CardNumber = "1234";
+//        $obj->save();
+//        print_r($obj);
+//        die;
+//    }
 }

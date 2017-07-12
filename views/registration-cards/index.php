@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
+use fedemotta\datatables\DataTables;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\GolferSearch */
@@ -20,34 +21,65 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="portlet-heading bg-inverse">
                         <h3 class="portlet-title"><?= $this->title ?></h3>
                         <div class="portlet-widgets">
-                            <?= Html::a('<i class="fa fa-asl-interpreting"></i> Assign Cards', 'javascript:void(0);', ['class' => 'link-golfer', 'data-href' => Url::to(['golfer/create'])]) ?>
-                            <?= Html::a('<i class="mdi mdi-plus"></i> Add New Cards', 'javascript:void(0);', ['class' => 'link-registration-cards', 'data-href' => Url::to(['registration-cards/create'])]) ?>
+                            <?php if (Yii::$app->user->identity->user_roleID == 3) { ?>
+                                <?= Html::a('<i class="fa fa-universal-access"></i> Request Cards', 'javascript:void(0);', ['class' => 'link-request-cards', 'data-href' => Url::to(['golfer/create'])]) ?>
+                            <?php } ?>
+
+                            <?php if (Yii::$app->user->identity->user_roleID == 1) { ?>
+                                <?= Html::a('<i class="mdi mdi-plus"></i> Add Cards', 'javascript:void(0);', ['class' => 'link-registration-cards', 'data-href' => Url::to(['registration-cards/create'])]) ?>
+                            <?php } ?>
                         </div>
                         <div class="clearfix"></div>
                     </div>                        
                     <div id="bg-default" class="panel-collapse collapse in show">
                         <div class="portlet-body">                            
                             <?=
-                            GridView::widget([
+                            DataTables::widget([
                                 'dataProvider' => $dataProvider,
-                                //'filterModel' => $searchModel,
-                                'tableOptions' => ['class' => 'table  table-bordered table-hover'],
-                                'layout' => '{items}{summary}{pager}',
+                                'filterModel' => $searchModel,
                                 'columns' => [
                                     ['class' => 'yii\grid\SerialColumn', 'contentOptions' => ['style' => 'width: 20px;', 'class' => 'text-center'],],
                                     'CardNumber',
-                                    'ClubID',
+                                    [
+                                        'attribute' => 'ClubID',
+                                        'label' => 'Golf Club',
+                                        'visible' => Yii::$app->user->identity->user_roleID == 1 ? TRUE : FALSE,
+                                        'content' => function($data) {
+                                            if ($data->ClubID != 0) {
+                                                $clubName = \app\models\RegistrationCards::getClubName($data->ClubID);
+                                                return Html::a($clubName, Url::to(['golf-club/view', 'id' => $data->ClubID]), ['title' => Yii::t('app', 'View the Club Profile'), 'class' => 'text-danger']);
+                                            } else {
+                                                return '-';
+                                            }
+                                        }
+                                    ],
                                     [
                                         'attribute' => 'UserID',
                                         'label' => 'First Name',
+                                        'content' => function($data) {
+                                            if ($data->UserID != 0) {
+                                                //return $data->user->user_username;
+                                                //return Html::a($data->UserID, Url::to(['golf-club/view', 'id' => $data->UserID]), ['title' => Yii::t('app', 'View the Golfer Profile'), 'class' => 'text-danger']);
+                                            } else {
+                                                return '-';
+                                            }
+                                        }
                                     ],
                                     [
                                         'attribute' => 'UserID',
                                         'label' => 'Last Name',
+                                        'content' => function($data) {
+                                            if ($data->UserID != 0) {
+                                                return Html::a($data->UserID, Url::to(['golf-club/view', 'id' => $data->UserID]), ['title' => Yii::t('app', 'View the Golfer Profile'), 'class' => 'text-danger']);
+                                            } else {
+                                                return '-';
+                                            }
+                                        }
                                     ],
                                     'RegisteredDate',
                                     [
                                         'class' => 'yii\grid\ActionColumn',
+                                        'visible' => false,
                                         'header' => 'Actions',
                                         'headerOptions' => ['style' => 'width:160px', 'class' => 'text-center'],
                                         'contentOptions' => ['class' => 'text-center'],

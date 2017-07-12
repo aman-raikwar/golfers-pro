@@ -33,6 +33,16 @@ use app\components\Utility;
     </div>
 
     <div class="row">
+        <div class="col-md-12">
+            <?php
+            $clubs = GolfClub::find()->orderBy('golfclub_name')->all();
+            $clubsList = ArrayHelper::map($clubs, 'golfclub_id', 'golfclub_name');
+            ?>
+            <?= $form->field($model, 'ClubID')->dropDownList($clubsList, ['prompt' => 'Select Golf Club']) ?>
+        </div>
+    </div>    
+
+    <div class="row">
         <div class="col-md-6">
             <?= $form->field($model, 'firstcard_number')->textInput(['maxlength' => true, 'autocomplete' => 'off']) ?>
         </div>                                    

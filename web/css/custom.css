@@ -26,3 +26,26 @@
 .fade.in {
     opacity: 1;
 }
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    padding: 0px;
+    margin: 0px;
+}
+
+.table td, .table th {
+    vertical-align: middle;    
+}
+
+table.dataTable thead th, table.dataTable thead td,
+table.dataTable.no-footer {
+    border-color: #eceeef;
+}
+
+.input-group-sm>.input-group-btn>select.btn:not([size]):not([multiple]), .input-group-sm>select.form-control:not([size]):not([multiple]), .input-group-sm>select.input-group-addon:not([size]):not([multiple]), select.form-control-sm:not([size]):not([multiple]) {
+    height: calc(2.25rem + 2px);
+}
+
+.page-link {
+    margin-left: -2px;
+}
+

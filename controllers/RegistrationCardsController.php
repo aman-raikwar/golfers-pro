@@ -74,38 +74,43 @@ class RegistrationCardsController extends Controller {
             $firstcard_number = $model->firstcard_number;
             $lastcard_number = $model->lastcard_number;
 
-            $firstcard_value = intval(preg_replace('/[^0-9]+/', '', $firstcard_number), 10);
-            $lastcard_value = intval(preg_replace('/[^0-9]+/', '', $lastcard_number), 10);
+            $firstcard_value = intval(preg_replace('/[^0-9]+/', '', $firstcard_number));
+            $lastcard_value = intval(preg_replace('/[^0-9]+/', '', $lastcard_number));
 
             $firstcard_string = strtoupper(str_replace($firstcard_value, '', $firstcard_number));
             $lastcard_string = strtoupper(str_replace($lastcard_value, '', $lastcard_number));
 
-            if ($firstcard_string != $lastcard_string) {
-                Yii::$app->response->format = Response::FORMAT_JSON;
-                return ActiveForm::validate($model);
-            }
+//            if ($firstcard_string != $lastcard_string) {
+//                Yii::$app->response->format = Response::FORMAT_JSON;
+//                return ActiveForm::validate($model);
+//            }
 
             $flag = 0;
             for ($i = $firstcard_value; $i <= $lastcard_value; $i++) {
-                $model = new RegistrationCards();
-                $model->CardNumber = $firstcard_string . $i;
-                $model->ClubID = 0;
-                $model->UserID = 0;
-                $model->RegisteredDate = date('Y-m-d');
-                $model->setIsNewRecord(false);
-                $model->save();
-                print_r($model->attributes);
-                $flag = 1;
+                //$model = new RegistrationCards();
+                $oldModel = RegistrationCards::findOne(['CardNumber' => $firstcard_string . $i]);
+                if (empty($oldModel)) {
+                    $model->ID = NULL;
+                    $model->CardNumber = $firstcard_string . $i;
+                    $model->ClubID = $model->ClubID;
+                    $model->UserID = 0;
+                    $model->RegisteredDate = date('Y-m-d');
+                    $model->isNewRecord = TRUE;
+                    $model->save();
+                    $flag = 1;
+                }
             }
-            die;
 
             if ($flag == 1) {
                 \Yii::$app->session->setFlash('type', 'success');
                 \Yii::$app->session->setFlash('title', 'Golfer Cards');
                 \Yii::$app->session->setFlash('message', 'Golfer Card added successfully.');
-
-                return $this->redirect(['index']);
+            } else {
+                \Yii::$app->session->setFlash('type', 'danger');
+                \Yii::$app->session->setFlash('title', 'Golfer Cards');
+                \Yii::$app->session->setFlash('message', 'All Cards already exists.');
             }
+            return $this->redirect(['index']);
         }
 
         return $this->renderAjax('_form', ['model' => $model]);

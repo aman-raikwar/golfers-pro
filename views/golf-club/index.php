@@ -6,6 +6,7 @@ use yii\helpers\Url;
 use yii\bootstrap\Modal;
 use app\models\GolfClub;
 use app\models\Golfer;
+use fedemotta\datatables\DataTables;
 
 $this->title = Yii::t('app', 'Golf Clubs');
 ?>
@@ -66,13 +67,14 @@ $this->title = Yii::t('app', 'Golf Clubs');
                         <div id="bg-default" class="panel-collapse collapse in show">
                             <div class="portlet-body">                                
                                 <?=
-                                GridView::widget([
+                                DataTables::widget([
                                     'dataProvider' => $dataProvider,
-                                    //'filterModel' => $searchModel,
-                                    'tableOptions' => ['class' => 'table  table-bordered table-hover'],
-                                    'layout' => '{items}{summary}{pager}',
+                                    'filterModel' => $searchModel,
                                     'columns' => [
-                                        ['class' => 'yii\grid\SerialColumn', 'contentOptions' => ['style' => 'width: 20px;', 'class' => 'text-center'],],
+                                        [
+                                            'class' => 'yii\grid\SerialColumn',
+                                            'contentOptions' => ['class' => 'text-center']
+                                        ],
                                         [
                                             'attribute' => 'golfclub_name',
                                             'content' => function($data) {
@@ -81,7 +83,7 @@ $this->title = Yii::t('app', 'Golf Clubs');
                                         ],
                                         [
                                             'attribute' => 'golfclub_id',
-                                            'headerOptions' => ['style' => 'width:120px', 'class' => 'text-center'],
+                                            //'headerOptions' => ['style' => 'width:120px', 'class' => 'text-center'],
                                             'contentOptions' => ['class' => 'text-center']
                                         ],
                                         [
@@ -92,7 +94,7 @@ $this->title = Yii::t('app', 'Golf Clubs');
                                         ],
                                         [
                                             'label' => 'Associated Golfers',
-                                            'headerOptions' => ['style' => 'width:160px', 'class' => 'text-center'],
+                                            //'headerOptions' => ['style' => 'width:160px', 'class' => 'text-center'],
                                             'contentOptions' => ['class' => 'text-center'],
                                             'content' => function($data) {
                                                 return $data->getCountOfGolfers($data->golfclub_id);
@@ -100,7 +102,7 @@ $this->title = Yii::t('app', 'Golf Clubs');
                                         ],
                                         [
                                             'label' => 'Number of Check-ins',
-                                            'headerOptions' => ['style' => 'width:160px', 'class' => 'text-center'],
+                                            //'headerOptions' => ['style' => 'width:160px', 'class' => 'text-center'],
                                             'contentOptions' => ['class' => 'text-center'],
                                             'content' => function($data) {
                                                 return '';
@@ -109,8 +111,8 @@ $this->title = Yii::t('app', 'Golf Clubs');
                                         [
                                             'class' => 'yii\grid\ActionColumn',
                                             'header' => 'Actions',
-                                            'headerOptions' => ['style' => 'width:160px', 'class' => 'text-center'],
-                                            'contentOptions' => ['class' => 'text-center'],
+                                            //'headerOptions' => ['style' => 'width:160px', 'class' => 'text-center'],
+                                            //'contentOptions' => ['class' => 'text-center'],
                                             'template' => '{view} {update} {delete}',
                                             'buttons' => [
                                                 'view' => function ($url, $model) {
