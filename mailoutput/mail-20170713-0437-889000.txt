@@ -1,0 +1,79 @@
+To: golfclub@mailinator.com
+Subject: Request More Golfer Cards for The Golfer Card
+Message-ID: <7ec2869ab7a02213e973cba0d14ebebd@localhost>
+Date: Thu, 13 Jul 2017 06:37:03 +0200
+From: The Golfer Card robot <support@golfersclub.com>
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="_=_swift_v4_1499920623_a4a48b4adf9830afedd9bbf269e45534_=_"
+
+
+--_=_swift_v4_1499920623_a4a48b4adf9830afedd9bbf269e45534_=_
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+
+Hello Admin!
+
+
+We need more Golfer Cards for our Club.
+
+
+Clu=
+b Username: golfclub
+Club Email: golfclub@mailinator.com
+Number of Card=
+s required: 300
+
+
+
+Thank you!
+
+
+
+--_=_swift_v4_1499920623_a4a48b4adf9830afedd9bbf269e45534_=_
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org=
+/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns=3D"http://www.w3.org/1999/=
+xhtml">
+<head>
+    <meta http-equiv=3D"Content-Type" content=3D"text/ht=
+ml; charset=3DUTF-8" />
+    <title></title>
+    </head>
+<body>
+    =
+   =20
+<div class=3D"account-verification">
+    <p>Hello Admin!</p>
+   =
+ <p>We need more Golfer Cards for our Club.</p>
+    <table>
+        <tr=
+>
+            <th>Club Username</th>
+            <td>golfclub</td>
+  =
+      </tr>
+        <tr>
+            <th>Club Email</th>
+            =
+<td>golfclub@mailinator.com</td>
+        </tr>
+        <tr>
+         =
+   <th>Number of Cards required</th>
+            <td><b>300</b></td>
+  =
+      </tr>
+    </table>   =20
+</div>
+    </body>
+</html>
+
+
+--_=_swift_v4_1499920623_a4a48b4adf9830afedd9bbf269e45534_=_--
+

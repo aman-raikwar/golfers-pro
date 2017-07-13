@@ -32,7 +32,8 @@ Completed:-
 -- Table should be similar to as shown in the link below: http://yogami.in/golfer/design/index.php
 17. Golfer Table is not as per my styling, there should not be  blue href links
 -- Table should be similar to as shown in the link below: http://yogami.in/golfer/registration/web/golfer
-
+24.Activation email took too long to come through
+-- Depends on Server Stats.
 
 
 
@@ -41,7 +42,6 @@ Completed:-
 Pending Tasks:-
 
 MAJOR: Cannot add Golf Club error is coming when click on Save Changes.
-
 
 9. Can you explain about the error message on the validation field for which golf club they are a member of? I don't know why you have added this in. This is a development note.
 -- Compare all the text from the design that was sent by client. Link is given below: http://yogami.in/golfer/design/golfer-registration.php
@@ -60,7 +60,3 @@ MAJOR: Cannot add Golf Club error is coming when click on Save Changes.
 
 19. Golf Clubs page is not complete. The counter for number of check-ins is showing 0 even though I know for sure that there are some in the database.
 -- Need to work on this.
-
- 
-Golfer Self Registration:
-24.Activation email took too long to come through

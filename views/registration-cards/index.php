@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <h3 class="portlet-title"><?= $this->title ?></h3>
                         <div class="portlet-widgets">
                             <?php if (Yii::$app->user->identity->user_roleID == 3) { ?>
-                                <?= Html::a('<i class="fa fa-universal-access"></i> Request Cards', 'javascript:void(0);', ['class' => 'link-request-cards', 'data-href' => Url::to(['golfer/create'])]) ?>
+                                <?= Html::a('<i class="fa fa-universal-access"></i> Request Cards', 'javascript:void(0);', ['class' => 'link-request-cards', 'data-href' => Url::to(['registration-cards/request-cards'])]) ?>
                             <?php } ?>
 
                             <?php if (Yii::$app->user->identity->user_roleID == 1) { ?>

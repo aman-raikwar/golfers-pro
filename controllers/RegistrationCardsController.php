@@ -74,30 +74,36 @@ class RegistrationCardsController extends Controller {
             $firstcard_number = $model->firstcard_number;
             $lastcard_number = $model->lastcard_number;
 
-            $firstcard_value = intval(preg_replace('/[^0-9]+/', '', $firstcard_number));
-            $lastcard_value = intval(preg_replace('/[^0-9]+/', '', $lastcard_number));
-
-            $firstcard_string = strtoupper(str_replace($firstcard_value, '', $firstcard_number));
-            $lastcard_string = strtoupper(str_replace($lastcard_value, '', $lastcard_number));
-
-//            if ($firstcard_string != $lastcard_string) {
-//                Yii::$app->response->format = Response::FORMAT_JSON;
-//                return ActiveForm::validate($model);
-//            }
+            $s_number = '8';
+            $card1 = substr($firstcard_number, 0, 3);
+            $card2 = substr($lastcard_number, 0, 3);
+            $len = strlen($firstcard_number);
+            $len2 = strlen($lastcard_number);
+            $card_len1 = strlen($card1);
+            $card_len2 = strlen($card2);
 
             $flag = 0;
-            for ($i = $firstcard_value; $i <= $lastcard_value; $i++) {
-                //$model = new RegistrationCards();
-                $oldModel = RegistrationCards::findOne(['CardNumber' => $firstcard_string . $i]);
-                if (empty($oldModel)) {
-                    $model->ID = NULL;
-                    $model->CardNumber = $firstcard_string . $i;
-                    $model->ClubID = $model->ClubID;
-                    $model->UserID = 0;
-                    $model->RegisteredDate = date('Y-m-d');
-                    $model->isNewRecord = TRUE;
-                    $model->save();
-                    $flag = 1;
+            if ($len == 11 && $card_len1 == 3 && $card1 == $card2 && $len == $len2) {
+                $card1 = substr($firstcard_number, 0, 3);
+                $min = filter_var($firstcard_number, FILTER_SANITIZE_NUMBER_INT);
+                //$min = filter_var($firstcard_number, FILTER_SANITIZE_NUMBER_INT);
+                $max = filter_var($lastcard_number, FILTER_SANITIZE_NUMBER_INT);
+                for ($x = $min; $x <= $max; $x++) {
+                    $x = str_pad($x, 8, '0', STR_PAD_LEFT);
+                    $card = $card1 . $x;
+                    ///echo "<br>";
+                    ///insert card functionality
+                    $oldModel = RegistrationCards::findOne(['CardNumber' => $card]);
+                    if (empty($oldModel)) {
+                        $model->ID = NULL;
+                        $model->CardNumber = $card;
+                        $model->ClubID = $model->ClubID;
+                        $model->UserID = 0;
+                        $model->RegisteredDate = date('Y-m-d');
+                        $model->isNewRecord = TRUE;
+                        $model->save();
+                        $flag = 1;
+                    }
                 }
             }
 
@@ -116,9 +122,33 @@ class RegistrationCardsController extends Controller {
         return $this->renderAjax('_form', ['model' => $model]);
     }
 
-    public function actionAddnew() {
-        $model = new RegistrationCards();
-        $data = $model->demoInsert();
+    public function actionRequestCards() {
+        if (Yii::$app->request->post()) {
+            $request = Yii::$app->request->post();
+            $number_of_cards = $request['number_of_cards'];
+
+            $user = Yii::$app->user->identity;
+
+            $mail = Yii::$app
+                    ->mailer
+                    ->compose(['html' => 'requestMoreGolferCards-html', 'text' => 'requestMoreGolferCards-text'], ['user' => $user, 'number_of_cards' => $number_of_cards])
+                    ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' robot'])
+                    ->setTo($user->user_email)
+                    ->setSubject('Request More Golfer Cards for ' . Yii::$app->name)
+                    ->send();
+
+            if ($mail) {
+                \Yii::$app->session->setFlash('type', 'success');
+                \Yii::$app->session->setFlash('title', 'Request More Golfer Cards');
+                \Yii::$app->session->setFlash('message', 'Request successfully sent.');
+            } else {
+                \Yii::$app->session->setFlash('type', 'danger');
+                \Yii::$app->session->setFlash('title', 'Request More Golfer Cards');
+                \Yii::$app->session->setFlash('message', 'Request failed to send.');
+            }
+            return $this->redirect(['index']);
+        }
+        return $this->renderAjax('_request_form');
     }
 
     /**
