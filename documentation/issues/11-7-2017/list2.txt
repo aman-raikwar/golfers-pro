@@ -37,3 +37,37 @@ Request Card:
 Only an email should be sent to platform admin with a request. HTML of email is awaited.
 
 Let me know if anything is not clear in this process.
+
+
+
+
+function addCardRange($bottomRange,$topRange){
+    $bottomRangeCard=substr($bottomRange,0,3);
+    $topRangeCard=substr($topRange,0,3);
+    $lenBottomRange=strlen($bottomRange);
+    $lenTopRange=strlen($topRange);
+    $bottomRangeCardLen=strlen($bottomRangeCard);
+    $topRangeCardLen=strlen($topRangeCard);
+    $min = filter_var($bottomRange, FILTER_SANITIZE_NUMBER_INT);
+    $max = filter_var($topRange, FILTER_SANITIZE_NUMBER_INT);
+    if(!($lenBottomRange==11&& $topRangeCardLen==3)){
+        echo "Invalid card formate";
+    }else if(!($bottomRangeCard==$topRangeCard)){
+        echo "First three characters do not the same";
+    }else if(!($lenBottomRange==$lenTopRange)){
+        echo "Card lenght wrong.";
+    }else if(!($min<$max)){
+            echo "Card range invalid";
+    }else{
+        for ($x = $min; $x <= $max; $x++) {
+            $x=str_pad($x, 8, '0', STR_PAD_LEFT);
+            echo  $newCard=$bottomRangeCard.$x;
+            echo "<br>";
+           ///insert card functionality
+
+        }
+    }
+}
+$bottomRange="OMD00000001";
+$topRange="OMD00000101";
+addCardRange($bottomRange,$topRange);
