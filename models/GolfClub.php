@@ -93,7 +93,8 @@ class GolfClub extends \yii\db\ActiveRecord {
             [['golfclub_postCode'], 'string', 'max' => 100],
             [['golfclub_addressNotes'], 'string', 'max' => 300],
             [['golfclub_description'], 'string', 'max' => 500],
-            [['golfclub_facebookUrl', 'golfclub_twitterUrl', 'golfclub_websiteUrl', 'golfclub_gpgUrl'], 'url'],
+            //[['golfclub_facebookUrl', 'golfclub_twitterUrl', 'golfclub_websiteUrl', 'golfclub_gpgUrl'], 'url'],
+            [['golfclub_websiteUrl', 'golfclub_gpgUrl'], 'url'],
             [['golfclub_userID'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['golfclub_userID' => 'user_id']],
         ];
     }

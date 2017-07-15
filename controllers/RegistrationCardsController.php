@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use Yii;
+use yii\filters\AccessControl;
 use app\models\RegistrationCards;
 use app\models\RegistrationCardsSearch;
 use yii\web\Controller;
@@ -21,6 +22,15 @@ class RegistrationCardsController extends Controller {
      */
     public function behaviors() {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -133,7 +143,7 @@ class RegistrationCardsController extends Controller {
                     ->mailer
                     ->compose(['html' => 'requestMoreGolferCards-html', 'text' => 'requestMoreGolferCards-text'], ['user' => $user, 'number_of_cards' => $number_of_cards])
                     ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' robot'])
-                    ->setTo($user->user_email)
+                    ->setTo(Yii::$app->params['adminEmail'])
                     ->setSubject('Request More Golfer Cards for ' . Yii::$app->name)
                     ->send();
 

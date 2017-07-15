@@ -49,3 +49,17 @@ table.dataTable.no-footer {
     margin-left: -2px;
 }
 
+.dataTables_wrapper .dataTables_paginate .paginate_button:active {
+    background: transparent !important;
+    border-color: transparent !important;
+    box-shadow: inset 0 0 0 transparent;    
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background: transparent !important;
+    border-color: transparent !important;
+    box-shadow: inset 0 0 0 transparent;    
+}
+
+span.select2-container {
+    z-index:10050 !important;
+}

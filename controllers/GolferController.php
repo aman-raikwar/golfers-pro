@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use Yii;
+use yii\filters\AccessControl;
 use app\models\User;
 use app\models\Golfer;
 use app\models\GolferSearch;
@@ -22,6 +23,15 @@ class GolferController extends Controller {
      */
     public function behaviors() {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -63,6 +73,7 @@ class GolferController extends Controller {
      */
     public function actionCreate() {
         $model = new Golfer();
+        $model->setScenario('create');
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             Yii::$app->response->format = Response::FORMAT_JSON;
@@ -70,6 +81,11 @@ class GolferController extends Controller {
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+
+            //print_r($_POST);
+            $model->golfer_dateOfBirth = date('Y-m-d', strtotime($model->golfer_dateOfBirth));
+//            print_r($model->attributes);
+//            die;
 
             $user = new User();
             $user->user_username = $model->user_username;
@@ -82,7 +98,11 @@ class GolferController extends Controller {
                 //$model->golfer_opgRegType = $_POST['Golfer']['golfer_opgRegType'];
                 $model->golfer_opgRegType = 1;
                 $model->golfer_userID = $user->user_id;
-                if ($model->save(false)) {
+
+                $card = \app\models\RegistrationCards::findOne(['ID' => $_POST['Golfer']['golfer_card_number']]);
+                $card->UserID = $user->user_id;
+
+                if ($model->save(false) && $card->save(false)) {
                     \Yii::$app->session->setFlash('type', 'success');
                     \Yii::$app->session->setFlash('title', 'Golfer');
                     \Yii::$app->session->setFlash('message', 'Golfer added successfully.');
@@ -116,6 +136,7 @@ class GolferController extends Controller {
         $model = $this->findModel($id);
         $model->user_email = $model->user->user_email;
         $model->user_username = $model->user->user_username;
+        $model->setScenario('update');
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             Yii::$app->response->format = Response::FORMAT_JSON;
@@ -124,6 +145,8 @@ class GolferController extends Controller {
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
+            $model->golfer_dateOfBirth = date('Y-m-d', strtotime($model->golfer_dateOfBirth));
+
             $model->user->user_email = $model->user_email;
             $model->user->user_username = $model->user_username;
             $model->user->setPassword($model->user_password);
@@ -131,14 +154,23 @@ class GolferController extends Controller {
 
             if ($model->save() && $model->user->save()) {
 
-                \Yii::$app->session->setFlash('type', 'success');
-                \Yii::$app->session->setFlash('title', 'Golfer');
-                \Yii::$app->session->setFlash('message', 'Golfer updated successfully.');
+                $card = \app\models\RegistrationCards::findOne(['ID' => $_POST['Golfer']['golfer_card_number']]);
+                $card->UserID = $model->user->user_id;
 
-                return $this->redirect(['index']);
+                if ($card->save(false)) {
+                    \Yii::$app->session->setFlash('type', 'success');
+                    \Yii::$app->session->setFlash('title', 'Golfer');
+                    \Yii::$app->session->setFlash('message', 'Golfer updated successfully.');
+                } else {
+                    \Yii::$app->session->setFlash('type', 'danger');
+                    \Yii::$app->session->setFlash('title', 'Golfer');
+                    \Yii::$app->session->setFlash('message', 'Golfer Card Number update failed.');
+                }
+                return $this->redirect(['view', 'id' => $model->golfer_id]);
             } else {
-                Yii::$app->response->format = Response::FORMAT_JSON;
-                return ActiveForm::validate($model);
+                \Yii::$app->session->setFlash('type', 'danger');
+                \Yii::$app->session->setFlash('title', 'Golfer');
+                \Yii::$app->session->setFlash('message', 'Golfer update failed.');
             }
         } else {
             return $this->renderAjax('_form', ['model' => $model]);
@@ -186,6 +218,19 @@ class GolferController extends Controller {
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    public function actionGetCards($id) {
+        $cards = \app\models\RegistrationCards::find()->where(['UserID' => 0, 'ClubID' => $id])->orderby('CardNumber')->all();
+
+        $cardsList = [];
+        if (!empty($cards)) {
+            $cardsList = \yii\helpers\ArrayHelper::map($cards, 'ID', 'CardNumber');
+        }
+
+        $response = array('cards' => $cardsList);
+        echo json_encode($response);
+        exit();
     }
 
 }

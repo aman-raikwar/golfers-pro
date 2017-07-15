@@ -9,6 +9,7 @@ use app\models\CardMembershipCategory;
 use app\models\Country;
 use app\models\County;
 use app\components\Utility;
+use app\models\RegistrationCards;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Golfer */
@@ -25,44 +26,63 @@ use app\components\Utility;
 <div class="modal-body">
 
     <div class="row">
-        <div class="col-md-12">
-            <div class="form-group">
-                <label for="field-1" class="control-label">Golfer Card Number</label>
-                <select class="select2 form-control select2" multiple="multiple" placeholder="Choose ..." id="field-1">
-                    <option value="110001">110001</option>
-                    <option value="220001">220001</option>
-                    <option value="110001">330001</option>
-                    <option value="110001">335101</option>
-                    <option value="110001">335201</option>
-                    <option value="110001">336001</option>
-                    <option value="110001">337001</option>
-                    <option value="110001">338001</option>
-                    <option value="220001">440001</option>
-                    <option value="220001">550001</option>
-                    <option value="110001">660001</option>
-                    <option value="220001">770001</option>
-                    <option value="110001">880001</option>
-                    <option value="220001">990001</option>
-                </select>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
         <div class="col-md-12">                                        
             <?php
-            $GolfClubs = GolfClub::find()->orderby('golfclub_name')->all();
+            $user_id = Yii::$app->user->identity->user_id;
+
+            if (Yii::$app->user->identity->user_roleID == 3) {
+                $GolfClubs = GolfClub::find()->where(['golfclub_userID' => $user_id])->orderby('golfclub_name')->all();
+            } else {
+                $GolfClubs = GolfClub::find()->orderby('golfclub_name')->all();
+            }
             $GolfClubsList = ArrayHelper::map($GolfClubs, 'golfclub_id', 'golfclub_name');
-            echo $form->field($model, 'golfer_firstClubID')->dropDownList($GolfClubsList, ['prompt' => 'Select Golf Club'])->label('Which Golf Club are they a member of?');
+            echo $form->field($model, 'golfer_firstClubID')->dropDownList($GolfClubsList, ['prompt' => 'Select Golf Club', 'class' => 'form-control select2', 'data-href' => Url::to('/golfer/get-cards')])->label('Which Golf Club are they a member of?');
             ?>
         </div>
     </div>
 
     <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <?php
+                //$cards = array();
+//                if (Yii::$app->user->identity->user_roleID == 3) {
+//                    $club = GolfClub::findOne(['golfclub_userID' => $user_id]);
+//                    if (!empty($club)) {
+//                        $cards = RegistrationCards::find()->where(['ClubID' => $club->golfclub_id, 'UserID' => 0])->orWhere(['UserID' => $model->golfer_userID])->orderby('CardNumber')->all();
+//                    }
+//                } else {
+//                    if (!$model->isNewRecord) {
+//                        $cards = RegistrationCards::find()->where(['UserID' => 0])->orWhere(['UserID' => $model->golfer_userID])->orderby('CardNumber')->all();
+//                    } else {
+//                        $cards = RegistrationCards::find()->where(['UserID' => 0])->orderby('CardNumber')->all();
+//                    }
+//                }
+//
+//                if (!$model->isNewRecord) {
+//                    $card = RegistrationCards::findOne(['UserID' => $model->golfer_userID]);
+//                    if (!empty($card)) {
+//                        $model->golfer_card_number = $card->ID;
+//                    }
+//                }
+                //$cardsList = ArrayHelper::map($cards, 'ID', 'CardNumber');
+                $cards = [];
+                if (!$model->isNewRecord) {
+                    echo $model->golfer_firstClubID;
+                    echo $model->golfer_userID;
+                    //$cards = RegistrationCards::find()->where(['ClubID' => $model->golfer_firstClubID, 'UserID' => 0])->orWhere(['UserID' => $model->golfer_userID])->orderby('CardNumber')->all();
+                }
+                echo $form->field($model, 'golfer_card_number')->dropDownList($cards, ['prompt' => 'Select Card Number', 'class' => 'form-control select2'])->label('Golfer Card Number');
+                ?>
+            </div>
+        </div>
+    </div>    
+
+    <div class="row">
         <div class="col-md-6">
             <?php
             $disabled = true;
-            if (!$model->isNewRecord && $model->golfer_isMemberOfAnotherClub == 2) {
+            if (!$model->isNewRecord || $model->golfer_isMemberOfAnotherClub == 2) {
                 $disabled = false;
             }
             ?>
@@ -71,11 +91,11 @@ use app\components\Utility;
         <div class="col-md-6">                                        
             <?php
             $disabled = true;
-            if (!$model->isNewRecord && $model->golfer_isMemberOfAnotherClub == 2) {
+            if (!$model->isNewRecord || $model->golfer_isMemberOfAnotherClub == 2) {
                 $disabled = false;
             }
             ?>
-            <?= $form->field($model, 'golfer_otherClubID')->dropDownList($GolfClubsList, ['prompt' => 'Select Golf Club', 'disabled' => $disabled])->label('Select Golf Club'); ?>                                        
+            <?= $form->field($model, 'golfer_otherClubID')->dropDownList($GolfClubsList, ['prompt' => 'Select Golf Club', 'class' => 'form-control select2', 'disabled' => $disabled])->label('Select Golf Club'); ?>                                        
         </div>
     </div>
 
@@ -96,7 +116,7 @@ use app\components\Utility;
 
     <div class="row">
         <div class="col-md-6">
-            <?= $form->field($model, 'golfer_title')->dropdownList(Utility::getPersonTitles(), ['prompt' => 'Select Title']); ?>
+            <?= $form->field($model, 'golfer_title')->dropdownList(Utility::getPersonTitles(), ['prompt' => 'Select Title', 'class' => 'form-control select2']); ?>
         </div>
     </div>
 
@@ -114,6 +134,7 @@ use app\components\Utility;
             <?= $form->field($model, 'golfer_gender')->dropDownList(['F' => 'Female', 'M' => 'Male'], ['prompt' => 'Select Gender']) ?>
         </div>
         <div class="col-md-6">
+            <?php $model->golfer_dateOfBirth = date('d-m-Y', strtotime($model->golfer_dateOfBirth)); ?>
             <?= $form->field($model, 'golfer_dateOfBirth', ['template' => '<div>{label}<div class="input-group">{input} <span class="input-group-addon bg-custom b-0 show-datepicker"><i class="mdi mdi-calendar text-white"></i></span></div>{error}{hint}</div>'])->textInput(['placeholder' => 'DD-MM-YYYY', 'autocomplete' => 'off']); ?>
         </div>
     </div>
@@ -158,17 +179,14 @@ use app\components\Utility;
             <?php
             $countries = Country::find()->orderBy('nationality')->all();
             $countryList = ArrayHelper::map($countries, 'id', 'nationality');
-            echo $form->field($model, 'golfer_country')->dropDownList($countryList, [
-                'prompt' => 'Select Country',
-                'data-url' => Url::to(['golf-clubs/county-list'])
-            ]);
+            echo $form->field($model, 'golfer_country')->dropDownList($countryList, ['prompt' => 'Select Country', 'class' => 'form-control', 'data-url' => Url::to(['golf-clubs/county-list'])]);
             ?>
         </div>
         <div class="col-md-6">                                        
             <?php
             $counties = County::find()->orderBy('name')->all();
             $countyList = ArrayHelper::map($counties, 'id', 'name');
-            echo $form->field($model, 'golfer_county')->dropDownList($countyList, ['prompt' => 'Select County']);
+            echo $form->field($model, 'golfer_county')->dropDownList($countyList, ['prompt' => 'Select County', 'class' => 'form-control']);
             ?>                                        
         </div>
     </div>

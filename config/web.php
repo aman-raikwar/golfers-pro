@@ -25,7 +25,7 @@ $config = [
         ],
         'user' => [
             'identityClass' => 'app\models\User',
-            'enableAutoLogin' => true,
+            'enableAutoLogin' => false,
             'enableSession' => true,
         ],
         'errorHandler' => [
@@ -54,12 +54,12 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                'golf-clubs' => 'golf-course/index',
-                'golf-clubs/add-club' => 'golf-course/create',
-                'golf-clubs/edit-club' => 'golf-course/update',
-                'golf-clubs/county-list' => 'golf-course/county-list',
+//                'golf-clubs' => 'golf-course/index',
+//                'golf-clubs/add-club' => 'golf-course/create',
+//                'golf-clubs/edit-club' => 'golf-course/update',
+//                'golf-clubs/county-list' => 'golf-course/county-list',
                 'playeractivity' => 'playeractivity/index',
-                'golf-cards' => 'golf-course/index',
+                //'golf-cards' => 'golf-course/index',
                 'login' => 'site/login',
                 'golfer-registration' => 'site/register',
                 'request-password-reset' => 'site/request-password-reset'

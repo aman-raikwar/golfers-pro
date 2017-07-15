@@ -38,7 +38,7 @@ use app\components\Utility;
             $clubs = GolfClub::find()->orderBy('golfclub_name')->all();
             $clubsList = ArrayHelper::map($clubs, 'golfclub_id', 'golfclub_name');
             ?>
-            <?= $form->field($model, 'ClubID')->dropDownList($clubsList, ['prompt' => 'Select Golf Club']) ?>
+            <?= $form->field($model, 'ClubID')->dropDownList($clubsList, ['prompt' => 'Select Golf Club', 'class' => 'form-control select2']) ?>
         </div>
     </div>    
 

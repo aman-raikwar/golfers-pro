@@ -34,13 +34,25 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'columns' => [
                                     [
                                         'class' => 'yii\grid\SerialColumn',
+                                        'header' => 'ID',
                                         'contentOptions' => ['class' => 'text-center']
                                     ],
-                                    'golfer_firstname',
-                                    'golfer_lastname',
+                                    [
+                                        'attribute' => 'golfer_firstname',
+                                        'content' => function($data, $url) {
+                                            return Html::a($data->golfer_firstname, Url::to(['golfer/view', 'id' => $url]), ['class' => 'text-danger']);
+                                        }
+                                    ],
+                                    [
+                                        'attribute' => 'golfer_lastname',
+                                        'content' => function($data, $url) {
+                                            return Html::a($data->golfer_lastname, Url::to(['golfer/view', 'id' => $url]), ['class' => 'text-danger']);
+                                        }
+                                    ],
                                     [
                                         'attribute' => 'golfer_firstClubID',
                                         'label' => 'Primary Membership Golf Club',
+                                        'visible' => Yii::$app->user->identity->user_roleID == 1 ? TRUE : FALSE,
                                         'content' => function ($data) {
                                             if (!empty($data->golfer_firstClubID)) {
                                                 return $data->getGolfClubName($data->golfer_firstClubID);
@@ -60,13 +72,20 @@ $this->params['breadcrumbs'][] = $this->title;
                                         }
                                     ],
                                     [
-                                        'attribute' => 'golfer_countyCardNumber',
-                                        'label' => 'Card Number'
+                                        'attribute' => 'golfer_card_number',
+                                        'label' => 'Card Number',
+                                        'content' => function ($data) {
+                                            $golfer_id = $data->golfer_userID;
+                                            $card = \app\models\RegistrationCards::findOne(['UserID' => $golfer_id]);
+                                            if (!empty($card)) {
+                                                return $card->CardNumber;
+                                            }
+                                        }
                                     ],
                                     [
                                         'class' => 'yii\grid\ActionColumn',
                                         'header' => 'Actions',
-                                        'headerOptions' => ['style' => 'width:160px', 'class' => 'text-center'],
+                                        'headerOptions' => ['class' => 'text-center'],
                                         'contentOptions' => ['class' => 'text-center'],
                                         'template' => '{view} {update} {delete}',
                                         'buttons' => [
@@ -86,7 +105,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             'delete' => function ($url, $model) {
                                                 return Html::a('<span class="fa fa-remove"></span>', $url, [
                                                             'title' => Yii::t('app', 'Delete the Golfer'),
-                                                            'class' => 'btn btn-icon waves-effect waves-light btn-inverse',
+                                                            'class' => 'btn btn-icon waves-effect waves-light btn-warning',
                                                             'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
                                                             'data-method' => 'post',
                                                 ]);

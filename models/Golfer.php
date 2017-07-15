@@ -38,6 +38,7 @@ class Golfer extends \yii\db\ActiveRecord {
     public $user_password;
     public $user_password_repeat;
     public $acceptTermsCondition;
+    public $golfer_card_number;
 
     /**
      * @inheritdoc
@@ -80,6 +81,7 @@ class Golfer extends \yii\db\ActiveRecord {
             ['user_email', 'string', 'max' => 255],
             //['user_email', 'unique', 'targetClass' => '\app\models\User', 'message' => 'This email address has already been taken.'],
             ['user_password', 'required', 'on' => ['register', 'create']],
+            ['golfer_card_number', 'required', 'on' => ['create', 'update']],
             ['user_password', 'string', 'min' => 6],
             ['user_password_repeat', 'required', 'on' => 'create'],
             //['user_password_repeat', 'compare', 'compareAttribute' => 'user_password'],

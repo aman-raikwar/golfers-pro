@@ -33,6 +33,7 @@ class RegistrationCards extends ActiveRecord {
     public function rules() {
         return [
             [['firstcard_number', 'lastcard_number'], 'required'],
+            [['firstcard_number', 'lastcard_number'], 'string', 'min' => 11, 'max' => 11],
             //[['CardNumber', 'UserID', 'RegisteredDate', 'ClubID'], 'required'],
             [['RegisteredDate'], 'safe'],
             [['CardNumber'], 'string', 'max' => 200],

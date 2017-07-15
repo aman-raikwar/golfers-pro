@@ -16,6 +16,21 @@ $(function () {
         $('#golfer-modal').find('.modal-content').load($(this).data('href'), function () {
             var thisModal = $('#golfer-modal');
             thisModal.modal('show');
+            $(".select2").select2({
+                dropdownParent: $("#golfer-modal")
+            });
+            $("#golfer-golfer_dateofbirth").datepicker({
+                autoclose: !0,
+                todayHighlight: !0,                
+                allowInputToggle: true,
+                format: 'dd-mm-yyyy'
+            });
+
+            $('.show-datepicker').click(function (event) {
+                event.preventDefault();
+                $("#golfer-golfer_dateofbirth").focus();
+            });
+            $('.modal').removeAttr('tabindex');
             $("#loading-indicator").hide();
         });
     });
@@ -34,6 +49,11 @@ $(function () {
         $('#registration-cards-modal').find('.modal-content').load($(this).data('href'), function () {
             var thisModal = $('#registration-cards-modal');
             thisModal.modal('show');
+
+            $(".select2").select2({
+                dropdownParent: $("#registration-cards-modal")
+            });
+
             $("#loading-indicator").hide();
         });
     });

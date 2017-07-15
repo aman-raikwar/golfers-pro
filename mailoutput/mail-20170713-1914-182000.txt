@@ -1,0 +1,66 @@
+To: johnson@mailinator.com
+Subject: Golf Club Credentials for The Golfer Card
+Message-ID: <da626fb797c749eb6da50a6a67a615ec@localhost>
+Date: Thu, 13 Jul 2017 21:14:14 +0200
+From: The Golfer Card robot <support@golfersclub.com>
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="_=_swift_v4_1499973254_4845b589717417ddb061487d991e8565_=_"
+
+
+--_=_swift_v4_1499973254_4845b589717417ddb061487d991e8565_=_
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+Hello inspire,
+
+Follow the link below to verify your account:
+
+http=
+://localhost:8080/site/account-verification?token=3DXZzqb7sfyjlzY2W1WEEDy1r=
+Xim1dsoSS
+
+--_=_swift_v4_1499973254_4845b589717417ddb061487d991e8565_=_
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org=
+/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns=3D"http://www.w3.org/1999/=
+xhtml">
+<head>
+    <meta http-equiv=3D"Content-Type" content=3D"text/ht=
+ml; charset=3DUTF-8" />
+    <title></title>
+    </head>
+<body>
+    =
+    <div class=3D"account-verification">
+    <p>Hello inspire,</p>
+    =
+<p>You are registered at "<b>The Golfer Card</b>", your login credentials a=
+re below:</p>
+    <table>
+        <tr>
+            <th>Username</th>=
+
+            <td>inspire</td>
+        </tr>
+        <tr>
+          =
+  <th>Password</th>
+            <td>123456</td>
+        </tr>        =
+
+    </table>
+    <p>Follow the link below to login to your account:</p=
+>
+    <p><a href=3D"http://localhost:8080/site/index">Click here to go fo=
+r Login</a></p>
+</div>
+    </body>
+</html>
+
+
+--_=_swift_v4_1499973254_4845b589717417ddb061487d991e8565_=_--
+

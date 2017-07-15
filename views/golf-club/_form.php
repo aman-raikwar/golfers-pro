@@ -7,10 +7,6 @@ use yii\helpers\ArrayHelper;
 use app\models\Country;
 use app\models\County;
 use app\models\ClubFunctionality;
-
-/* @var $this yii\web\View */
-/* @var $model app\models\Golfclub */
-/* @var $form yii\widgets\ActiveForm */
 ?>
 
 <?php $form = ActiveForm::begin(['enableClientValidation' => true, 'enableAjaxValidation' => true, 'options' => ['enctype' => 'multipart/form-data', 'id' => 'golf-club-form']]); ?>
@@ -169,7 +165,7 @@ use app\models\ClubFunctionality;
 //            echo $form->field($model, 'clubFacilities')->dropDownList($clubFacilitiesList, [
 //                'prompt' => 'Select Country'
 //            ])->label(false);
-                //echo $form->field($model, 'clubFacilities')->dropDownList($clubFacilities, ['prompt' => 'Select Club Facilities', 'multiple' => 'true', 'class' => 'selectpicker', 'data-style' => 'btn-secondary'])->label(false);
+//echo $form->field($model, 'clubFacilities')->dropDownList($clubFacilities, ['prompt' => 'Select Club Facilities', 'multiple' => 'true', 'class' => 'selectpicker', 'data-style' => 'btn-secondary'])->label(false);
                 ?>            
             </div>
         </div>
@@ -179,7 +175,7 @@ use app\models\ClubFunctionality;
 
 <div class="modal-footer">
     <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
-    <?= Html::submitButton('Save Changes', ['class' => 'btn btn-danger waves-effect waves-light', 'id' => 'btnSave']); ?>
+    <?= Html::submitButton($model->isNewRecord ? 'Add Golf Club' : 'Save Changes', ['class' => 'btn btn-danger waves-effect waves-light', 'id' => 'btnSave']); ?>
 </div>
 
 <?php ActiveForm::end(); ?>

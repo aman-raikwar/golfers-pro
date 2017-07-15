@@ -2,6 +2,10 @@
 
 $(function () {
 
+    $(".select2").select2({
+        dropdownParent: $("#golfer-modal")
+    });
+
     $('body').on('change', '#golfer-golfer_firstclubid', function () {
         if ($(this).val() !== '') {
             $('#golfer-golfer_ismemberofanotherclub').removeAttr('disabled');
@@ -40,8 +44,7 @@ $(function () {
     //dt.setFullYear(new Date().getFullYear() - 18);
     $("#golfer-golfer_dateofbirth").datepicker({
         autoclose: !0,
-        todayHighlight: !0,
-        // endDate: dt,
+        todayHighlight: !0,        
         allowInputToggle: true,
         format: 'dd-mm-yyyy'
     });
@@ -69,6 +72,27 @@ $(function () {
                     });
                 }
                 $('#golfer-golfer_county').html(html);
+            }
+        });
+    });
+
+    $('body').on('change', '#golfer-golfer_firstclubid', function (e) {
+        e.preventDefault();
+        var club_id = $(this).val();
+        var url = $(this).data('href');
+
+        $.ajax({
+            url: url,
+            data: {id: club_id},
+            type: 'GET',
+            dataType: 'JSON',
+            success: function (response) {
+                var html = '<option value="">Select Card</option>';
+                $.each(response.cards, function (index, item) {
+                    html += '<option value="' + index + '">' + item + '</option>';
+                });
+                
+                $('#golfer-golfer_card_number').html(html);
             }
         });
     });
