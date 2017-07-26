@@ -30,7 +30,7 @@ if (Yii::$app->session->hasFlash('success')) {
                         <p>Thank you for registering with The Golfer Card. We have sent you a confirmation email to activate your account.<br/><br/>Follow the link and you will then be able to login.</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary waves-effect"><a href="<?= Url::to(['login']); ?>" class="text-danger">Login Page</a></button>   
+                        <a href="<?= Url::to(['login']); ?>" class="btn btn-secondary waves-effect text-danger">Login Page</a>  
                         <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">Close</button>
                     </div>
                 </div>
@@ -61,12 +61,12 @@ if (Yii::$app->session->hasFlash('success')) {
                                 <p>Fill out the form below and we will send you an acitivation link to your account. Once the deadline has been reached for your club, you will be notified when you can pick up your personalised Golfer Card from your Clubhouse.</p>
                                 <p>If your Golf Club is not in the list, please <a href="#" class="text-danger">click here</a> to find out how to join.</p>
                                 <hr/>
-                                <?php $form = ActiveForm::begin(['enableClientValidation' => true, 'enableAjaxValidation' => false], ['id' => 'golfer-registration-form', 'class' => 'form-horizontal']); ?>
+                                <?php $form = ActiveForm::begin(['enableClientValidation' => true, 'enableAjaxValidation' => TRUE], ['id' => 'golfer-registration-form', 'class' => 'form-horizontal']); ?>
 
                                 <div class="row">
                                     <div class="col-md-12">                                        
                                         <?php
-                                        $GolfClubs = GolfClub::find()->orderby('golfclub_name')->all();
+                                        $GolfClubs = GolfClub::find()->where(['golfclub_selfRegistration' => 1])->orderby('golfclub_name')->all();
                                         $GolfClubsList = ArrayHelper::map($GolfClubs, 'golfclub_id', 'golfclub_name');
                                         echo $form->field($model, 'golfer_firstClubID')->dropDownList($GolfClubsList, ['prompt' => 'Select Golf Club']);
                                         ?>
@@ -75,10 +75,22 @@ if (Yii::$app->session->hasFlash('success')) {
 
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <?= $form->field($model, 'golfer_isMemberOfAnotherClub')->dropDownList([1 => 'No', 2 => 'Yes'], ['disabled' => 'disabled']); ?>
+                                        <?php
+                                        $disabled = 'true';
+                                        if ($model->golfer_isMemberOfAnotherClub == 2) {
+                                            $disabled = 'false';
+                                        }
+                                        ?>
+                                        <?= $form->field($model, 'golfer_isMemberOfAnotherClub')->dropDownList([1 => 'No', 2 => 'Yes'], ['disabled' => $disabled]); ?>
                                     </div>
                                     <div class="col-md-6">                                        
-                                        <?= $form->field($model, 'golfer_otherClubID')->dropDownList($GolfClubsList, ['prompt' => 'Select Golf Club', 'disabled' => 'disabled']); ?>                                        
+                                        <?php
+                                        $disabled = 'true';
+                                        if (!empty($model->golfer_otherClubID)) {
+                                            $disabled = 'false';
+                                        }
+                                        ?>
+                                        <?= $form->field($model, 'golfer_otherClubID')->dropDownList($GolfClubsList, ['prompt' => 'Select Golf Club', 'disabled' => $disabled]); ?>                                        
                                     </div>
                                 </div>
 
@@ -160,14 +172,13 @@ if (Yii::$app->session->hasFlash('success')) {
                                         $countryList = ArrayHelper::map($countries, 'id', 'nationality');
                                         echo $form->field($model, 'golfer_country')->dropDownList($countryList, [
                                             'prompt' => 'Select Country',
-                                            'data-url' => Url::to(['golf-clubs/county-list'])
+                                            'data-url' => Url::to(['county/county-list'])
                                         ]);
                                         ?>
                                     </div>
                                     <div class="col-md-6">                                        
                                         <?php
-                                        $counties = County::find()->orderBy('name')->all();
-                                        $countyList = ArrayHelper::map($counties, 'id', 'name');
+                                        $countyList = [];
                                         echo $form->field($model, 'golfer_county')->dropDownList($countyList, ['prompt' => 'Select County']);
                                         ?>                                        
                                     </div>
@@ -208,7 +219,7 @@ if (Yii::$app->session->hasFlash('success')) {
                                     <div class="col-12">
                                         <hr/>
                                         <div class="form-group">
-                                            <?= Html::submitButton('Register', ['class' => 'btn btn-md btn-block btn-danger waves-effect waves-light']) ?>
+                                            <?= Html::submitButton('Register', ['class' => 'btn btn-md btn-block btn-danger waves-effect waves-light btnRegisterGolfer']) ?>
                                         </div>
                                         <p class="text-center"><?= Html::a('Back to Login', ['site/login']) ?></p>
                                     </div>

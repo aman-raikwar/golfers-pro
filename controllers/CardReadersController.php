@@ -3,23 +3,34 @@
 namespace app\controllers;
 
 use Yii;
+use yii\filters\AccessControl;
 use app\models\CardReaders;
 use app\models\CardReadersSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
+use yii\widgets\ActiveForm;
 
 /**
  * CardReadersController implements the CRUD actions for CardReaders model.
  */
-class CardReadersController extends Controller
-{
+class CardReadersController extends Controller {
+
     /**
      * @inheritdoc
      */
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -33,15 +44,11 @@ class CardReadersController extends Controller
      * Lists all CardReaders models.
      * @return mixed
      */
-    public function actionIndex()
-    {
+    public function actionIndex() {
         $searchModel = new CardReadersSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $data = $searchModel->getAll();
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+        return $this->render('index', ['data' => $data]);
     }
 
     /**
@@ -49,10 +56,9 @@ class CardReadersController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionView($id)
-    {
+    public function actionView($id) {
         return $this->render('view', [
-            'model' => $this->findModel($id),
+                    'model' => $this->findModel($id),
         ]);
     }
 
@@ -61,16 +67,29 @@ class CardReadersController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
-    {
+    public function actionCreate() {
         $model = new CardReaders();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->ID]);
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        }
+
+        if ($model->load(Yii::$app->request->post())) {
+
+            if ($model->save()) {
+                \Yii::$app->session->setFlash('type', 'success');
+                \Yii::$app->session->setFlash('title', 'Card Readers');
+                \Yii::$app->session->setFlash('message', 'Reader added successfully.');
+            } else {
+                \Yii::$app->session->setFlash('type', 'danger');
+                \Yii::$app->session->setFlash('title', 'Card Readers');
+                \Yii::$app->session->setFlash('message', 'Reader not added.');
+            }
+
+            return $this->redirect(['index']);
         } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+            return $this->renderAjax('_form', ['model' => $model]);
         }
     }
 
@@ -80,16 +99,29 @@ class CardReadersController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id)
-    {
+    public function actionUpdate($id) {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->ID]);
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        }
+
+        if ($model->load(Yii::$app->request->post())) {
+
+            if ($model->save()) {
+                \Yii::$app->session->setFlash('type', 'success');
+                \Yii::$app->session->setFlash('title', 'Card Readers');
+                \Yii::$app->session->setFlash('message', 'Reader updated successfully.');
+            } else {
+                \Yii::$app->session->setFlash('type', 'danger');
+                \Yii::$app->session->setFlash('title', 'Card Readers');
+                \Yii::$app->session->setFlash('message', 'Reader not updated.');
+            }
+
+            return $this->redirect(['index']);
         } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
+            return $this->renderAjax('_form', ['model' => $model]);
         }
     }
 
@@ -99,9 +131,18 @@ class CardReadersController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
+    public function actionDelete($id) {
+        $model = $this->findModel($id);
+
+        if ($model->delete()) {
+            \Yii::$app->session->setFlash('type', 'success');
+            \Yii::$app->session->setFlash('title', 'Card Readers');
+            \Yii::$app->session->setFlash('message', 'Reader deleted successfully.');
+        } else {
+            \Yii::$app->session->setFlash('type', 'success');
+            \Yii::$app->session->setFlash('title', 'Card Readers');
+            \Yii::$app->session->setFlash('message', 'Reader not deleted.');
+        }
 
         return $this->redirect(['index']);
     }
@@ -113,12 +154,12 @@ class CardReadersController extends Controller
      * @return CardReaders the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
-    {
+    protected function findModel($id) {
         if (($model = CardReaders::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
 }

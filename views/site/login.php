@@ -27,6 +27,20 @@ $this->title = 'Login';
                                 <hr/>
                                 <?= Alert::widget() ?>
                                 <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
+                                <?php
+                                $cookies = Yii::$app->request->cookies;
+                                if ($cookies->has('username')) {
+                                    $model->username = $cookies->getValue('username');
+                                }
+                                if ($cookies->has('password')) {
+                                    $model->password = $cookies->getValue('password');
+                                }
+
+                                if ($cookies->has('rememberMe')) {
+                                    $model->rememberMe = $cookies->getValue('rememberMe');
+                                }
+                                ?>
+
                                 <div class="form-group m-b-20 row">
                                     <div class="col-12">
                                         <label for="emailaddress">Username</label>
@@ -42,11 +56,10 @@ $this->title = 'Login';
                                     <div class="col-12">
                                         <?= Html::a('Forgot your Password?', ['request-password-reset'], ['class' => 'text-muted pull-right']) ?>
                                         <?php
-                                        $model->rememberMe = 1;
                                         echo $form->field($model, 'rememberMe', [
                                             'options' => ['class' => 'checkbox checkbox-success'],
                                             'template' => "{input}\n{label}\n{hint}\n{error}"
-                                        ])->checkbox(['value' => 1, 'checked' => 'checked'], false)->label('Remember me');
+                                        ])->checkbox([], false)->label('Remember me');
                                         ?>                                        
                                     </div>
                                 </div>

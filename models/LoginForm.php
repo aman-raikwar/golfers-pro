@@ -65,6 +65,19 @@ class LoginForm extends Model {
      */
     public function login() {
         if ($this->validate()) {
+
+            $cookies = Yii::$app->response->cookies;
+            $cookies->add(new \yii\web\Cookie(['name' => 'rememberMe', 'value' => $this->rememberMe]));
+            if ($this->rememberMe == 1) {
+                $cookies->add(new \yii\web\Cookie(['name' => 'username', 'value' => $this->username]));
+                $cookies->add(new \yii\web\Cookie(['name' => 'password', 'value' => $this->password]));
+            } else {
+                $cookies->remove('username');
+                unset($cookies['username']);
+                $cookies->remove('password');
+                unset($cookies['password']);
+            }
+
             return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0);
         } else {
             return false;

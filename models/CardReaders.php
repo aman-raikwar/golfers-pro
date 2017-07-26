@@ -11,21 +11,19 @@ use Yii;
  * @property string $ReaderName
  * @property string $GolfCourse
  */
-class CardReaders extends \yii\db\ActiveRecord
-{
+class CardReaders extends \yii\db\ActiveRecord {
+
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'card_readers';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['ReaderName', 'GolfCourse'], 'required'],
             [['ReaderName', 'GolfCourse'], 'string', 'max' => 200],
@@ -36,12 +34,17 @@ class CardReaders extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'ID' => Yii::t('app', 'Unique system reference'),
             'ReaderName' => Yii::t('app', 'The unique number of the physical reader'),
             'GolfCourse' => Yii::t('app', 'The ID of the Golf Course associated with this reader'),
         ];
     }
+
+    public function getAll() {
+        $readers = CardReaders::find()->all();
+        return $readers;
+    }
+
 }

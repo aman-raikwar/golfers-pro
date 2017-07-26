@@ -46,7 +46,7 @@ $this->title = Yii::t('app', 'Golf Clubs');
                         <i class="mdi mdi-check widget-two-icon"></i>
                         <div class="wigdet-two-content">
                             <p class="m-0 text-uppercase font-bold font-secondary text-overflow" title="Statistics">Number of Check-ins</p>
-                            <h2 class="font-600">0</h2>
+                            <h2 class="font-600"><?= GolfClub::getCheckInsCount(); ?></h2>
                             <p class="m-0">Since <?= date('F Y'); ?></p>
                         </div>
                     </div>
@@ -66,81 +66,63 @@ $this->title = Yii::t('app', 'Golf Clubs');
                         </div>                        
                         <div id="bg-default" class="panel-collapse collapse in show">
                             <div class="portlet-body">                                
-                                <?=
-                                DataTables::widget([
-                                    'dataProvider' => $dataProvider,
-                                    'filterModel' => $searchModel,
-                                    'columns' => [
-                                        [
-                                            'class' => 'yii\grid\SerialColumn',
-                                            'contentOptions' => ['class' => 'text-center']
-                                        ],
-                                        [
-                                            'attribute' => 'golfclub_name',
-                                            'content' => function($data) {
-                                                return Html::a($data->golfclub_name, Url::to(['golf-club/view', 'id' => $data->golfclub_id]), ['title' => Yii::t('app', 'View the Club Profile'), 'class' => 'text-danger']);
-                                            }
-                                        ],
-                                        [
-                                            'attribute' => 'golfclub_id',
-                                            //'headerOptions' => ['style' => 'width:120px', 'class' => 'text-center'],
-                                            'contentOptions' => ['class' => 'text-center']
-                                        ],
-                                        [
-                                            'label' => 'Club Admin Name',
-                                            'content' => function($data) {
-                                                return $data->user->user_username;
-                                            }
-                                        ],
-                                        [
-                                            'label' => 'Associated Golfers',
-                                            //'headerOptions' => ['style' => 'width:160px', 'class' => 'text-center'],
-                                            'contentOptions' => ['class' => 'text-center'],
-                                            'content' => function($data) {
-                                                return $data->getCountOfGolfers($data->golfclub_id);
-                                            }
-                                        ],
-                                        [
-                                            'label' => 'Number of Check-ins',
-                                            //'headerOptions' => ['style' => 'width:160px', 'class' => 'text-center'],
-                                            'contentOptions' => ['class' => 'text-center'],
-                                            'content' => function($data) {
-                                                return '';
-                                            }
-                                        ],
-                                        [
-                                            'class' => 'yii\grid\ActionColumn',
-                                            'header' => 'Actions',
-                                            //'headerOptions' => ['style' => 'width:160px', 'class' => 'text-center'],
-                                            //'contentOptions' => ['class' => 'text-center'],
-                                            'template' => '{view} {update} {delete}',
-                                            'buttons' => [
-                                                'view' => function ($url, $model) {
-                                                    return Html::a('<span class="fa fa-search"></span>', $url, [
-                                                                'title' => Yii::t('app', 'View the Club Profile'),
-                                                                'class' => 'btn btn-icon waves-effect waves-light btn-danger'
-                                                    ]);
-                                                },
-                                                'update' => function ($url, $model) {
-                                                    return Html::a('<span class="fa fa-pencil"></span>', 'javascript:void(0);', [
-                                                                'title' => Yii::t('app', 'Edit the Club'),
-                                                                'class' => 'btn btn-icon waves-effect waves-light btn-warning link-golf-club',
-                                                                'data-href' => $url
-                                                    ]);
-                                                },
-                                                'delete' => function ($url, $model) {
-                                                    return Html::a('<span class="fa fa-remove"></span>', $url, [
-                                                                'title' => Yii::t('app', 'Delete the Club'),
-                                                                'class' => 'btn btn-icon waves-effect waves-light btn-inverse',
-                                                                'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
-                                                                'data-method' => 'post',
-                                                    ]);
-                                                }
-                                            ]
-                                        ]
-                                    ],
-                                ]);
-                                ?>
+                                <div class="table-responsive">
+                                    <table id="datatable-buttons" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Club Name</th>
+                                                <th>Club Number</th>
+                                                <th>Club Admin Name</th>
+                                                <th>Associated Golfers</th>
+                                                <th>Number of Check-ins</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php if (!empty($data)) { ?>
+                                                <?php foreach ($data as $club) { ?>
+                                                    <?php
+//                                                    $club_id = $reader->GolfCourse;
+//                                                    $club_name = GolfClub::getGolfClubName($club_id);
+                                                    ?>
+                                                    <tr>
+                                                        <td><?= Html::a($club->golfclub_name, Url::to(['golf-club/view', 'id' => $club->golfclub_id]), ['class' => 'text-danger', 'title' => 'View the Club Profile']) ?></td>
+                                                        <td><?= $club->golfclub_id ?></td>
+                                                        <td><?= $club->user->user_username ?></td>
+                                                        <td><?= $club->getCountOfGolfers($club->golfclub_id) ?></td>
+                                                        <td><?= $club->getCheckInsCount($club->golfclub_id) ?></td>
+                                                        <td>
+                                                            <div class="button-list pull-right">
+                                                                <?=
+                                                                Html::a('<i class="fa fa-search"></i>', Url::to(['golf-club/view', 'id' => $club->golfclub_id]), [
+                                                                    'title' => 'View the Club Profile',
+                                                                    'class' => 'btn btn-icon waves-effect waves-light btn-danger'
+                                                                ])
+                                                                ?>
+                                                                <?=
+                                                                Html::a('<i class="fa fa-pencil"></i>', 'javascript:void(0);', [
+                                                                    'title' => 'Edit the Club',
+                                                                    'class' => 'btn btn-icon waves-effect waves-light btn-warning link-golf-club',
+                                                                    'data-href' => Url::to(['golf-club/update', 'id' => $club->golfclub_id])
+                                                                ])
+                                                                ?>
+                                                                <?=
+                                                                Html::a('<span class="fa fa-remove"></span>', Url::to(['golf-club/delete', 'id' => $club->golfclub_id]), [
+                                                                    'title' => Yii::t('app', 'Delete the Club'),
+                                                                    'class' => 'btn btn-icon waves-effect waves-light btn-inverse',
+                                                                    'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
+                                                                    'data-method' => 'post',
+                                                                    'style' => "display: none;"
+                                                                ]);
+                                                                ?>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                <?php } ?>
+                                            <?php } ?>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>

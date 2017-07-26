@@ -1,6 +1,8 @@
 Completed:-
 
 1. When adding a Golf club the button should say "Add Golf" and while editing the button should be "Save Changes".
+2. When editing a golfer then "Date of Birth" field is showing 000000. This is happening with New Golfers registered now. For example check 16, 17 and even Priyanka Shikla entry that you did.
+3. Terms and Conitions checkbox is also unchecked while editing a golfer.
 
 
 
@@ -10,10 +12,7 @@ Completed:-
 
 
 
-
-
-when Platform admin logged and add golfer
-the card number should be populated according to golf clubs
+when Platform admin logged and add golfer the card number should be populated according to golf clubs
 yes but if we do not populate card numbers according to golf club then card of other golf club can be added to this selected golf club's golfer
 
 
@@ -25,7 +24,7 @@ Select Country and County drodowns are opening at the top when click on them in 
 When editing a golfer then "Date of Birth" field is showing 000000. This is happening with New Golfers registered now. For example check 16, 17 and even Priyanka Shikla entry that you did.
 
 
-Terms and Conitions checkbox is also unchecked while editing a golfer.
+
 
 
 Tried adding SAS00000001 (Top Range) and dsd00000000 (Bottom Range). And clicked on Add Cards it gave error All Cards already exists error. Instead it should give error that first three characters should be same.

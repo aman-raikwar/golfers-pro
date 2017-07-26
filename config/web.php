@@ -54,15 +54,18 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-//                'golf-clubs' => 'golf-course/index',
+                'golf-clubs' => 'golf-club/index',
 //                'golf-clubs/add-club' => 'golf-course/create',
 //                'golf-clubs/edit-club' => 'golf-course/update',
 //                'golf-clubs/county-list' => 'golf-course/county-list',
                 'playeractivity' => 'playeractivity/index',
                 //'golf-cards' => 'golf-course/index',
                 'login' => 'site/login',
+                'logout' => 'site/logout',
                 'golfer-registration' => 'site/register',
-                'request-password-reset' => 'site/request-password-reset'
+                'request-password-reset' => 'site/request-password-reset',
+                'account-verification' => 'site/account-verification',
+                'reset-password' => 'site/reset-password'
             ],
         ],
     ],

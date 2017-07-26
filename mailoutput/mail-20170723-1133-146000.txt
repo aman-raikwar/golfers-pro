@@ -1,0 +1,191 @@
+To: aman@gmail.com
+Subject: Account Verification Link for The Golfer Card
+Message-ID: <6218e7fa0bac15d5f4ed366b0eb598b9@localhost>
+Date: Sun, 23 Jul 2017 13:33:41 +0200
+From: The Golfer Card <support@golfersclub.com>
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="_=_swift_v4_1500809622_a6277a9175a41aa3f68d97079657fa9f_=_"
+
+
+--_=_swift_v4_1500809622_a6277a9175a41aa3f68d97079657fa9f_=_
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+
+Dear  Raikwar,
+
+Thank you for joining The Golfer Card.
+
+In order=
+ to complete your registration, we need to confirm your email address.
+=
+
+Please http://localhost:8080/account-verification?token=3DO2IfLBQymus4v5=
+LFxEjjgkJfxK14oIfB to activate your account.
+
+
+Many Thanks,
+The Gol=
+fer Card Team
+
+--_=_swift_v4_1500809622_a6277a9175a41aa3f68d97079657fa9f_=_
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<!doctype html>
+<html>
+    <head>      =20
+
+        <meta http-equiv=
+=3D"Content-Type" content=3D"text/html; charset=3DUTF-8" />
+        <titl=
+e>Welcome to The Golfer Card</title>
+                <style>
+          =
+  body {
+                padding: 2%;
+                background-color:=
+ #f3f3f3;
+            }
+            p {
+                font-family: =
+Verdana, Geneva, sans-serif;
+                font-size: 12px;
+         =
+       color: #333333;
+            }
+            h1 {
+               =
+ font-family: Georgia, serif;
+                font-size: 16px;
+        =
+        color: #d62027;
+            }
+            h2 {
+              =
+  font-family: Georgia, serif;
+                font-size: 16px;
+       =
+         color: #000000;
+            }
+            h3 {
+             =
+   font-family: Georgia, serif;
+                font-size: 14px;
+      =
+          color: #d62027;
+            }
+            a {
+             =
+   font-family: Verdana, Geneva, sans-serif;
+                font-weight:=
+ 400;
+                font-size: 12px;
+                color: #d62027;=
+
+                text-decoration: none;
+            }
+            .he=
+ader {
+                padding:20px;
+                background-color: =
+#d62027;
+                border-top-left-radius: 10px;
+                =
+border-top-right-radius: 10px;
+            }
+            .logo {
+    =
+            height: 40px;
+            }
+            .content-container =
+{
+                background-color: #ffffff;
+                padding: 2=
+0px;
+            }
+            .footer {
+                background-c=
+olor: #333333;
+                padding: 20px;
+            }
+         =
+   .footer-content {
+                font-family: Verdana, Geneva, sans-s=
+erif;
+                font-size: 10px;
+                color: #ffffff;=
+
+                text-align: center;
+            }
+            .botto=
+m {
+                font-family: Verdana, Geneva, sans-serif;
+         =
+       font-size: 10px;
+                color: #333333;
+               =
+ text-align: center;
+                padding-top: 20px;
+            }=
+
+            a.bottom-link {
+                color: #333333;
+        =
+    }
+
+        </style>
+    </head>
+
+    <body>
+        <div cl=
+ass=3D"header">
+            <a href=3D"http://www.thegolfercard.co.uk">=
+
+                <img src=3D"http://www.thegolfercard.co.uk/wp-content/up=
+loads/2017/03/The-Golfer-card-white.png" class=3D"logo">
+            </a>=
+
+        </div>
+        <div class=3D"content-container">
+           =
+            =20
+<h2>Dear  Raikwar<br/><br/></h2>
+<h3>Thank you for joinin=
+g The Golfer Card.<br/><br/></h3>
+<p>In order to complete your registrati=
+on, we need to confirm your email address.</p>
+<p>
+    Please <a href=
+=3D"http://localhost:8080/account-verification?token=3DO2IfLBQymus4v5LFxEjj=
+gkJfxK14oIfB">click here</a> to activate your account.
+    <br/><br/><br/=
+>
+    Many Thanks,
+    <br/><br/>
+    The Golfer Card Team
+</p>
+ =
+                   </div>
+        <div class=3D"footer">
+            <d=
+iv class=3D"footer-content">
+                Here is some legal stuff tha=
+t we will no doubt need to write in at the bottom of the email.<br/><br/>Yo=
+u can <a href=3D"#">click here</a> to find out more.
+            </div>=
+
+        </div>
+        <div class=3D"bottom">
+            <a href=3D=
+"" class=3D"bottom-link">Link One</a> | <a href=3D"" class=3D"bottom-link">=
+Link Two</a> | <a href=3D"" class=3D"bottom-link">Link Two</a>
+        </=
+div>
+    </body>
+</html>
+
+
+--_=_swift_v4_1500809622_a6277a9175a41aa3f68d97079657fa9f_=_--
+

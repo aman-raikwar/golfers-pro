@@ -12,14 +12,15 @@ use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
+use app\models\County;
 
-class CountyController extends Controller
-{
+class CountyController extends Controller {
+
     /**
      * @inheritdoc
      */
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
@@ -34,16 +35,15 @@ class CountyController extends Controller
      * Lists all Player models.
      * @return mixed
      */
-    public function actionIndex()
-    {
+    public function actionIndex() {
         $searchModel = new PlayerSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-		$data = $searchModel->getAll();
+        $data = $searchModel->getAll();
         return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-			'data' => $data,
-			'model' => $searchModel,
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
+                    'data' => $data,
+                    'model' => $searchModel,
         ]);
     }
 
@@ -52,30 +52,38 @@ class CountyController extends Controller
      * @param integer $id
      * @return mixed
      */
-    
-    public function actionLists($id)
-    {
-       if (Yii::$app->request->isAjax) {
-           $countPosts = \app\models\County::find()
-           ->where(['country_id' => $id])
-           ->count();
+    public function actionLists($id) {
+        if (Yii::$app->request->isAjax) {
+            $countPosts = \app\models\County::find()
+                    ->where(['country_id' => $id])
+                    ->count();
 
-           $posts = \app\models\County::find()
-           ->where(['country_id' => $id])
-           ->orderBy('id DESC')
-           ->all();
+            $posts = \app\models\County::find()
+                    ->where(['country_id' => $id])
+                    ->orderBy('id DESC')
+                    ->all();
 
-           if($countPosts>0){
-           foreach($posts as $post){
+            if ($countPosts > 0) {
+                foreach ($posts as $post) {
 
-           echo "<option value='".$post->id."'>".$post->name."</option>";
-           }
-           }
-           else{
-           echo "<option>-</option>";
-           }
+                    echo "<option value='" . $post->id . "'>" . $post->name . "</option>";
+                }
+            } else {
+                echo "<option>-</option>";
+            }
+        }
+    }
+
+    public function actionCountyList($id) {
+        $counties = County::find()->where(['country_id' => $id])->orderby('name')->all();
+        $response = array('status' => false);
+        if (!empty($counties)) {
+            $countyList = ArrayHelper::map($counties, 'id', 'name');
+            $response = array('status' => true, 'counties' => $countyList);
         }
 
+        echo json_encode($response);
+        exit();
     }
-    
+
 }

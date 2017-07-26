@@ -2,7 +2,7 @@
 /* @var $this yii\web\View */
 /* @var $user common\models\User */
 
-$accountVerificationLink = Yii::$app->urlManager->createAbsoluteUrl(['site/account-verification', 'token' => $user->user_auth_key]);
+$accountVerificationLink = Yii::$app->urlManager->createAbsoluteUrl(['account-verification', 'token' => $user->user_auth_key]);
 ?>
 Hello <?= $user->user_username ?>,
 

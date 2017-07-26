@@ -39,6 +39,8 @@ class Golfer extends \yii\db\ActiveRecord {
     public $user_password_repeat;
     public $acceptTermsCondition;
     public $golfer_card_number;
+    public $new_password;
+    public $confirm_new_password;
 
     /**
      * @inheritdoc
@@ -74,6 +76,8 @@ class Golfer extends \yii\db\ActiveRecord {
                     }
                 }
             ],
+            ['golfer_isMemberOfAnotherClub', 'validateOtherClub'],
+            ['golfer_phone', 'validateUser'],
             ['user_username', 'string', 'min' => 2, 'max' => 255],
             ['user_email', 'trim'],
             ['user_email', 'required'],
@@ -93,7 +97,47 @@ class Golfer extends \yii\db\ActiveRecord {
             ['golfer_phone', 'string', 'max' => 12],
             [['golfer_firstname', 'golfer_lastname', 'golfer_address1', 'golfer_address2', 'golfer_notes'], 'string', 'max' => 200],
             [['golfer_dateOfBirth', 'golfer_opgregtype', 'golfer_isMemberOfAnotherClub', 'golfer_otherClubID', 'golfer_title', 'golfer_gender', 'golfer_county'], 'safe'],
+            [['new_password', 'confirm_new_password'], 'required', 'on' => 'changepassword'],
+            ['confirm_new_password', 'validateConfirmPassword'],
         ];
+    }
+
+    public function validateConfirmPassword($attribute, $params) {
+        if ($this->new_password != $this->confirm_new_password) {
+            $this->addError($attribute, 'Both Password didn\'t match.');
+        }
+    }
+
+    public function validateOtherClub($attribute, $params) {
+        if (!empty($this->golfer_isMemberOfAnotherClub)) {
+            if ($this->golfer_isMemberOfAnotherClub == 2) {
+                if ($this->golfer_otherClubID == '') {
+                    $this->addError('golfer_otherClubID', 'Please select Other Club');
+                }
+            }
+        }
+    }
+
+    public function validateUser($attribute, $params) {
+        if (!empty($this->golfer_firstname) && !empty($this->golfer_lastname) && !empty($this->golfer_phone)) {
+            if ($this->isNewRecord) {
+                $userNewModel = Golfer::find()->where([
+                            'golfer_firstname' => $this->golfer_firstname,
+                            'golfer_lastname' => $this->golfer_lastname,
+                            'golfer_phone' => $this->golfer_phone
+                        ])->one();
+            } else {
+                $userNewModel = Golfer::find()->where([
+                            'golfer_firstname' => $this->golfer_firstname,
+                            'golfer_lastname' => $this->golfer_lastname,
+                            'golfer_phone' => $this->golfer_phone
+                        ])->andWhere(['<>', 'golfer_id', $this->golfer_id])->one();
+            }
+
+            if (!empty($userNewModel)) {
+                $this->addError($attribute, 'An account already exists with Same First Name, Last Name and Phone Number');
+            }
+        }
     }
 
     /**
@@ -110,14 +154,14 @@ class Golfer extends \yii\db\ActiveRecord {
             'golfer_firstname' => Yii::t('app', 'First Name'),
             'golfer_lastname' => Yii::t('app', 'Last Name'),
             'golfer_gender' => Yii::t('app', 'Gender'),
-            'golfer_dateOfBirth' => Yii::t('app', 'Date Of Birth'),
+            'golfer_dateOfBirth' => Yii::t('app', 'Date of Birth'),
             'golfer_address1' => Yii::t('app', 'Address Line 1'),
             'golfer_address2' => Yii::t('app', 'Address Line 2'),
             'golfer_phone' => Yii::t('app', 'Phone No'),
             'golfer_town' => Yii::t('app', 'Town'),
             'golfer_firstClubID' => Yii::t('app', 'Which Golf Club are you a member of?'),
-            'golfer_isMemberOfAnotherClub' => Yii::t('app', 'Is Member Of Another Club'),
-            'golfer_otherClubID' => Yii::t('app', 'Other Club Name'),
+            'golfer_isMemberOfAnotherClub' => Yii::t('app', 'Member of another Club'),
+            'golfer_otherClubID' => Yii::t('app', 'Select Golf Club'),
             'golfer_country' => Yii::t('app', 'Country'),
             'golfer_county' => Yii::t('app', 'County'),
             'golfer_countyCardId' => Yii::t('app', 'County Card ID'),
@@ -135,9 +179,13 @@ class Golfer extends \yii\db\ActiveRecord {
         return $this->hasOne(User::className(), ['user_id' => 'golfer_userID']);
     }
 
-    public static function getGolfClubName($golfclub_id) {
-        $club = GolfClub::findOne($golfclub_id);
-        return $club ? $club->golfclub_name : '';
+    public static function getGolferName($golfer_id) {
+        $golfer = Golfer::findOne(['golfer_id' => $golfer_id]);
+        if (!empty($golfer)) {
+            return $golfer->golfer_firstname . ' ' . $golfer->golfer_lastname;
+        } else {
+            return '';
+        }
     }
 
 }

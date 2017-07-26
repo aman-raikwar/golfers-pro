@@ -10,13 +10,12 @@ use app\models\Playeractivity;
 /**
  * PlayeractivitySearch represents the model behind the search form about `app\models\Playeractivity`.
  */
-class PlayeractivitySearch extends Playeractivity
-{
+class PlayeractivitySearch extends Playeractivity {
+
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['ID'], 'integer'],
             [['ReaderID', 'CardID', 'Date'], 'safe'],
@@ -26,8 +25,7 @@ class PlayeractivitySearch extends Playeractivity
     /**
      * @inheritdoc
      */
-    public function scenarios()
-    {
+    public function scenarios() {
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
@@ -39,8 +37,7 @@ class PlayeractivitySearch extends Playeractivity
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
-    {
+    public function search($params) {
         $query = Playeractivity::find();
 
         // add conditions that should always apply here
@@ -64,8 +61,9 @@ class PlayeractivitySearch extends Playeractivity
         ]);
 
         $query->andFilterWhere(['like', 'ReaderID', $this->ReaderID])
-            ->andFilterWhere(['like', 'CardID', $this->CardID]);
+                ->andFilterWhere(['like', 'CardID', $this->CardID]);
 
         return $dataProvider;
     }
+
 }

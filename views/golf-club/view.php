@@ -18,7 +18,9 @@ $this->title = $model->golfclub_name;
                         <div class="portlet-heading bg-inverse">
                             <h3 class="portlet-title">Club Details</h3>
                             <div class="portlet-widgets">
-                                <?= Html::a('<i class="mdi mdi-pencil"></i>', 'javascript:void(0);', ['class' => 'link-golf-club', 'data-href' => Url::to(['golf-club/update', 'id' => $model->golfclub_id])]) ?>
+                                <?php if (in_array(Yii::$app->user->identity->user_roleID, [1, 3])) { ?>
+                                    <?= Html::a('<i class="mdi mdi-pencil"></i>', 'javascript:void(0);', ['class' => 'link-golf-club', 'data-href' => Url::to(['golf-club/update', 'id' => $model->golfclub_id])]) ?>
+                                <?php } ?>
                             </div>
                             <div class="clearfix"></div>
                         </div>
@@ -41,7 +43,7 @@ $this->title = $model->golfclub_name;
                                         <h5 class="text-center">Par</h5>
                                     </div>
                                     <div class="col-4">
-                                        <h4 class="text-center"><?= $model->golfclub_yardage ?></h4>
+                                        <h4 class="text-center"><?= number_format($model->golfclub_yardage) ?></h4>
                                         <h5 class="text-center">Yards</h5>
                                     </div>
                                 </div>
@@ -54,7 +56,7 @@ $this->title = $model->golfclub_name;
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <p><?= $model->golfclub_description ?></p>
-                                        <p>Green Fees from <strong>£<?= $model->golfclub_greenFeeFrom ?></strong> to <strong>£<?= $model->golfclub_greenFeeTo ?></strong>.</p>
+                                        <p>Green Fees from <strong>£ <?= $model->golfclub_greenFeeFrom ?></strong> to <strong>£ <?= $model->golfclub_greenFeeTo ?></strong>.</p>
                                         <hr/>
                                     </div>
                                 </div>
@@ -63,7 +65,7 @@ $this->title = $model->golfclub_name;
                                         <a class="btn waves-effect waves-light btn-danger btn-block" target="_blank" href="<?= $model->golfclub_websiteUrl ?>">Club Website</a>
                                     </div>
                                     <div class="col-6">
-                                        <button type="button" class="btn waves-effect waves-light btn-success btn-block" href="#">Go Play Golf</button>
+                                        <a class="btn waves-effect waves-light btn-success btn-block" target="_blank" href="<?= !empty($model->golfclub_gpgUrl) ? $model->golfclub_gpgUrl : 'javascript:void(0);' ?>">Go Play Golf</a>
                                     </div>
                                 </div>
                             </div>
@@ -77,7 +79,9 @@ $this->title = $model->golfclub_name;
                         <div class="portlet-heading bg-inverse">
                             <h3 class="portlet-title">Facilities</h3>
                             <div class="portlet-widgets">
-                                <?= Html::a('<i class="mdi mdi-pencil"></i>', 'javascript:void(0);', ['class' => 'link-golf-club', 'data-href' => Url::to(['golf-club/update', 'id' => $model->golfclub_id])]) ?>
+                                <?php if (in_array(Yii::$app->user->identity->user_roleID, [1, 3])) { ?>
+                                    <?= Html::a('<i class="mdi mdi-pencil"></i>', 'javascript:void(0);', ['class' => 'link-golf-club', 'data-href' => Url::to(['golf-club/update', 'id' => $model->golfclub_id])]) ?>
+                                <?php } ?>
                             </div>
                             <div class="clearfix"></div>
                         </div>
@@ -87,24 +91,54 @@ $this->title = $model->golfclub_name;
                                     <div class="col-lg-6">
                                         <h5>Course & Club Facilities</h5>
                                         <hr/>
-                                        <p><i class="fa fa-check text-success"></i> Buggy Hire<br/>
-                                            <i class="fa fa-times text-danger"></i> Trolley Hire<br/>
-                                            <i class="fa fa-check text-success"></i> Society Days<br/>
-                                            <i class="fa fa-check text-success"></i> Venue Hire<br/>
-                                            <i class="fa fa-times text-danger"></i> Showers<br/>
-                                            <i class="fa fa-check text-success"></i> Snooker<br/>
-                                            <i class="fa fa-times text-danger"></i> Gym<br/>
-                                            <i class="fa fa-check text-success"></i> Swimming Pool<br/>
-                                            <i class="fa fa-times text-danger"></i> Accommodation Hire</p>
+                                        <?php
+                                        $facilities = app\models\ClubFunctionality::find()->where(['type' => 1])->all();
+                                        $clubFacilities = $model->golfclub_facilities;
+                                        if (!empty($clubFacilities)) {
+                                            $clubFacilities = explode(',', $clubFacilities);
+                                        }
+                                        ?>
+                                        <p>                
+                                            <?php if (!empty($facilities)) { ?>
+                                                <?php foreach ($facilities as $facility) { ?>
+                                                    <?php if (!empty($clubFacilities)) { ?>
+                                                        <?php if (in_array($facility->id, $clubFacilities)) { ?>
+                                                            <i class="fa fa-check text-success"></i> <?php echo $facility->name; ?><br/>
+                                                        <?php } else { ?>
+                                                            <i class="fa fa-times text-danger"></i> <?php echo $facility->name; ?><br/>
+                                                        <?php } ?>
+                                                    <?php } else { ?>
+                                                        <i class="fa fa-times text-danger"></i> <?php echo $facility->name; ?><br/>
+                                                    <?php } ?>
+                                                <?php } ?>
+                                            <?php } ?>                                                                    
+                                        </p>
                                     </div>
                                     <div class="col-lg-6">
                                         <h5>Practice Facilities</h5>
                                         <hr/>
-                                        <p><i class="fa fa-check text-success"></i> Driving Range<br/>
-                                            <i class="fa fa-times text-danger"></i> Practice Ground<br/>
-                                            <i class="fa fa-check text-success"></i> Practice Net<br/>
-                                            <i class="fa fa-check text-success"></i> Putting Green<br/>
-                                            <i class="fa fa-times text-danger"></i> Swing Studio</p>
+                                        <?php
+                                        $facilities = app\models\ClubFunctionality::find()->where(['type' => 2])->all();
+                                        $clubFacilities = $model->golfclub_facilities;
+                                        if (!empty($clubFacilities)) {
+                                            $clubFacilities = explode(',', $clubFacilities);
+                                        }
+                                        ?>
+                                        <p>                
+                                            <?php if (!empty($facilities)) { ?>
+                                                <?php foreach ($facilities as $facility) { ?>
+                                                    <?php if (!empty($clubFacilities)) { ?>
+                                                        <?php if (in_array($facility->id, $clubFacilities)) { ?>
+                                                            <i class="fa fa-check text-success"></i> <?php echo $facility->name; ?><br/>
+                                                        <?php } else { ?>
+                                                            <i class="fa fa-times text-danger"></i> <?php echo $facility->name; ?><br/>
+                                                        <?php } ?>
+                                                    <?php } else { ?>
+                                                        <i class="fa fa-times text-danger"></i> <?php echo $facility->name; ?><br/>
+                                                    <?php } ?>
+                                                <?php } ?>
+                                            <?php } ?>                                                                    
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -116,7 +150,9 @@ $this->title = $model->golfclub_name;
                         <div class="portlet-heading bg-inverse">
                             <h3 class="portlet-title">Contact Details</h3>
                             <div class="portlet-widgets">
-                                <?= Html::a('<i class="mdi mdi-pencil"></i>', 'javascript:void(0);', ['class' => 'link-golf-club', 'data-href' => Url::to(['golf-club/update', 'id' => $model->golfclub_id])]) ?>
+                                <?php if (in_array(Yii::$app->user->identity->user_roleID, [1, 3])) { ?>
+                                    <?= Html::a('<i class="mdi mdi-pencil"></i>', 'javascript:void(0);', ['class' => 'link-golf-club', 'data-href' => Url::to(['golf-club/update', 'id' => $model->golfclub_id])]) ?>
+                                <?php } ?>
                             </div>
                             <div class="clearfix"></div>
                         </div>
@@ -151,6 +187,10 @@ $this->title = $model->golfclub_name;
                                                 <br/>
                                                 <?= \app\models\Country::findOne(['id' => $model->golfclub_countryID])->long_name ?>
                                                 <br/>
+                                                <?php if (!empty($model->golfclub_countyID)) { ?>
+                                                    <?= \app\models\County::findOne(['id' => $model->golfclub_countyID])->name ?>
+                                                    <br/>
+                                                <?php } ?>
                                                 <?= $model->golfclub_postCode ?>
                                             </td>
                                         </tr>
@@ -163,76 +203,42 @@ $this->title = $model->golfclub_name;
                         </div>
                     </div>
                     <!-- Contact Details End -->
-                    <!-- Account Details -->
-                    <div class="portlet">
-                        <div class="portlet-heading bg-inverse">
-                            <h3 class="portlet-title">My Account Details</h3>
-                            <div class="portlet-widgets">
-                                <a href="#" data-toggle="modal" data-target="#changePassword"><i class="mdi mdi-pencil"></i></a>
-                            </div>
-                            <div class="clearfix"></div>
-                        </div>
-                        <div id="bg-default" class="panel-collapse collapse in show">
-                            <div class="portlet-body">
-                                <table class="table table-striped" cellspacing="0" width="100%">
-                                    <tbody>
-                                        <tr>
-                                            <td><strong>Username</strong></td>
-                                            <td class="text-right"><?= $model->user->user_username ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Registered Email</strong></td>
-                                            <td class="text-right"><a href="mailto:<?= $model->user->user_email ?>" class="text-danger"><?= $model->user->user_email ?></a></td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Password</strong></td>
-                                            <td class="text-right">**********
-                                                <br/><br/>
-                                                <button class="btn btn-danger waves-effect waves-light" data-toggle="modal" data-target="#changePassword">Change Password</button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Account Details End -->
-                    <!-- Change Password Modal -->
-                    <div id="changePassword" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fi-cross"></i></button>
-                                    <h4 class="modal-title" id="myModalLabel">Change Password</h4>
+                    <?php if (Yii::$app->user->identity->user_roleID == 3) { ?>
+                        <!-- Account Details -->
+                        <div class="portlet">
+                            <div class="portlet-heading bg-inverse">
+                                <h3 class="portlet-title">My Account Details</h3>
+                                <div class="portlet-widgets">                                
+                                    <?= Html::a('<i class="mdi mdi-pencil"></i>', 'javascript:void(0);', ['class' => 'link-golf-club-change-password', 'data-href' => Url::to(['golf-club/change-password', 'id' => $model->golfclub_id])]) ?>                                
                                 </div>
-                                <div class="modal-body">
-                                    <form class="form-horizontal" action="#">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label for="field-1" class="control-label">New Password</label>
-                                                    <input type="text" class="form-control" id="field-1">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label for="field-2" class="control-label">Confirm New Password</label>
-                                                    <input type="text" class="form-control" id="field-2">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Cancel</button>
-                                    <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">Set Password</button>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div id="bg-default" class="panel-collapse collapse in show">
+                                <div class="portlet-body">
+                                    <table class="table table-striped" cellspacing="0" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Username</strong></td>
+                                                <td class="text-right"><?= $model->user->user_username ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Registered Email</strong></td>
+                                                <td class="text-right"><a href="mailto:<?= $model->user->user_email ?>" class="text-danger"><?= $model->user->user_email ?></a></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Password</strong></td>
+                                                <td class="text-right">**********
+                                                    <br/><br/>
+                                                    <?= Html::a('Change Password', 'javascript:void(0);', ['class' => 'btn btn-danger waves-effect waves-light link-golf-club-change-password', 'data-href' => Url::to(['golf-club/change-password', 'id' => $model->golfclub_id])]) ?>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- Change Password Modal End -->                    
+                        <!-- Account Details End -->
+                    <?php } ?>
                 </div>
             </div>
             <!-- container end -->

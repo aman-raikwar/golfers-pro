@@ -6,7 +6,7 @@
 
 use yii\helpers\Html;
 
-$this->title = $name;
+$this->title = Yii::$app->name . ' - No Access Allowed';
 ?>
 <!-- HOME -->
 <section>
@@ -24,8 +24,9 @@ $this->title = $name;
                                 </h2>
                             </div>
                             <div class="account-content">
-                                <h1 class="text-error">404</h1>
-                                <h2 class="text-uppercase text-danger m-t-30"><?= nl2br(Html::encode($message)) ?></h2>
+                                <h2 class="text-uppercase text-danger m-t-30">
+                                    Unauthorized access. Access Not Allowed.
+                                </h2>
                                 <p class="text-muted m-t-30">
                                     It's looking like you may have taken a wrong turn. Don't worry... it
                                     happens to the best of us. You might want to check your internet connection. Here's a

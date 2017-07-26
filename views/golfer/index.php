@@ -5,6 +5,7 @@ use yii\grid\GridView;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
 use fedemotta\datatables\DataTables;
+use app\models\GolfClub;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\GolferSearch */
@@ -27,94 +28,92 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>                        
                     <div id="bg-default" class="panel-collapse collapse in show">
                         <div class="portlet-body">
-                            <?=
-                            DataTables::widget([
-                                'dataProvider' => $dataProvider,
-                                'filterModel' => $searchModel,
-                                'columns' => [
-                                    [
-                                        'class' => 'yii\grid\SerialColumn',
-                                        'header' => 'ID',
-                                        'contentOptions' => ['class' => 'text-center']
-                                    ],
-                                    [
-                                        'attribute' => 'golfer_firstname',
-                                        'content' => function($data, $url) {
-                                            return Html::a($data->golfer_firstname, Url::to(['golfer/view', 'id' => $url]), ['class' => 'text-danger']);
-                                        }
-                                    ],
-                                    [
-                                        'attribute' => 'golfer_lastname',
-                                        'content' => function($data, $url) {
-                                            return Html::a($data->golfer_lastname, Url::to(['golfer/view', 'id' => $url]), ['class' => 'text-danger']);
-                                        }
-                                    ],
-                                    [
-                                        'attribute' => 'golfer_firstClubID',
-                                        'label' => 'Primary Membership Golf Club',
-                                        'visible' => Yii::$app->user->identity->user_roleID == 1 ? TRUE : FALSE,
-                                        'content' => function ($data) {
-                                            if (!empty($data->golfer_firstClubID)) {
-                                                return $data->getGolfClubName($data->golfer_firstClubID);
-                                            } else {
-                                                return '';
-                                            }
-                                        }
-                                    ],
-                                    [
-                                        'attribute' => 'golfer_gender',
-                                        'content' => function ($data) {
-                                            if (!empty($data->golfer_gender)) {
-                                                return ($data->golfer_gender == 'M') ? 'Male' : 'Female';
-                                            } else {
-                                                return '';
-                                            }
-                                        }
-                                    ],
-                                    [
-                                        'attribute' => 'golfer_card_number',
-                                        'label' => 'Card Number',
-                                        'content' => function ($data) {
-                                            $golfer_id = $data->golfer_userID;
-                                            $card = \app\models\RegistrationCards::findOne(['UserID' => $golfer_id]);
-                                            if (!empty($card)) {
-                                                return $card->CardNumber;
-                                            }
-                                        }
-                                    ],
-                                    [
-                                        'class' => 'yii\grid\ActionColumn',
-                                        'header' => 'Actions',
-                                        'headerOptions' => ['class' => 'text-center'],
-                                        'contentOptions' => ['class' => 'text-center'],
-                                        'template' => '{view} {update} {delete}',
-                                        'buttons' => [
-                                            'view' => function ($url, $model) {
-                                                return Html::a('<span class="fa fa-search"></span>', $url, [
-                                                            'title' => Yii::t('app', 'View the Golfer Profile'),
-                                                            'class' => 'btn btn-icon waves-effect waves-light btn-danger'
-                                                ]);
-                                            },
-                                            'update' => function ($url, $model) {
-                                                return Html::a('<span class="fa fa-pencil"></span>', 'javascript:void(0);', [
-                                                            'title' => Yii::t('app', 'Edit the Golfer'),
-                                                            'class' => 'btn btn-icon waves-effect waves-light btn-warning link-golfer',
-                                                            'data-href' => $url
-                                                ]);
-                                            },
-                                            'delete' => function ($url, $model) {
-                                                return Html::a('<span class="fa fa-remove"></span>', $url, [
-                                                            'title' => Yii::t('app', 'Delete the Golfer'),
-                                                            'class' => 'btn btn-icon waves-effect waves-light btn-warning',
-                                                            'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
-                                                            'data-method' => 'post',
-                                                ]);
-                                            }
-                                        ]
-                                    ]
-                                ],
-                            ]);
-                            ?>
+                            <div class="table-responsive">
+                                <table id="datatable-buttons" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>First Name</th>
+                                            <th>Last Name</th>
+                                            <?php if (Yii::$app->user->identity->user_roleID == 1) { ?>
+                                                <th>Primary Membership Golf Club</th>
+                                            <?php } ?>
+                                            <th>Gender</th>
+                                            <th>Card Number</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php if (!empty($data)) { ?>
+                                            <?php foreach ($data as $golfer) { ?>
+                                                <tr>
+                                                    <td><?= $golfer->golfer_id ?></td>
+                                                    <td><?= Html::a($golfer->golfer_firstname, Url::to(['golfer/view', 'id' => $golfer->golfer_id]), ['class' => 'text-danger', 'title' => 'View Golfer Profile']); ?></td>
+                                                    <td><?= Html::a($golfer->golfer_lastname, Url::to(['golfer/view', 'id' => $golfer->golfer_id]), ['class' => 'text-danger', 'title' => 'View Golfer Profile']); ?></td>
+                                                    <?php if (Yii::$app->user->identity->user_roleID == 1) { ?>
+                                                        <td>
+                                                            <?php
+                                                            if (!empty($golfer->golfer_firstClubID)) {
+                                                                echo GolfClub::getGolfClubName($golfer->golfer_firstClubID);
+                                                            } else {
+                                                                echo '-';
+                                                            }
+                                                            ?>
+                                                        </td>
+                                                    <?php } ?>
+                                                    <td>
+                                                        <?php
+                                                        if (!empty($golfer->golfer_gender)) {
+                                                            echo ($golfer->golfer_gender == 'M') ? 'Male' : 'Female';
+                                                        } else {
+                                                            echo '-';
+                                                        }
+                                                        ?>
+                                                    </td>
+                                                    <td>
+                                                        <?php
+                                                        $card = \app\models\RegistrationCards::findOne(['UserID' => $golfer->golfer_id]);
+                                                        if (!empty($card)) {
+                                                            echo $card->CardNumber;
+                                                        } else {
+                                                            echo '-';
+                                                        }
+                                                        ?>
+                                                    </td>
+                                                    <td>
+                                                        <div class="button-list text-center">
+                                                            <?=
+                                                            Html::a('<i class="fa fa-search"></i>', Url::to(['golfer/view', 'id' => $golfer->golfer_id]), [
+                                                                'title' => 'View the Golfer Profile',
+                                                                'class' => 'btn btn-icon waves-effect waves-light btn-danger'
+                                                            ])
+                                                            ?>
+                                                            <?php if (in_array(Yii::$app->user->identity->user_roleID, [1, 2])) { ?>
+                                                                <?=
+                                                                Html::a('<i class="fa fa-pencil"></i>', 'javascript:void(0);', [
+                                                                    'title' => 'Edit the Profile',
+                                                                    'class' => 'btn btn-icon waves-effect waves-light btn-warning link-golfer',
+                                                                    'data-href' => Url::to(['golfer/update', 'id' => $golfer->golfer_id])
+                                                                ])
+                                                                ?>
+                                                            <?php } ?>
+                                                            <?=
+                                                            Html::a('<span class="fa fa-remove"></span>', Url::to(['golfer/delete', 'id' => $golfer->golfer_id]), [
+                                                                'title' => Yii::t('app', 'Delete the Profile'),
+                                                                'class' => 'btn btn-icon waves-effect waves-light btn-inverse',
+                                                                'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
+                                                                'data-method' => 'post',
+                                                                'style' => "display: none;"
+                                                            ]);
+                                                            ?>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            <?php } ?>
+                                        <?php } ?>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>

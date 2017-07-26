@@ -16,6 +16,8 @@ use app\models\ContactForm;
 use app\models\PasswordResetRequestForm;
 use app\models\ResetPasswordForm;
 use app\models\CardMembershipCategory;
+use app\models\Playeractivity;
+use app\models\CardReaders;
 
 class SiteController extends Controller {
 
@@ -51,6 +53,9 @@ class SiteController extends Controller {
 
     public function beforeAction($action) {
         if (parent::beforeAction($action)) {
+            if ($action->id == 'account-verification') {
+                Yii::$app->user->logout(true);
+            }
             // change layout for error action
             if ($action->id == 'error') {
                 $this->layout = 'frontend';
@@ -128,6 +133,8 @@ class SiteController extends Controller {
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
+            $model->golfer_dateOfBirth = date('Y-m-d', strtotime($model->golfer_dateOfBirth));
+
             $user = new User();
             $user->user_username = $model->user_username;
             $user->user_email = $model->user_email;
@@ -143,8 +150,9 @@ class SiteController extends Controller {
 
                     Yii::$app
                             ->mailer
-                            ->compose(['html' => 'accountVerification-html', 'text' => 'accountVerification-text'], ['user' => $user])
-                            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' robot'])
+                            //->compose(['html' => 'accountVerification-html', 'text' => 'accountVerification-text'], ['user' => $user])
+                            ->compose(['html' => 'welcomeGolferEmail-html', 'text' => 'welcomeGolferEmail-text'], ['user' => $user, 'golfer' => $model])
+                            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name])
                             ->setTo($user->user_email)
                             ->setSubject('Account Verification Link for ' . Yii::$app->name)
                             ->send();
@@ -257,6 +265,9 @@ class SiteController extends Controller {
      */
     public function actionResetPassword($token) {
         $this->layout = 'frontend';
+
+        Yii::$app->user->logout();
+
         try {
             $model = new ResetPasswordForm($token);
         } catch (InvalidParamException $e) {
@@ -269,17 +280,31 @@ class SiteController extends Controller {
             return $this->goHome();
         }
 
-        return $this->render('resetPassword', [
-                    'model' => $model,
-        ]);
+        return $this->render('resetPassword', ['model' => $model]);
     }
 
     public function actionAccountVerification($token) {
         $this->layout = 'frontend';
 
+        Yii::$app->user->logout();
+
         if (!empty($token)) {
             $user = User::find()->where(['user_auth_key' => $token, 'status' => 0])->one();
             if (!empty($user)) {
+
+                $golfer = Golfer::findOne(['golfer_userID' => $user->user_id]);
+                if (!empty($golfer)) {
+                    $club = \app\models\GolfClub::find()->where(['golfclub_id' => $golfer->golfer_firstClubID])->one();
+                    if (!empty($club)) {
+                        $card = \app\models\RegistrationCards::find()->where(['ClubID' => $club->golfclub_id, 'UserID' => 0])->one();
+                        if (!empty($card)) {
+                            $card->UserID = $golfer->golfer_id;
+                            $card->RegisteredDate = date('Y-m-d');
+                            $card->save(false);
+                        }
+                    }
+                }
+
                 $user->status = 1;
                 $user->save();
 
@@ -292,6 +317,63 @@ class SiteController extends Controller {
         }
 
         return $this->render('confirmation');
+    }
+
+    public function actionNoAccess() {
+        $this->layout = 'frontend';
+        return $this->render('no-access');
+    }
+
+    public function actionRunCron() {
+        $this->layout = false;
+
+        $sql = "SELECT playeractivity.ID, playeractivity.CardID, card_readers.GolfCourse, playeractivity.Date FROM playeractivity join card_readers on playeractivity.ReaderID=card_readers.ID ORDER by playeractivity.CardID, playeractivity.Date";
+        $connection = Yii::$app->getDb();
+        $command = $connection->createCommand($sql);
+        $activities = $command->queryAll();
+
+        if (!empty($activities)) {
+            $oldActivity = [];
+            $curActivity = [];
+
+            foreach ($activities as $activity) {
+//                echo $activity['ID'] . '  ----  ' . $activity['CardID'] . '  ----  ' . $activity['GolfCourse'] . '  ----  ' . $activity['Date'];
+//                echo '<hr/>';
+
+                if (empty($oldActivity)) {
+                    $oldActivity = $activity;
+                }
+
+                if (empty($curActivity)) {
+                    $curActivity = $activity;
+                } else {
+                    //if ($curActivity['Date'])
+                    $curActivity = $activity;
+                    if ($oldActivity['CardID'] == $curActivity['CardID'] && $oldActivity['GolfCourse'] == $curActivity['GolfCourse']) {
+                        $time_one = new \DateTime($oldActivity['Date']);
+                        $time_two = new \DateTime($curActivity['Date']);
+                        $difference = $time_one->diff($time_two);
+//                        echo '<br/>-------------------------------------------------------------<br/>';
+                        $hours = $difference->h;
+                        $hours = $hours + ($difference->days * 24);
+//                        echo $hours;
+//                        echo '<pre>';
+//                        print_r($difference);
+//                        echo '</pre>';
+//                        echo '<br/>-------------------------------------------------------------<br/>';
+
+                        if ($hours < 3) {
+                            if (Playeractivity::findOne($curActivity['ID'])->delete()) {
+                                $oldActivity = $curActivity;
+                            }
+                        }
+                    } else {
+                        $curActivity = [];
+                        $oldActivity = [];
+                    }
+                }
+            }
+        }
     }
 
 }

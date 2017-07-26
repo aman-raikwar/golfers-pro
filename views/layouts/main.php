@@ -1,6 +1,4 @@
 <?php
-/* @var $this \yii\web\View */
-/* @var $content string */
 
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
@@ -10,9 +8,6 @@ use app\assets\AppAsset;
 use yii\helpers\Url;
 use lavrentiev\widgets\toastr\Notification;
 
-//
-//print_r(Notification);
-//die;
 AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
@@ -115,10 +110,30 @@ AppAsset::register($this);
                             <?php } ?>
 
                             <?php if (Yii::$app->user->identity->user_roleID == 1) { ?>
-                                <li><?= Html::a('<i class="fi-server"></i><span> Readers </span>', 'javascript:void(0);') ?></li>
+                                <li><?= Html::a('<i class="fi-server"></i><span> Readers </span>', ['/card-readers']) ?></li>                                
                             <?php } ?>
 
-                            <li><?= Html::a('<i class="fi-cog"></i><span> My Profile </span>', 'javascript:void(0);') ?></li>
+
+                            <?php
+                            $profile_url = 'javascript:void(0);';
+                            if (Yii::$app->user->identity->user_roleID == 1) {
+                                // Administrator
+                            } else if (Yii::$app->user->identity->user_roleID == 2) {
+                                // Golfer
+                                $user_id = Yii::$app->user->identity->user_id;
+                                $golfer = \app\models\Golfer::findOne(['golfer_userID' => $user_id]);
+                                $profile_url = Url::to(['golfer/view', 'id' => $golfer->golfer_id]);
+                            } else if (Yii::$app->user->identity->user_roleID == 3) {
+                                // Golf Club
+                                $user_id = Yii::$app->user->identity->user_id;
+                                $golfclub = \app\models\GolfClub::findOne(['golfclub_userID' => $user_id]);                                
+                                $profile_url = Url::to(['golf-club/view', 'id' => $golfclub->golfclub_id]);
+                            }
+                            ?>
+                            <?php if (Yii::$app->user->identity->user_roleID != 1) { ?>
+                                <li><?= Html::a('<i class="fi-cog"></i><span> My Profile </span>', $profile_url) ?></li>
+                            <?php } ?>
+
                             <li>
                                 <a href="javascript: void(0);"><i class="fi-help"></i><span> Info & Support </span> <span class="menu-arrow"></span></a>
                                 <ul class="nav-second-level" aria-expanded="false">
@@ -166,13 +181,11 @@ AppAsset::register($this);
             //Buttons examples
             var table = $('#datatable-buttons').DataTable({
                 lengthChange: false,
-                buttons: ['copy']
+                buttons: ['copy', 'csv']
             });
 
-            table.buttons().container()
-                    .appendTo('#datatable-buttons_wrapper .col-md-6:eq(0)');
+            table.buttons().container().appendTo('#datatable-buttons_wrapper .col-md-6:eq(0)');
         });
-
     </script>
 </html>
 <?php $this->endPage() ?>

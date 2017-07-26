@@ -39,6 +39,8 @@ class GolfClub extends \yii\db\ActiveRecord {
     public $user_username;
     public $user_password;
     public $user_password_repeat;
+    public $new_password;
+    public $confirm_new_password;
 
     /**
      * @inheritdoc
@@ -92,15 +94,33 @@ class GolfClub extends \yii\db\ActiveRecord {
             [['golfclub_phone'], 'string', 'max' => 50],
             [['golfclub_postCode'], 'string', 'max' => 100],
             [['golfclub_addressNotes'], 'string', 'max' => 300],
-            [['golfclub_description'], 'string', 'max' => 500],
+            //[['golfclub_description'], 'string', 'message' => 'Please enter a description of the Club upto 250 words.'],
+            ['golfclub_description', 'validateDescription'],
             //[['golfclub_facebookUrl', 'golfclub_twitterUrl', 'golfclub_websiteUrl', 'golfclub_gpgUrl'], 'url'],
             [['golfclub_websiteUrl', 'golfclub_gpgUrl'], 'url'],
             [['golfclub_userID'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['golfclub_userID' => 'user_id']],
+            [['new_password', 'confirm_new_password'], 'required', 'on' => 'changepassword'],
+            ['confirm_new_password', 'validateConfirmPassword'],
         ];
     }
 
     public function validatePassword($attribute, $params) {
         if ($this->user_password != $this->user_password_repeat) {
+            $this->addError($attribute, 'Both Password didn\'t match.');
+        }
+    }
+
+    public function validateDescription($attribute, $params) {
+        if (!empty($this->golfclub_description)) {
+            $num = str_word_count($this->golfclub_description);
+            if ($num > 250) {
+                $this->addError($attribute, 'Please enter a description of the Club upto 250 words.');
+            }
+        }
+    }
+
+    public function validateConfirmPassword($attribute, $params) {
+        if ($this->new_password != $this->confirm_new_password) {
             $this->addError($attribute, 'Both Password didn\'t match.');
         }
     }
@@ -115,7 +135,7 @@ class GolfClub extends \yii\db\ActiveRecord {
             'user_email' => Yii::t('app', 'Email'),
             'user_username' => Yii::t('app', 'Username'),
             'golfclub_id' => Yii::t('app', 'Club Number'),
-            'golfclub_name' => Yii::t('app', 'Club Name'),
+            'golfclub_name' => Yii::t('app', 'Golf Club Name'),
             'golfclub_facebookUrl' => Yii::t('app', 'Club Facebook URL'),
             'golfclub_twitterUrl' => Yii::t('app', 'Club Twitter URL'),
             'golfclub_phone' => Yii::t('app', 'Contact Number'),
@@ -137,6 +157,8 @@ class GolfClub extends \yii\db\ActiveRecord {
             'golfclub_greenFeeTo' => Yii::t('app', 'Green Fee To (£)'),
             'golfclub_facilities' => Yii::t('app', 'Club Facilities'),
             'golfclub_userID' => Yii::t('app', 'Golf Club User ID'),
+            'new_password' => Yii::t('app', 'New Password'),
+            'confirm_new_password' => Yii::t('app', 'Confirm New Password'),
         ];
     }
 
@@ -147,8 +169,36 @@ class GolfClub extends \yii\db\ActiveRecord {
         return $this->hasOne(User::className(), ['user_id' => 'golfclub_userID']);
     }
 
+    public static function getGolfClubName($club_id) {
+        $club = GolfClub::findOne(['golfclub_id' => $club_id]);
+        if (!empty($club)) {
+            return $club->golfclub_name;
+        } else {
+            return '';
+        }
+    }
+
     public static function getCountOfGolfers($golfclub_id) {
         return Golfer::find()->andWhere(['OR', ['golfer_firstClubID' => $golfclub_id], ['golfer_otherClubID' => $golfclub_id]])->count();
+    }
+
+    public static function getCheckInsCount($golfclub_id = null) {
+        if (!empty($golfclub_id)) {
+            $readers = CardReaders::findAll(['GolfCourse' => $golfclub_id]);
+        } else {
+            $readers = CardReaders::find()->all();
+        }
+
+        $totalCount = 0;
+
+        if (!empty($readers)) {
+            foreach ($readers as $reader) {
+                $activity = Playeractivity::find()->where(['ReaderID' => $reader->ID])->count();
+                $totalCount += $activity;
+            }
+        }
+
+        return $totalCount;
     }
 
 }

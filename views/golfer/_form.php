@@ -31,12 +31,15 @@ use app\models\RegistrationCards;
             $user_id = Yii::$app->user->identity->user_id;
 
             if (Yii::$app->user->identity->user_roleID == 3) {
-                $GolfClubs = GolfClub::find()->where(['golfclub_userID' => $user_id])->orderby('golfclub_name')->all();
+                $GolfClubs = GolfClub::find()->where(['golfclub_userID' => $user_id])->all();
+                $model->golfer_firstClubID = $GolfClubs[0]->golfclub_id;
+                $GolfClubsList = ArrayHelper::map($GolfClubs, 'golfclub_id', 'golfclub_name');
+                echo $form->field($model, 'golfer_firstClubID')->dropDownList($GolfClubsList, ['class' => 'form-control select2', 'data-href' => Url::to(['golfer/get-cards'])])->label('Which Golf Club are they a member of?');
             } else {
                 $GolfClubs = GolfClub::find()->orderby('golfclub_name')->all();
+                $GolfClubsList = ArrayHelper::map($GolfClubs, 'golfclub_id', 'golfclub_name');
+                echo $form->field($model, 'golfer_firstClubID')->dropDownList($GolfClubsList, ['prompt' => 'Select Golf Club', 'class' => 'form-control select2', 'data-href' => Url::to(['golfer/get-cards'])])->label('Which Golf Club are they a member of?');
             }
-            $GolfClubsList = ArrayHelper::map($GolfClubs, 'golfclub_id', 'golfclub_name');
-            echo $form->field($model, 'golfer_firstClubID')->dropDownList($GolfClubsList, ['prompt' => 'Select Golf Club', 'class' => 'form-control select2', 'data-href' => Url::to('/golfer/get-cards')])->label('Which Golf Club are they a member of?');
             ?>
         </div>
     </div>
@@ -45,34 +48,36 @@ use app\models\RegistrationCards;
         <div class="col-md-12">
             <div class="form-group">
                 <?php
-                //$cards = array();
-//                if (Yii::$app->user->identity->user_roleID == 3) {
-//                    $club = GolfClub::findOne(['golfclub_userID' => $user_id]);
-//                    if (!empty($club)) {
-//                        $cards = RegistrationCards::find()->where(['ClubID' => $club->golfclub_id, 'UserID' => 0])->orWhere(['UserID' => $model->golfer_userID])->orderby('CardNumber')->all();
-//                    }
-//                } else {
-//                    if (!$model->isNewRecord) {
-//                        $cards = RegistrationCards::find()->where(['UserID' => 0])->orWhere(['UserID' => $model->golfer_userID])->orderby('CardNumber')->all();
-//                    } else {
-//                        $cards = RegistrationCards::find()->where(['UserID' => 0])->orderby('CardNumber')->all();
-//                    }
-//                }
-//
-//                if (!$model->isNewRecord) {
-//                    $card = RegistrationCards::findOne(['UserID' => $model->golfer_userID]);
-//                    if (!empty($card)) {
-//                        $model->golfer_card_number = $card->ID;
-//                    }
-//                }
-                //$cardsList = ArrayHelper::map($cards, 'ID', 'CardNumber');
-                $cards = [];
-                if (!$model->isNewRecord) {
-                    echo $model->golfer_firstClubID;
-                    echo $model->golfer_userID;
-                    //$cards = RegistrationCards::find()->where(['ClubID' => $model->golfer_firstClubID, 'UserID' => 0])->orWhere(['UserID' => $model->golfer_userID])->orderby('CardNumber')->all();
+                $cardsList = [];
+
+                if (Yii::$app->user->identity->user_roleID == 3) {
+                    if ($model->isNewRecord) {
+                        $cards = RegistrationCards::find()->where(['ClubID' => $model->golfer_firstClubID, 'UserID' => 0])->orderby('CardNumber')->all();
+                        if (!empty($cards)) {
+                            $cardsList = ArrayHelper::map($cards, 'ID', 'CardNumber');
+                        }
+                    }
                 }
-                echo $form->field($model, 'golfer_card_number')->dropDownList($cards, ['prompt' => 'Select Card Number', 'class' => 'form-control select2'])->label('Golfer Card Number');
+
+                if (!$model->isNewRecord) {
+                    $singleCard = RegistrationCards::findOne(['UserID' => $model->golfer_id]);
+                    $cards = RegistrationCards::find()->where(['ClubID' => $model->golfer_firstClubID, 'UserID' => 0])->orWhere(['UserID' => $model->golfer_id])->orderby('CardNumber')->all();
+                    if (!empty($cards)) {
+                        $cardsList = ArrayHelper::map($cards, 'ID', 'CardNumber');
+                        if (!empty($singleCard)) {
+                            $model->golfer_card_number = $singleCard->ID;
+                        }
+                    }
+                }
+
+                $disabled = false;
+                if (Yii::$app->user->identity->user_roleID == 2) {
+                    $disabled = true;
+                    echo $form->field($model, 'golfer_card_number')->dropDownList($cardsList, ['class' => 'form-control select2', 'disabled' => $disabled])->label('Golfer Card Number');
+                    echo $form->field($model, 'golfer_card_number')->hiddenInput(['class' => 'form-control'])->label(false);
+                } else {
+                    echo $form->field($model, 'golfer_card_number')->dropDownList($cardsList, ['prompt' => 'Select Card Number', 'class' => 'form-control select2', 'disabled' => $disabled])->label('Golfer Card Number');
+                }
                 ?>
             </div>
         </div>
@@ -85,8 +90,11 @@ use app\models\RegistrationCards;
             if (!$model->isNewRecord || $model->golfer_isMemberOfAnotherClub == 2) {
                 $disabled = false;
             }
+            if (Yii::$app->user->identity->user_roleID == 3) {
+                $disabled = false;
+            }
             ?>
-            <?= $form->field($model, 'golfer_isMemberOfAnotherClub')->dropDownList([1 => 'No', 2 => 'Yes'], ['disabled' => $disabled])->label('Member of a second Golf Club?'); ?>
+            <?= $form->field($model, 'golfer_isMemberOfAnotherClub')->dropDownList([1 => 'No', 2 => 'Yes'], ['disabled' => $disabled]); ?>
         </div>
         <div class="col-md-6">                                        
             <?php
@@ -94,8 +102,11 @@ use app\models\RegistrationCards;
             if (!$model->isNewRecord || $model->golfer_isMemberOfAnotherClub == 2) {
                 $disabled = false;
             }
+
+            $GolfClubs = GolfClub::find()->orderby('golfclub_name')->all();
+            $GolfClubsList = ArrayHelper::map($GolfClubs, 'golfclub_id', 'golfclub_name');
             ?>
-            <?= $form->field($model, 'golfer_otherClubID')->dropDownList($GolfClubsList, ['prompt' => 'Select Golf Club', 'class' => 'form-control select2', 'disabled' => $disabled])->label('Select Golf Club'); ?>                                        
+            <?= $form->field($model, 'golfer_otherClubID')->dropDownList($GolfClubsList, ['prompt' => 'Select', 'class' => 'form-control select2', 'disabled' => $disabled]); ?>                                        
         </div>
     </div>
 
@@ -134,7 +145,17 @@ use app\models\RegistrationCards;
             <?= $form->field($model, 'golfer_gender')->dropDownList(['F' => 'Female', 'M' => 'Male'], ['prompt' => 'Select Gender']) ?>
         </div>
         <div class="col-md-6">
-            <?php $model->golfer_dateOfBirth = date('d-m-Y', strtotime($model->golfer_dateOfBirth)); ?>
+            <?php
+            if (!$model->isNewRecord) {
+                if (!empty($model->golfer_dateOfBirth)) {
+                    if ($model->golfer_dateOfBirth == '0000-00-00') {
+                        $model->golfer_dateOfBirth = '';
+                    } else {
+                        $model->golfer_dateOfBirth = date('d-m-Y', strtotime($model->golfer_dateOfBirth));
+                    }
+                }
+            }
+            ?>
             <?= $form->field($model, 'golfer_dateOfBirth', ['template' => '<div>{label}<div class="input-group">{input} <span class="input-group-addon bg-custom b-0 show-datepicker"><i class="mdi mdi-calendar text-white"></i></span></div>{error}{hint}</div>'])->textInput(['placeholder' => 'DD-MM-YYYY', 'autocomplete' => 'off']); ?>
         </div>
     </div>
@@ -144,7 +165,13 @@ use app\models\RegistrationCards;
             <?= $form->field($model, 'user_email')->textInput(['maxlength' => true, 'autocomplete' => 'off']) ?>
         </div>
         <div class="col-md-6">
-            <?= $form->field($model, 'user_username')->textInput(['maxlength' => true, 'autocomplete' => 'off']) ?>
+            <?php
+            $readonly = false;
+            if (Yii::$app->user->identity->user_roleID == 2) {
+                $readonly = true;
+            }
+            ?>
+            <?= $form->field($model, 'user_username')->textInput(['maxlength' => true, 'autocomplete' => 'off', 'readonly' => $readonly]) ?>
         </div>
     </div>
 
@@ -179,13 +206,12 @@ use app\models\RegistrationCards;
             <?php
             $countries = Country::find()->orderBy('nationality')->all();
             $countryList = ArrayHelper::map($countries, 'id', 'nationality');
-            echo $form->field($model, 'golfer_country')->dropDownList($countryList, ['prompt' => 'Select Country', 'class' => 'form-control', 'data-url' => Url::to(['golf-clubs/county-list'])]);
+            echo $form->field($model, 'golfer_country')->dropDownList($countryList, ['prompt' => 'Select Country', 'class' => 'form-control', 'data-url' => Url::to(['county/county-list'])]);
             ?>
         </div>
         <div class="col-md-6">                                        
             <?php
-            $counties = County::find()->orderBy('name')->all();
-            $countyList = ArrayHelper::map($counties, 'id', 'name');
+            $countyList = [];
             echo $form->field($model, 'golfer_county')->dropDownList($countyList, ['prompt' => 'Select County', 'class' => 'form-control']);
             ?>                                        
         </div>
@@ -215,6 +241,10 @@ use app\models\RegistrationCards;
     <div class="row">
         <div class="col-12">
             <?php
+            if (!$model->isNewRecord) {
+                $model->acceptTermsCondition = 1;
+            }
+
             echo $form->field($model, 'acceptTermsCondition', [
                 'options' => ['class' => 'checkbox checkbox-success'],
                 'template' => "{input}\n{label}\n{hint}\n{error}"
@@ -231,5 +261,5 @@ use app\models\RegistrationCards;
 
 <?php $form = ActiveForm::end(); ?>
 
-<?php $this->registerJsFile(Yii::$app->request->baseUrl . '/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]); ?>
+<?php //$this->registerJsFile(Yii::$app->request->baseUrl . '/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);   ?>
 <?php $this->registerJsFile(Yii::$app->request->baseUrl . '/js/golfer-script.js', ['depends' => [\yii\web\JqueryAsset::className()]]); ?>

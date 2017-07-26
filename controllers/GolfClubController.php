@@ -49,13 +49,10 @@ class GolfClubController extends Controller {
      * @return mixed
      */
     public function actionIndex() {
-        $searchModel = new GolfClubSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel = new GolfClub();
+        $data = $searchModel->find()->all();
 
-        return $this->render('index', [
-                    'searchModel' => $searchModel,
-                    'dataProvider' => $dataProvider,
-        ]);
+        return $this->render('index', ['data' => $data]);
     }
 
     /**
@@ -64,9 +61,21 @@ class GolfClubController extends Controller {
      * @return mixed
      */
     public function actionView($id) {
-        return $this->render('view', [
-                    'model' => $this->findModel($id),
-        ]);
+        if (Yii::$app->user->identity->user_roleID == 2) {
+            $model = $this->findModel($id);
+        } else if (Yii::$app->user->identity->user_roleID == 3) {
+            $user_id = Yii::$app->user->identity->user_id;
+            $golfclub = \app\models\GolfClub::findOne(['golfclub_userID' => $user_id]);
+            if ($golfclub->golfclub_id == $id) {
+                $model = $this->findModel($id);
+            } else {
+                return $this->redirect(['site/no-access']);
+            }
+        } else {
+            $model = $this->findModel($id);
+        }
+
+        return $this->render('view', ['model' => $model]);
     }
 
     /**
@@ -97,6 +106,12 @@ class GolfClubController extends Controller {
                 $model->golfclub_facilities = implode(',', $_POST['GolfClub']['golfclub_facilities']);
             }
 
+            if (!empty($_POST['GolfClub']['golfclub_selfRegistration'])) {
+                $model->golfclub_selfRegistration = 1;
+            } else {
+                $model->golfclub_selfRegistration = 0;
+            }
+
             $user = new User();
             $user->user_username = $model->user_username;
             $user->user_email = $model->user_email;
@@ -108,12 +123,13 @@ class GolfClubController extends Controller {
 
             if ($user->save()) {
                 $model->golfclub_userID = $user->user_id;
+
                 if ($model->save(false)) {
 
                     Yii::$app
                             ->mailer
                             ->compose(['html' => 'golfClubCredentials-html', 'text' => 'golfClubCredentials-text'], ['user' => $user, 'tempPassword' => $tempPassword])
-                            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' robot'])
+                            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name])
                             ->setTo($user->user_email)
                             ->setSubject('Golf Club Credentials for ' . Yii::$app->name)
                             ->send();
@@ -164,8 +180,10 @@ class GolfClubController extends Controller {
 
             $model->user->user_email = $model->user_email;
             $model->user->user_username = $model->user_username;
-            $model->user->setPassword($model->user_password);
-            $model->user->generateAuthKey();
+            if (!empty($model->user_password)) {
+                $model->user->setPassword($model->user_password);
+                $model->user->generateAuthKey();
+            }
 
             $clubLogo = UploadedFile::getInstance($model, 'golfclub_logo');
             if (!empty($clubLogo)) {
@@ -179,6 +197,12 @@ class GolfClubController extends Controller {
 
             if (!empty($_POST['GolfClub']['golfclub_facilities'])) {
                 $model->golfclub_facilities = implode(',', $_POST['GolfClub']['golfclub_facilities']);
+            }
+
+            if (!empty($_POST['GolfClub']['golfclub_selfRegistration'])) {
+                $model->golfclub_selfRegistration = 1;
+            } else {
+                $model->golfclub_selfRegistration = 0;
             }
 
 //            print_r($_POST);
@@ -245,16 +269,37 @@ class GolfClubController extends Controller {
         }
     }
 
-    public function actionCountyList($id) {
-        $counties = County::find()->where('country_id = :country_id', [':country_id' => $id])->orderby('name')->all();
-        $response = array('status' => false);
-        if (!empty($counties)) {
-            $countyList = ArrayHelper::map($counties, 'id', 'name');
-            $response = array('status' => true, 'counties' => $countyList);
+    public function actionChangePassword($id) {
+        $model = $this->findModel($id);
+        $model->setScenario('changepassword');
+
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
         }
 
-        echo json_encode($response);
-        exit();
+        if ($model->load(Yii::$app->request->post())) {
+
+            $model->user->setPassword($model->confirm_new_password);
+            //$model->user->generateAuthKey();
+//            print_r($_POST);
+//            print_r($model->attributes);
+//            die;
+
+            if ($model->user->save()) {
+                \Yii::$app->session->setFlash('type', 'success');
+                \Yii::$app->session->setFlash('title', 'Golf Club');
+                \Yii::$app->session->setFlash('message', 'Password Changed Sucessfully.');
+            } else {
+                \Yii::$app->session->setFlash('type', 'danger');
+                \Yii::$app->session->setFlash('title', 'Golf Club');
+                \Yii::$app->session->setFlash('message', 'Password Changed Failed.');
+            }
+
+            return $this->redirect(['view', 'id' => $id]);
+        } else {
+            return $this->renderAjax('_change_password', ['model' => $model]);
+        }
     }
 
 }

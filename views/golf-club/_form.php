@@ -24,7 +24,13 @@ use app\models\ClubFunctionality;
     </div>
     <div class="row">
         <div class="col-md-6">
-            <?= $form->field($model, 'user_username')->textInput(['class' => "form-control", "id" => "user_username"]) ?>
+            <?php
+            $readonly = false;
+            if (!$model->isNewRecord) {
+                $readonly = true;
+            }
+            ?>
+            <?= $form->field($model, 'user_username')->textInput(['class' => "form-control", "id" => "user_username", 'readonly' => $readonly]) ?>
         </div>
         <div class="col-md-6">                    
             <?= $form->field($model, 'user_email')->textInput(['class' => "form-control", "id" => "user_email"]) ?>                    
@@ -58,7 +64,7 @@ use app\models\ClubFunctionality;
             $countryList = ArrayHelper::map($countries, 'id', 'long_name');
             echo $form->field($model, 'golfclub_countryID')->dropDownList($countryList, [
                 'prompt' => 'Select Country',
-                'data-url' => Url::to(['golf-club/county-list'])
+                'data-url' => Url::to(['county/county-list'])
             ]);
             ?>            
         </div>
@@ -147,7 +153,7 @@ use app\models\ClubFunctionality;
                     echo '<div class="form-group showClubLogo" style="height:80px;"><img src="' . Yii::$app->request->baseUrl . '/images/default-logo.png" style="max-height: 100%;" /></div>';
                 }
                 ?>
-                <?= $form->field($model, 'golfclub_logo')->fileInput(['class' => "form-control", "id" => "golfclub_logo"])->label(false) ?>
+                <?= $form->field($model, 'golfclub_logo')->fileInput(['class' => "form-control", "id" => "golfclub_logo", "style" => "height:auto;"])->label(false) ?>
             </div>
         </div>
     </div>
@@ -171,11 +177,26 @@ use app\models\ClubFunctionality;
         </div>
     </div>
 
+    <div class="row">
+        <div class="col-12">
+            <?php
+            if ($model->isNewRecord) {
+                $model->golfclub_selfRegistration = 1;
+            }
+
+            echo $form->field($model, 'golfclub_selfRegistration', [
+                'options' => ['class' => 'checkbox checkbox-success'],
+                'template' => "{input}\n{label}\n{hint}\n{error}"
+            ])->checkbox(['value' => 1, 'checked' => 'checked'], false)->label('Enable Self Golfer Registration');
+            ?>
+        </div>
+    </div>
+
 </div>
 
 <div class="modal-footer">
     <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
-    <?= Html::submitButton($model->isNewRecord ? 'Add Golf Club' : 'Save Changes', ['class' => 'btn btn-danger waves-effect waves-light', 'id' => 'btnSave']); ?>
+    <?= Html::submitButton($model->isNewRecord ? 'Add Club' : 'Save Changes', ['class' => 'btn btn-danger waves-effect waves-light', 'id' => 'btnSave']); ?>
 </div>
 
 <?php ActiveForm::end(); ?>

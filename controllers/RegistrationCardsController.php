@@ -47,12 +47,9 @@ class RegistrationCardsController extends Controller {
     public function actionIndex() {
 
         $searchModel = new RegistrationCardsSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $data = $searchModel->getAll();
 
-        return $this->render('index', [
-                    'searchModel' => $searchModel,
-                    'dataProvider' => $dataProvider,
-        ]);
+        return $this->render('index', ['data' => $data]);
     }
 
     /**
@@ -93,39 +90,64 @@ class RegistrationCardsController extends Controller {
             $card_len2 = strlen($card2);
 
             $flag = 0;
-            if ($len == 11 && $card_len1 == 3 && $card1 == $card2 && $len == $len2) {
-                $card1 = substr($firstcard_number, 0, 3);
-                $min = filter_var($firstcard_number, FILTER_SANITIZE_NUMBER_INT);
-                //$min = filter_var($firstcard_number, FILTER_SANITIZE_NUMBER_INT);
-                $max = filter_var($lastcard_number, FILTER_SANITIZE_NUMBER_INT);
-                for ($x = $min; $x <= $max; $x++) {
-                    $x = str_pad($x, 8, '0', STR_PAD_LEFT);
-                    $card = $card1 . $x;
-                    ///echo "<br>";
-                    ///insert card functionality
-                    $oldModel = RegistrationCards::findOne(['CardNumber' => $card]);
-                    if (empty($oldModel)) {
-                        $model->ID = NULL;
-                        $model->CardNumber = $card;
-                        $model->ClubID = $model->ClubID;
-                        $model->UserID = 0;
-                        $model->RegisteredDate = date('Y-m-d');
-                        $model->isNewRecord = TRUE;
-                        $model->save();
-                        $flag = 1;
+
+            if ($card1 != $card2) {
+                \Yii::$app->session->setFlash('type', 'danger');
+                \Yii::$app->session->setFlash('title', 'Golfer Cards');
+                \Yii::$app->session->setFlash('message', 'Top range and Bottom range should have first three characters same. ');
+            } else {
+                if ($len == 11 && $card_len1 == 3 && $card1 == $card2 && $len == $len2) {
+                    $card1 = substr($firstcard_number, 0, 3);
+                    $min = filter_var($firstcard_number, FILTER_SANITIZE_NUMBER_INT);
+                    $max = filter_var($lastcard_number, FILTER_SANITIZE_NUMBER_INT);
+
+                    if (empty($min) || empty($max)) {
+                        \Yii::$app->session->setFlash('type', 'danger');
+                        \Yii::$app->session->setFlash('title', 'Golfer Cards');
+                        \Yii::$app->session->setFlash('message', 'Enter correct card format');
+                    } else {
+                        if ($max < $min) {
+                            \Yii::$app->session->setFlash('type', 'danger');
+                            \Yii::$app->session->setFlash('title', 'Golfer Cards');
+                            \Yii::$app->session->setFlash('message', 'Top range should be less than bottom range');
+                        } else {
+                            for ($x = $min; $x <= $max; $x++) {
+                                $x = str_pad($x, 8, '0', STR_PAD_LEFT);
+                                $card = $card1 . $x;
+                                ///echo "<br>";
+                                ///insert card functionality
+                                $oldModel = RegistrationCards::findOne(['CardNumber' => $card]);
+                                if (empty($oldModel)) {
+                                    $model->ID = NULL;
+                                    $model->CardNumber = strtoupper($card);
+                                    $model->ClubID = $model->ClubID;
+                                    $model->UserID = 0;
+                                    $model->RegisteredDate = date('Y-m-d');
+                                    $model->RegisteredDate = '';
+                                    $model->isNewRecord = TRUE;
+                                    $model->save();
+                                    $flag = 1;
+                                }
+                            }
+
+                            if ($flag == 1) {
+                                \Yii::$app->session->setFlash('type', 'success');
+                                \Yii::$app->session->setFlash('title', 'Golfer Cards');
+                                \Yii::$app->session->setFlash('message', 'Golfer Card added successfully.');
+                            } else {
+                                \Yii::$app->session->setFlash('type', 'danger');
+                                \Yii::$app->session->setFlash('title', 'Golfer Cards');
+                                \Yii::$app->session->setFlash('message', 'All Cards already exists.');
+                            }
+                        }
                     }
+                } else {
+                    \Yii::$app->session->setFlash('type', 'danger');
+                    \Yii::$app->session->setFlash('title', 'Golfer Cards');
+                    \Yii::$app->session->setFlash('message', 'Top range and Bottom range should have first three characters same. ');
                 }
             }
 
-            if ($flag == 1) {
-                \Yii::$app->session->setFlash('type', 'success');
-                \Yii::$app->session->setFlash('title', 'Golfer Cards');
-                \Yii::$app->session->setFlash('message', 'Golfer Card added successfully.');
-            } else {
-                \Yii::$app->session->setFlash('type', 'danger');
-                \Yii::$app->session->setFlash('title', 'Golfer Cards');
-                \Yii::$app->session->setFlash('message', 'All Cards already exists.');
-            }
             return $this->redirect(['index']);
         }
 
@@ -142,7 +164,7 @@ class RegistrationCardsController extends Controller {
             $mail = Yii::$app
                     ->mailer
                     ->compose(['html' => 'requestMoreGolferCards-html', 'text' => 'requestMoreGolferCards-text'], ['user' => $user, 'number_of_cards' => $number_of_cards])
-                    ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' robot'])
+                    ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name])
                     ->setTo(Yii::$app->params['adminEmail'])
                     ->setSubject('Request More Golfer Cards for ' . Yii::$app->name)
                     ->send();
